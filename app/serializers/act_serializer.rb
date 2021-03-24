@@ -7,9 +7,9 @@ class ActSerializer
     has_many :lines
     has_many :on_stages
 
-    attribute :scenes do |act|
-      SceneSerializer.new(act.scenes)
-    end
+    # attribute :scenes do |act|
+    #   SceneSerializer.new(act.scenes)
+    # end
   end
 
     

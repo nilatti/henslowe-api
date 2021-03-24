@@ -33,5 +33,6 @@ module June20
     # config.hosts = 'henslowescloud.com'
     config.api_only = true
     config.active_job.queue_adapter = :sidekiq
+    
   end
 end

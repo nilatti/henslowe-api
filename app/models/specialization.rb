@@ -1,6 +1,6 @@
 class Specialization < ApplicationRecord
   validates :title, presence: true
-  belongs_to :job
+  belongs_to :job, optional: true
 
   scope :actor, -> { where title: 'Actor' }
   scope :auditioner, -> { where title: 'Auditioner' }

@@ -23,6 +23,20 @@ class UsersController < ApiController
     head :no_content
   end
 
+  def build_conflict_schedule
+    set_user
+    json_response(@user.as_json)
+    conflict_schedule_pattern = params[:user][:conflict_schedule_pattern]
+    puts(conflict_schedule_pattern)
+    # BuildConflictScheduleWorker.perform_async(
+    #   rehearsal_schedule_pattern[:days_of_week],
+    #   rehearsal_schedule_pattern[:end_time],
+    #   rehearsal_schedule_pattern[:time_between_breaks],
+    #   rehearsal_schedule_pattern[:start_time],
+    #   @user.id
+    # )
+  end
+
   private
 
   # Only allow a trusted parameter "white list" through.

@@ -1,4 +1,5 @@
 class ProductionsController < ApiController
+  load_and_authorize_resource
   before_action :set_production, only: [:show, :update, :destroy]
 
   # GET /productions

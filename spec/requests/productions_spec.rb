@@ -6,7 +6,7 @@ Sidekiq::Testing.fake!
 RSpec.describe 'Productions API' do
   # Initialize the test data
   include ApiHelper
-  let!(:user) { create(:user)}
+  let!(:user) { create(:user, role: "superadmin")}
   let!(:theater) {create(:theater)}
   let!(:other_theater) {create(:theater)}
   let!(:id) { productions.first.id }

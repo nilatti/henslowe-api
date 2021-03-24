@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_162557) do
+ActiveRecord::Schema.define(version: 2021_03_08_031519) do
 
   create_table "active_admin_comments", charset: "utf8", force: :cascade do |t|
     t.string "namespace"
@@ -347,6 +347,8 @@ ActiveRecord::Schema.define(version: 2021_02_20_162557) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "production_admin", default: false
+    t.boolean "theater_admin", default: false
   end
 
   create_table "stage_directions", charset: "latin1", force: :cascade do |t|
@@ -413,6 +415,7 @@ ActiveRecord::Schema.define(version: 2021_02_20_162557) do
     t.boolean "fake", default: false
     t.text "authentication_token"
     t.datetime "authentication_token_created_at"
+    t.string "role", default: "regular"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, length: 255
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

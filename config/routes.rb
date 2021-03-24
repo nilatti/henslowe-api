@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     # resources :users do
     resources :users, only: [:index, :show, :update, :destroy] do
       resources :conflicts
+      member do
+        put :build_conflict_schedule
+      end
     end
     resources :jobs do
       collection do

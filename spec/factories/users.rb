@@ -14,6 +14,7 @@ FactoryBot.define do
     password {'testtesttest'}
     phone_number { Faker::PhoneNumber.cell_phone }
     program_name { Faker::Name.name }
+    role { "regular" }
     state { Faker::Address.state_abbr }
     street_address { Faker::Address.street_address }
     timezone { 'EST' }
