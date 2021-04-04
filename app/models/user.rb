@@ -9,7 +9,8 @@ class User < ApplicationRecord
 
   validates_uniqueness_of :email, case_sensitive: false
   validates_presence_of :first_name, :last_name, :phone_number, :email
-  has_many :conflicts
+  has_many :conflicts, dependent: :destroy
+  has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
   has_many :jobs, dependent: :destroy
   has_many :characters, through: :jobs
