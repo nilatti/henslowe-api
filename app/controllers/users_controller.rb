@@ -10,7 +10,7 @@ class UsersController < ApiController
 
   # GET /Users/1
   def show
-    json_response(@user.as_json(include: [:conflicts, :jobs]))
+    json_response(@user.as_json(include: [:conflicts, :conflict_patterns, :jobs]))
   end
 
   def update
@@ -21,6 +21,36 @@ class UsersController < ApiController
   def destroy
     @user.destroy
     head :no_content
+  end
+
+  def build_conflict_schedule
+    set_user
+    conflict_schedule_pattern = params[:conflict_schedule_pattern]
+    end_date = conflict_schedule_pattern[:end_date] || Date.today + 1.year
+    start_date = conflict_schedule_pattern[:start_date] || Date.today
+    conflict_pattern = ConflictPattern.create(
+      category: conflict_schedule_pattern[:category],
+      days_of_week: conflict_schedule_pattern[:days_of_week],
+      end_date: end_date,
+      end_time: conflict_schedule_pattern[:end_time],
+      start_date: start_date,
+      start_time: conflict_schedule_pattern[:start_time],
+      user: @user
+    )
+
+    #order matters here, Sidekiq does not accept keyword args
+    BuildConflictsScheduleWorker.perform_async(
+      conflict_schedule_pattern[:category],
+      conflict_pattern.id,
+      conflict_schedule_pattern[:days_of_week],
+      end_date,
+      conflict_schedule_pattern[:end_time],
+      nil,
+      start_date,
+      conflict_schedule_pattern[:start_time],
+      @user.id
+    )
+      json_response(@user.as_json(include: [:conflicts, :conflict_patterns, :jobs]))
   end
 
   private

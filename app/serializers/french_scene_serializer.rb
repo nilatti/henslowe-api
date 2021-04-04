@@ -10,6 +10,9 @@ class FrenchSceneSerializer
     has_many :character_groups
     has_many :users
     has_many :stage_directions
+    attribute :lines do |french_scene|
+      LineSerializer.new(french_scene.lines)
+    end
   end
 
   

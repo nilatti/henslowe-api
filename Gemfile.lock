@@ -81,6 +81,7 @@ GEM
     ast (2.4.1)
     bcrypt (3.1.16)
     builder (3.2.4)
+    cancancan (3.2.1)
     capistrano (3.14.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -355,6 +356,7 @@ DEPENDENCIES
   activeadmin
   activerecord-import
   bcrypt (~> 3.1.7)
+  cancancan
   capistrano-rails
   capybara
   capybara-screenshot

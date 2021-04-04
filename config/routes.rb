@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     # resources :users do
     resources :users, only: [:index, :show, :update, :destroy] do
       resources :conflicts
+      resources :conflict_patterns
+      member do
+        put :build_conflict_schedule
+      end
     end
     resources :jobs do
       collection do
@@ -45,6 +49,10 @@ Rails.application.routes.draw do
     end
     resources :spaces do
       resources :conflicts
+      resources :conflict_patterns
+      member do
+        put :build_conflict_schedule
+      end
       collection do
         get :space_names
       end
@@ -103,6 +111,7 @@ Rails.application.routes.draw do
       resources :on_stages
     end
     resources :conflicts
+    resources :conflict_patterns
     resources :entrance_exits
     resources :labels
     resources :lines

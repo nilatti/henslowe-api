@@ -5,6 +5,7 @@ FactoryBot.define do
     category { ['personal', 'rehearsal', 'work']}
     user
     space {nil}
+    conflict_pattern { nil }
 
     trait :space do
       space
