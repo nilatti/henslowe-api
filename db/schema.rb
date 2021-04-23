@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_210242) do
+ActiveRecord::Schema.define(version: 2021_04_23_204419) do
 
   create_table "active_admin_comments", charset: "utf8", force: :cascade do |t|
     t.string "namespace"
@@ -272,6 +272,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_210242) do
     t.text "synopsis"
     t.float "original_line_count"
     t.float "new_line_count"
+    t.boolean "production_copy_complete", default: false
     t.index ["author_id"], name: "index_plays_on_author_id"
     t.index ["production_id"], name: "index_plays_on_production_id"
   end

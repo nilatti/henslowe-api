@@ -11,6 +11,7 @@ class PlaysController < ApiController
     play_french_scene_on_stages
     play_on_stages
     play_scene_on_stages
+    production_copy_complete
   ]
   # GET /plays
   def index
@@ -167,6 +168,10 @@ class PlaysController < ApiController
   def play_titles
     @plays = Play.where(canonical: true)
     render json: @plays.as_json(only: %i[id title])
+  end
+
+  def production_copy_complete
+    render json: @play.as_json(only: :production_copy_complete)
   end
 
   private
