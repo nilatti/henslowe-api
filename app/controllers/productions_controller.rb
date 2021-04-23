@@ -1,6 +1,11 @@
 class ProductionsController < ApiController
-  load_and_authorize_resource
-  before_action :set_production, only: [:show, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_production, only: [
+    :show,
+    :update,
+    :destroy,
+    :get_production_with_play_text
+  ]
 
   # GET /productions
   def index
@@ -16,6 +21,7 @@ class ProductionsController < ApiController
         [
           :theater,
           :stage_exits,
+          :play,
           rehearsals: {
             include: [
               :users,
@@ -25,30 +31,6 @@ class ProductionsController < ApiController
                 methods: :pretty_name
               },
               scenes: {methods: [:on_stages, :pretty_name]}]
-          },
-          play: {
-            include: [
-              :characters,
-              acts: {
-                include: [
-                  scenes: {
-                    include: [
-                      french_scenes: {
-                        include: [
-                            on_stages: {
-                              include: :character
-                            },
-                            entrance_exits: {
-                        },
-                      ],
-                        methods: :pretty_name
-                      }
-                    ],
-                    methods: :pretty_name
-                  }
-                ]
-              }
-            ]
           },
           jobs: {
             include: [
@@ -215,14 +197,14 @@ class ProductionsController < ApiController
     json_response(@production.as_json(include: [:theater]))
     rehearsal_schedule_pattern = params[:production][:rehearsal_schedule_pattern]
     BuildRehearsalScheduleWorker.perform_async(
-      rehearsal_schedule_pattern[:block_length], 
-      rehearsal_schedule_pattern[:break_length], 
-      rehearsal_schedule_pattern[:days_of_week], 
-      rehearsal_schedule_pattern[:end_date], 
-      rehearsal_schedule_pattern[:end_time], 
-      @production.id, 
-      rehearsal_schedule_pattern[:time_between_breaks], 
-      rehearsal_schedule_pattern[:start_date], 
+      rehearsal_schedule_pattern[:block_length],
+      rehearsal_schedule_pattern[:break_length],
+      rehearsal_schedule_pattern[:days_of_week],
+      rehearsal_schedule_pattern[:end_date],
+      rehearsal_schedule_pattern[:end_time],
+      @production.id,
+      rehearsal_schedule_pattern[:time_between_breaks],
+      rehearsal_schedule_pattern[:start_date],
       rehearsal_schedule_pattern[:start_time]
     )
   end

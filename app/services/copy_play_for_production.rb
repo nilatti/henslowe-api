@@ -8,6 +8,8 @@ class CopyPlayForProduction
   def run
     create_play_copy(play: @original_play)
     CreateCastingForProduction.new(play_id: @new_play.id, production_id: production_id).create_castings
+    @new_play.production_copy_complete = true
+    @new_play.save
   end
 
   def create_play_copy(play:)

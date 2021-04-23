@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       resources :rehearsals
       member do
         put :build_rehearsal_schedule
+        get :get_production_with_play_text
       end
       resources :stage_exits
       collection do
@@ -69,14 +70,13 @@ Rails.application.routes.draw do
         get :play_titles
       end
       member do
-        get :play_script
-        get :play_skeleton
-      end
-      member do
         get :play_act_on_stages
+        get :production_copy_complete
         get :play_french_scene_on_stages
         get :play_on_stages
         get :play_scene_on_stages
+        get :play_script
+        get :play_skeleton
       end
       resources :acts do
         resources :scenes
