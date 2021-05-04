@@ -22,16 +22,6 @@ class ProductionsController < ApiController
           :theater,
           :stage_exits,
           :play,
-          rehearsals: {
-            include: [
-              :users,
-              acts: {methods: :on_stages},
-              french_scenes: {
-                include: [:on_stages],
-                methods: :pretty_name
-              },
-              scenes: {methods: [:on_stages, :pretty_name]}]
-          },
           jobs: {
             include: [
               :specialization,

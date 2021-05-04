@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe 'Rehearsals API' do
   # Initialize the test data
   include ApiHelper
-  let!(:production) { create(:production) }
+  let!(:production) { create(:production, start_date: Date.today, end_date: 6.weeks.from_now) }
   let!(:play) { production.play }
   let!(:scenes) { [play.scenes.first]}
   let!(:french_scenes) { scenes.first.french_scenes }
@@ -30,6 +30,20 @@ RSpec.describe 'Rehearsals API' do
         expect(json.size).to eq(11)
       end
     end
+  end
+
+  describe 'GET api/productions/:production_id/rehearsals with dates' do
+    before {
+      get "/api/productions/#{production.id}/rehearsals", headers: authenticated_header(user), params: {start_time: production.start_date, end_time: production.start_date + 1.week}, as: :json
+    }
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+    end
+    it 'does not return all of the rehearsals' do
+      expect(json.size).to be < production.rehearsals.size
+      expect(json.size).to be > 0
+    end
+
   end
 
   describe 'GET api/french_scenes/:french_scene_id/rehearsals' do
@@ -169,7 +183,7 @@ RSpec.describe 'Rehearsals API' do
 
   # Test suite for DELETE /rehearsals/:id
   describe 'DELETE /rehearsals/:id' do
-    
+
     before { delete "/api/productions/#{production.id}/rehearsals/#{id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
@@ -177,4 +191,3 @@ RSpec.describe 'Rehearsals API' do
     end
   end
 end
-

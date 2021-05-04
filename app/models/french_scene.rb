@@ -1,4 +1,5 @@
 class FrenchScene < ApplicationRecord
+  include OnStageable
   belongs_to :scene
   has_many :entrance_exits, dependent: :destroy
   has_many :lines, dependent: :destroy

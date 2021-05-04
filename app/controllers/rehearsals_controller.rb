@@ -4,12 +4,12 @@ class RehearsalsController < ApiController
   # GET /acts
   def index
     @rehearsals = @parent.rehearsals
-    render json: @rehearsals.as_json
+    render json: @rehearsals.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}])
   end
 
   # GET /acts/1
   def show
-    render json: @rehearsal.as_json
+    render json: @rehearsal.as_json(include: [:acts, :users, french_scenes: {methods: :pretty_name}, scenes: {methods: :pretty_name}])
   end
 
   # POST /acts
@@ -25,11 +25,10 @@ class RehearsalsController < ApiController
 
   # PATCH/PUT /acts/1
   def update
+    puts ('rehearsal update callled!')
+    puts rehearsal_params
     @rehearsal.update(rehearsal_params)
-    render json: @rehearsal.as_json(include: [:acts, :users, french_scenes: {methods: :pretty_name}, scenes: {methods: :pretty_name}])
-    # else
-    #   render json: @rehearsal.errors, status: :unprocessable_entity
-    # end
+    json_response(@rehearsal.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
   end
 
   # DELETE /acts/1
