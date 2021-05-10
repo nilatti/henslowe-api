@@ -15,9 +15,8 @@ class RehearsalsController < ApiController
   # POST /acts
   def create
     @rehearsal = Rehearsal.new(rehearsal_params)
-
     if @rehearsal.save
-      render json: @rehearsal, status: :created, location: @parent
+      json_response(@rehearsal.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}])), status: :created
     else
       render json: @rehearsal.errors, status: :unprocessable_entity
     end
@@ -25,9 +24,7 @@ class RehearsalsController < ApiController
 
   # PATCH/PUT /acts/1
   def update
-    puts ('rehearsal update callled!')
-    puts rehearsal_params
-    @rehearsal.update(rehearsal_params)
+    @rehearsal.update[rehearsal_params]
     json_response(@rehearsal.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
   end
 
