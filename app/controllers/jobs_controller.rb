@@ -10,12 +10,14 @@ class JobsController < ApiController
         include: [
           :specialization,
           :theater,
-          :user,
           character: {
             include: :lines
           },
           production: {
             include: :play
+          },
+          user: {
+            include: :conflicts
           }
         ]
       )
