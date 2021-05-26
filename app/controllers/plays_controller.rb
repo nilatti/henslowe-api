@@ -112,12 +112,12 @@ class PlaysController < ApiController
 
   def play_act_on_stages
     @acts = Act.play_order(@play.acts)
-    render json: @acts.as_json(methods: :find_on_stages)
+    render json: @acts.as_json(methods: :find_on_stages, include: :rehearsals)
   end
 
   def play_french_scene_on_stages
     @french_scenes = FrenchScene.play_order(@play.french_scenes)
-    render json: @french_scenes.as_json(methods: [:pretty_name, :find_on_stages])
+    render json: @french_scenes.as_json(methods: [:pretty_name, :find_on_stages], include: :rehearsals)
   end
 
   def play_on_stages
@@ -126,7 +126,7 @@ class PlaysController < ApiController
 
   def play_scene_on_stages
     @scenes = Scene.play_order(@play.scenes)
-    render json: @scenes.as_json(methods: [:pretty_name, :find_on_stages])
+    render json: @scenes.as_json(methods: [:pretty_name, :find_on_stages], include: :rehearsals)
   end
 
   def play_script

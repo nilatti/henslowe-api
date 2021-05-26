@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_204419) do
+ActiveRecord::Schema.define(version: 2021_05_14_201542) do
 
-  create_table "active_admin_comments", charset: "utf8", force: :cascade do |t|
+  create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "acts", charset: "utf8", force: :cascade do |t|
+  create_table "acts", charset: "utf8mb3", force: :cascade do |t|
     t.integer "number"
     t.bigint "play_id"
     t.text "summary"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.bigint "rehearsal_id", null: false
   end
 
-  create_table "admin_users", charset: "utf8", force: :cascade do |t|
+  create_table "admin_users", charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "authors", charset: "utf8", force: :cascade do |t|
+  create_table "authors", charset: "utf8mb3", force: :cascade do |t|
     t.date "birthdate"
     t.date "deathdate"
     t.string "nationality"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["character_group_id", "stage_direction_id"], name: "index_character_groups_stage_directions"
   end
 
-  create_table "characters", charset: "utf8", force: :cascade do |t|
+  create_table "characters", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.string "age"
     t.string "gender"
@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["character_id", "stage_direction_id"], name: "index_characters_stage_directions"
   end
 
-  create_table "conflict_patterns", charset: "utf8", force: :cascade do |t|
+  create_table "conflict_patterns", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "space_id"
     t.string "start_time"
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["user_id"], name: "index_conflicts_on_user_id"
   end
 
-  create_table "entrance_exits", charset: "utf8", force: :cascade do |t|
+  create_table "entrance_exits", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "french_scene_id"
     t.integer "page"
     t.integer "line"
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["user_id"], name: "index_entrance_exits_on_user_id"
   end
 
-  create_table "french_scenes", charset: "utf8", force: :cascade do |t|
+  create_table "french_scenes", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "scene_id"
     t.string "number"
     t.text "summary"
@@ -188,7 +188,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.bigint "rehearsal_id", null: false
   end
 
-  create_table "jobs", charset: "utf8", force: :cascade do |t|
+  create_table "jobs", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "production_id"
     t.bigint "specialization_id"
     t.bigint "user_id"
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["user_id"], name: "index_jobs_on_user_id"
   end
 
-  create_table "jwt_denylist", charset: "utf8", force: :cascade do |t|
+  create_table "jwt_denylist", charset: "utf8mb3", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["french_scene_id"], name: "index_lines_on_french_scene_id"
   end
 
-  create_table "on_stages", charset: "utf8", force: :cascade do |t|
+  create_table "on_stages", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "character_id"
     t.bigint "user_id"
     t.bigint "french_scene_id"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["french_scene_id", "character_id"], name: "index_on_stages_on_french_scene_id_and_character_id", unique: true
   end
 
-  create_table "plays", charset: "utf8", force: :cascade do |t|
+  create_table "plays", charset: "utf8mb3", force: :cascade do |t|
     t.string "title"
     t.bigint "author_id"
     t.date "date"
@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["production_id"], name: "index_plays_on_production_id"
   end
 
-  create_table "productions", charset: "utf8", force: :cascade do |t|
+  create_table "productions", charset: "utf8mb3", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
     t.bigint "theater_id"
@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.bigint "production_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "text_unit"
     t.index ["production_id"], name: "index_rehearsals_on_production_id"
     t.index ["space_id"], name: "index_rehearsals_on_space_id"
   end
@@ -310,7 +311,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.bigint "user_id", null: false
   end
 
-  create_table "scenes", charset: "utf8", force: :cascade do |t|
+  create_table "scenes", charset: "utf8mb3", force: :cascade do |t|
     t.integer "number"
     t.text "summary"
     t.bigint "act_id"
@@ -337,7 +338,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["french_scene_id"], name: "index_sound_cues_on_french_scene_id"
   end
 
-  create_table "space_agreements", charset: "utf8", force: :cascade do |t|
+  create_table "space_agreements", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "theater_id"
     t.bigint "space_id"
     t.datetime "created_at", null: false
@@ -346,7 +347,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["theater_id"], name: "index_space_agreements_on_theater_id"
   end
 
-  create_table "spaces", charset: "utf8", force: :cascade do |t|
+  create_table "spaces", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.string "street_address"
     t.string "city"
@@ -361,7 +362,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.string "logo"
   end
 
-  create_table "specializations", charset: "utf8", force: :cascade do |t|
+  create_table "specializations", charset: "utf8mb3", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -382,7 +383,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["french_scene_id"], name: "index_stage_directions_on_french_scene_id"
   end
 
-  create_table "stage_exits", charset: "utf8", force: :cascade do |t|
+  create_table "stage_exits", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "production_id"
     t.string "name"
     t.datetime "created_at", null: false
@@ -390,7 +391,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.index ["production_id"], name: "index_stage_exits_on_production_id"
   end
 
-  create_table "theaters", charset: "utf8", force: :cascade do |t|
+  create_table "theaters", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.string "street_address"
     t.string "city"
@@ -405,7 +406,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_204419) do
     t.string "logo"
   end
 
-  create_table "users", charset: "utf8", force: :cascade do |t|
+  create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

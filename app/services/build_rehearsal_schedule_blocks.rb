@@ -1,34 +1,45 @@
+# the problem is in block length -- it's not passing from the form, but it really doesn't have to because it is just rehearsal time + break time
 class BuildRehearsalScheduleBlocks
-  def initialize(block_length:, break_length:, days_of_week:, end_date:, end_time:, production_id:, time_between_breaks:, start_date:, start_time:)
-    @block_length = block_length
+  def initialize(break_length:, days_of_week:, default_user_ids:, end_date:, end_time:, production_id:, time_between_breaks:, start_date:, start_time:)
     @break_length = break_length
     @days_of_week = days_of_week
+    @default_user_ids = default_user_ids
     @end_date = end_date
     @end_time = end_time
     @production_id = production_id
     @start_date = start_date
     @start_time = start_time
     @rehearsal_blocks = []
-    @time_between_breaks = time_between_breaks #time_between_breaks is the time from the end of one break to the beginning of the next break.
+    @time_between_breaks = time_between_breaks #time_between_breaks is the time from the end of one break to the beginning of the next break, also known as the time when rehearsal is happening.
+    @block_length = @break_length + @time_between_breaks
   end
 
   def run
+    users = @default_user_ids.map {|uid| User.find(uid)}
     @rehearsal_blocks = build_recurring_rehearsals(
       block_length: @block_length,
       break_length: @break_length,
       days_of_week: @days_of_week,
+      default_users: users,
       end_date: @end_date,
       end_time: @end_time,
       start_date: @start_date,
       start_time: @start_time,
       time_between_breaks: @time_between_breaks
     )
-    Rehearsal.import @rehearsal_blocks
+    # puts "about to import rehearsal"
+    # # imports = Rehearsal.import! @rehearsal_blocks
+    # puts "failed"
+    # puts imports.failed_instances
+    # puts "success"
+    # puts imports.num_inserts
+
   end
   def build_recurring_rehearsals(
     block_length:,
     break_length:,
     days_of_week:,
+    default_users:,
     end_date:,
     end_time:,
     start_date:,
@@ -45,10 +56,11 @@ class BuildRehearsalScheduleBlocks
         r.production_id = @production_id
         r.notes = block[:notes]
         r.start_time = Time.zone.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%T')}")
-        rehearsal_blocks_array << r
+        r.save
+        r.users = default_users
+        r.save
       end
     end
-    return rehearsal_blocks_array
   end
 
   def build_rehearsal_blocks(block_length:, break_length:, end_time:, start_time:, time_between_breaks:)
@@ -67,7 +79,6 @@ class BuildRehearsalScheduleBlocks
         notes: 'break',
         start_time: Time.new,
       }
-
       block[:start_time] = block_start_time
       if block_start_time < next_break
         block[:end_time] = block[:start_time] + block_length.minutes

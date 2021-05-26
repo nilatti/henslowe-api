@@ -77,6 +77,8 @@ class BuildConflictsSchedule
     days = days_arr.each {|day| day.to_sym}
     start_on = start_date
     end_on = end_date
+    puts('days')
+    puts days
     schedule = Montrose.every(:week, starts: start_on, until: end_on).on(days)
   end
 end

@@ -187,9 +187,9 @@ class ProductionsController < ApiController
     json_response(@production.as_json(include: [:theater]))
     rehearsal_schedule_pattern = params[:production][:rehearsal_schedule_pattern]
     BuildRehearsalScheduleWorker.perform_async(
-      rehearsal_schedule_pattern[:block_length],
       rehearsal_schedule_pattern[:break_length],
       rehearsal_schedule_pattern[:days_of_week],
+      rehearsal_schedule_pattern[:default_user_ids],
       rehearsal_schedule_pattern[:end_date],
       rehearsal_schedule_pattern[:end_time],
       @production.id,
@@ -215,6 +215,7 @@ class ProductionsController < ApiController
         :rehearsal_block_length,
         :rehearsal_break_length,
         :rehearsal_days_of_week,
+        :rehearsal_default_user_ids,
         :rehearsal_end_date,
         :rehearsal_end_time,
         :rehearsal_start_date,
