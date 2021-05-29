@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   ActiveAdmin.routes(self)
   scope 'api' do
-
   devise_for :users,
              path: '',
              controllers: {
@@ -78,6 +77,7 @@ Rails.application.routes.draw do
         get :play_script
         get :play_skeleton
       end
+
       resources :acts do
         resources :scenes
         resources :rehearsals
@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       resources :characters
       resources :character_groups
     end
+    root to: "plays#index"
     resources :acts do
       member do
         get :act_script

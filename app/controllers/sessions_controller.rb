@@ -12,16 +12,9 @@ class SessionsController < Devise::SessionsController
  private
  #
  def respond_with(resource, _opts = {})
-   # render json: resource
-
-
-   render json: resource.as_json(
-       include: [
-         jobs: {include: :specialization}
-       ]
-     )
+   render json: resource
  end
- 
+
  def respond_to_on_destroy
    head :no_content
  end
