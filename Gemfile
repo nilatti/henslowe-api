@@ -24,6 +24,7 @@ gem 'bcrypt', '~> 3.1.7'
 #Active Admin
 gem 'devise'
 gem 'devise-jwt', '~> 0.7.0'
+gem 'omniauth-google-oauth2'
 gem 'sidekiq'
 gem 'activeadmin'
 
