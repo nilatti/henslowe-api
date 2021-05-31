@@ -25,6 +25,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 gem 'devise-jwt', '~> 0.7.0'
 gem 'omniauth-google-oauth2'
+gem 'doorkeeper', '~> 5.4.0'
 gem 'sidekiq'
 gem 'activeadmin'
 

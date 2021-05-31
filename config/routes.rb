@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   ActiveAdmin.routes(self)
