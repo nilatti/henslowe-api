@@ -2,8 +2,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
     devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2]
+         # :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   ROLES = %i[superadmin regular]
 
@@ -22,6 +22,12 @@ class User < ApplicationRecord
 
   default_scope {order(:last_name, :first_name, :email)}
 
+  # the authenticate method from devise documentation
+  def self.authenticate(email, password)
+    user = User.find_for_authentication(email: email)
+    user&.valid_password?(password) ? user : nil
+  end
+  
   def castings_for_production(production)
     jobs = production_jobs(production)
     acting_jobs = jobs.select { |job| job.specialization.title == "Actor"}
