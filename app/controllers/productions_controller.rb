@@ -1,5 +1,4 @@
 class ProductionsController < ApiController
-  before_action :authenticate_user!
   before_action :set_production, only: [
     :show,
     :update,
@@ -21,7 +20,6 @@ class ProductionsController < ApiController
         [
           :theater,
           :stage_exits,
-          :play,
           jobs: {
             include: [
               :specialization,
@@ -31,6 +29,9 @@ class ProductionsController < ApiController
                 include: :conflicts
               }
             ]
+          },
+          play: {
+            include: :characters
           }
         ]
       )

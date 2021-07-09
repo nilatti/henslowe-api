@@ -10,11 +10,9 @@ class JobsController < ApiController
         include: [
           :specialization,
           :theater,
-          character: {
-            include: :lines
-          },
+          :character,
           production: {
-            include: :play
+            include: {play: { only: [:title]}}
           },
           user: {
             include: :conflicts
@@ -34,7 +32,7 @@ class JobsController < ApiController
           :theater,
           :user,
           production: {
-            include: :play
+            include: {play: { only: [:title]}}
           }
         ]
       )

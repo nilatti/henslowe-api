@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     end
     resources :specializations
     resources :productions do
+      resources :jobs
       resources :rehearsals
       member do
         put :build_rehearsal_schedule
@@ -98,10 +99,10 @@ Rails.application.routes.draw do
     resources :characters
     resources :character_groups
     resources :scenes do
-      resources :rehearsals
       member do
         get :scene_script
       end
+      resources :rehearsals
       resources :french_scenes
     end
     resources :french_scenes do
@@ -116,6 +117,7 @@ Rails.application.routes.draw do
     resources :conflicts
     resources :conflict_patterns
     resources :entrance_exits
+    resources :jobs
     resources :labels
     resources :lines
     resources :on_stages

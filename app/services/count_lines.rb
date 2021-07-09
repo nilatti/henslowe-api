@@ -1,13 +1,16 @@
 class CountLines
   attr_reader :lines, :updated_lines
   def initialize(line_id: nil, lines: nil, play: nil)
+    puts('count lines initialized')
     @characters = []
     @character_groups = []
     if lines
       @lines = lines
     elsif line_id
+      puts('got a line id')
       @line_id = line_id
       @line = Line.find(@line_id)
+      puts('found the line', @line)
       @lines = [@line]
     end
     @updated_lines = []

@@ -1,5 +1,4 @@
 class PlaysController < ApiController
-  before_action :authenticate_user!
   before_action :set_author, only: %i[index, create]
   before_action :set_play, only: %i[
     show
@@ -137,14 +136,19 @@ class PlaysController < ApiController
         acts: {
           include: {
             scenes: {
+              methods: :pretty_name,
               include: {
                 french_scenes: {
+                  methods: :pretty_name,
                   include: [
                     :stage_directions,
                     :sound_cues,
                     lines: {
                       include: :character
-                    }
+                    },
+                    on_stages: {
+                      include: :character
+                    },
                   ]
                 }
               }

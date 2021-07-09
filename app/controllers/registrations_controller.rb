@@ -4,7 +4,8 @@ class RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
     resource.save
-    render_resource(resource)
+    resource.errors.each {|e| puts e.full_message}
+    render json: resource
   end
 
   def update

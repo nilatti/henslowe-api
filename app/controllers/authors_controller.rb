@@ -1,5 +1,4 @@
 class AuthorsController < ApiController
-  before_action :authenticate_user!
   before_action :set_author, only: %i[show update destroy]
 
   # GET /authors

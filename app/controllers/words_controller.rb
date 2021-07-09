@@ -1,5 +1,4 @@
 class WordsController < ApiController
-  before_action :authenticate_user!
   before_action :set_word, only: [:show, :update, :destroy]
   before_action :set_play
   # GET /words

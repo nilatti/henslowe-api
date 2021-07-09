@@ -6,9 +6,13 @@ Doorkeeper.configure do
   resource_owner_from_credentials do |routes|
     email = "#{params[:email]}".downcase
     Rails.logger.info email
-    return if email.blank?
-    user = User.where('email = ?', email).first
-    if user && user.authentication_token
+    puts(email)
+    puts "Calling user search!"
+    # return if email.blank?
+    puts (User.find_by(email: email).id)
+    user = User.find_by(email: email)
+    puts(user)
+    if user
       user
     else
       User.new
