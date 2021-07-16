@@ -31,8 +31,10 @@ class PlaysController < ApiController
         acts: {
           include: {
             scenes: {
+              methods: :pretty_name,
               include: {
                 french_scenes: {
+                  methods: :pretty_name,
                   include: [
                     :characters,
                     :character_groups,
