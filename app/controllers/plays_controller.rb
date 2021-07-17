@@ -173,7 +173,7 @@ class PlaysController < ApiController
 
   def play_titles
     @plays = Play.where(canonical: true)
-    render json: @plays.as_json(only: %i[id title])
+    render json: @plays.as_json(only: %i[author_id id title])
   end
 
   def production_copy_complete
