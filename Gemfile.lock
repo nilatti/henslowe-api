@@ -121,10 +121,6 @@ GEM
     diff-lcs (1.4.4)
     doorkeeper (5.4.0)
       railties (>= 5)
-    dotenv (2.7.6)
-    dotenv-rails (2.7.6)
-      dotenv (= 2.7.6)
-      railties (>= 3.2)
     dry-auto_inject (0.7.0)
       dry-container (>= 0.3.4)
     dry-configurable (0.12.1)
@@ -408,7 +404,6 @@ DEPENDENCIES
   devise
   devise-jwt (~> 0.7.0)
   doorkeeper (~> 5.4.0)
-  dotenv-rails
   factory_bot_rails
   faker
   foreman
