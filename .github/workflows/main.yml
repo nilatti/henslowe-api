@@ -40,7 +40,6 @@ jobs:
         cp config/database.yml.ci config/database.yml
         sudo service mysql start
         bundle exec rails db:prepare
-        bundle exec rails s
       env:
         DB_PORT: 3306
         RAILS_ENV: development
