@@ -31,7 +31,7 @@ jobs:
 
     - name: Bundle Install and Create DB
       env:
-        RAILS_ENV: dev
+        RAILS_ENV: development
         DB_PASSWORD: root
         # tell Rails to use proper port for MySQL
         DB_PORT: ${{ job.services.mysql.ports[3306] }}
@@ -50,7 +50,7 @@ jobs:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: henslowe-api
-        environment_name: dev
+        environment_name: development
         version_label: 3
         region: us-east-1
         deployment_package: deploy.zip
