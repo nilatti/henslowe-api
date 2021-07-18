@@ -43,7 +43,7 @@ jobs:
       env:
         DB_PORT: 3306
         RAILS_ENV: development
-          - name: Generate deployment package
+    - name: Generate deployment package
           run: |
           zip -r deploy.zip . -x '*.git*'
 
