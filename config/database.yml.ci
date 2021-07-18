@@ -3,8 +3,10 @@ default: &default
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password:
-  socket: /tmp/mysql.sock
+  password: root
+  socket: /tmp/mysql.socket
+  host: 127.0.0.1
+  port: <%= ENV['DB_PORT'] %>
 
 development:
   <<: *default
@@ -13,8 +15,9 @@ development:
 test:
   <<: *default
   database: henslowe5_test
-  host: 127.0.0.1
 
 production:
   <<: *default
-  database: henslowe5_production
+  database: june_20_production
+  username: june_20
+  password: <%= ENV['JUNE_20_DATABASE_PASSWORD'] %>
