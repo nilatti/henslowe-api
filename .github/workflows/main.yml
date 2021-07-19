@@ -53,6 +53,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: henslowe_development
         environment_name: Henslowedevelopment-env
-        version_label: 7
+        use_existing_version_if_available: true
+        version_label: 8
         region: us-east-1
         deployment_package: deploy.zip
