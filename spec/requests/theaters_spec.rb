@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'theaters API', type: :request do
   # initialize test data
-  include ApiHelper
   let!(:theaters) { create_list(:theater, 10, :has_spaces) }
   let(:theater_id) { theaters.first.id }
   let!(:user) { create(:user)}
@@ -59,7 +58,7 @@ RSpec.describe 'theaters API', type: :request do
     let(:valid_attributes) { { theater: { name: 'The Great American Theater Company' } } }
 
     context 'when the request is valid' do
-      before { post '/api/theaters', params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { post '/api/theaters', params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'creates a theater' do
         expect(json['name']).to eq('The Great American Theater Company')
@@ -71,7 +70,7 @@ RSpec.describe 'theaters API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/api/theaters', params: { theater: { address: 'Failure' } }, headers: authenticated_header(user), as: :json }
+      before { post '/api/theaters', params: { theater: { address: 'Failure' } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -89,7 +88,7 @@ RSpec.describe 'theaters API', type: :request do
     let(:valid_attributes) { { theater: { name: 'The Great American Theater Company' } } }
 
     context 'when the record exists' do
-      before { put "/api/theaters/#{theater_id}", params: valid_attributes, headers: authenticated_header(user), as: :json}
+      before { put "/api/theaters/#{theater_id}", params: valid_attributes, as: :json, headers: authenticated_header(user)}
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -99,7 +98,7 @@ RSpec.describe 'theaters API', type: :request do
 
   # Test suite for DELETE /theaters/:id
   describe 'DELETE /theaters/:id' do
-    before { delete "/api/theaters/#{theater_id}" }
+    before { delete "/api/theaters/#{theater_id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

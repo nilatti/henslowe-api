@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Authors API', type: :request do
   # initialize test data
-  include ApiHelper
+
   let!(:authors) { create_list(:author, 4) }
   let(:author_id) { authors.first.id }
   let!(:user) { create(:user)}

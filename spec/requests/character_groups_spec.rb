@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe 'CharacterGroups API' do
   # Initialize the test data
-  include ApiHelper
   let!(:author) { create(:author) }
   let!(:play) { create(:play, author_id: author.id) }
   let!(:id) { play.character_groups.first.id }
@@ -60,8 +59,7 @@ RSpec.describe 'CharacterGroups API' do
       before {
         post "/api/plays/#{play.id}/character_groups",
         params: valid_attributes,
-        as: :json,
-        headers: authenticated_header(user)
+        as: :json, headers: authenticated_header(user)
       }
 
       it 'returns status code 201' do
@@ -73,6 +71,7 @@ RSpec.describe 'CharacterGroups API' do
       before { post "/api/plays/#{play.id}/character_groups", params: { character_group: { age: 'Baby', play_id: play.id } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
+        puts response.body
         expect(response).to have_http_status(422)
       end
 

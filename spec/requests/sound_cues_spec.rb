@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'SoundCues API', type: :request do
   # initialize test data
-  include ApiHelper
   let!(:sound_cues) { create_list(:sound_cue, 4) }
   let!(:french_scene) {create(:french_scene)}
   let(:sound_cue_id) { sound_cues.first.id }
@@ -62,13 +61,13 @@ RSpec.describe 'SoundCues API', type: :request do
             french_scene_id: test_sound_cue.french_scene.id,
             original_content: test_sound_cue.original_content,
           } }
-        post '/api/sound_cues', params: valid_attributes, headers: authenticated_header(user), as: :json
+        post '/api/sound_cues', params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(json['french_scene_id']).to eq(test_sound_cue.french_scene.id)
       end
     end
 
     # context 'when the request is invalid' do
-    #   before { post '/api/sound_cues', params: { sound_cue: { first_name: 'Failure' } }, as: :json, headers: authenticated_header(user) }
+    #   before { post '/api/sound_cues', params: { sound_cue: { first_name: 'Failure' } }, as: :json }
     #
     #   it 'returns status code 422' do
     #     expect(response).to have_http_status(422)

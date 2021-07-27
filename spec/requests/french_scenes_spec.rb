@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'French Scenes API' do
   # Initialize the test data
-  include ApiHelper
+
   let!(:user) { create(:user)}
   let!(:author) { create(:author) }
   let!(:play) { create(:play, author_id: author.id) }
@@ -19,7 +19,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for GET /scenes/:scene_id/french_scenes
   describe 'GET api/scenes/:scene_id/french_scenes' do
     before {
-      get "/api/scenes/#{scene_id}/french_scenes", params: {scene_id: scene_id}, headers: authenticated_header(user), as: :json
+      get "/api/scenes/#{scene_id}/french_scenes", params: {scene_id: scene_id}, as: :json, headers: authenticated_header(user)
     }
 
     context 'when scene exists' do
@@ -36,7 +36,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for GET /scenes/:scene_id/french_scenes/:id
   describe 'GET /scenes/:scene_id/french_scenes/:id' do
     before {
-      get "/api/scenes/#{scene_id}/french_scenes/#{id}", headers: authenticated_header(user), as: :json
+      get "/api/scenes/#{scene_id}/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when french_scene exists' do
@@ -75,12 +75,12 @@ RSpec.describe 'French Scenes API' do
     let(:valid_attributes) { { french_scene: { number: 1, scene_id: scene_id, character_ids: [ character.id ] } } }
 
     context 'when request attributes are valid' do
-      before { post "/api/scenes/#{scene_id}/french_scenes", params: valid_attributes, headers: authenticated_header(user), as: :json}
+      before { post "/api/scenes/#{scene_id}/french_scenes", params: valid_attributes, as: :json, headers: authenticated_header(user)}
 
       it 'returns status code 201' do
         expect(response).to have_http_status(200)
       end
-      it 'creates an on_stage for character' do 
+      it 'creates an on_stage for character' do
         french_scene = FrenchScene.find(json['id'])
         expect(french_scene.on_stages.size).to eq(1)
         expect(french_scene.on_stages.last.character.id).to eq(character.id)
@@ -88,7 +88,7 @@ RSpec.describe 'French Scenes API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/scenes/#{scene_id}/french_scenes", params: { french_scene: { summary: 'Baby', scene_id: scene_id } }, headers: authenticated_header(user), as: :json }
+      before { post "/api/scenes/#{scene_id}/french_scenes", params: { french_scene: { summary: 'Baby', scene_id: scene_id } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -105,7 +105,7 @@ RSpec.describe 'French Scenes API' do
   describe 'PUT /api/french_scenes/:id' do
     let(:valid_attributes) { { french_scene: { number: 'a', character_ids: [ character.id ], character_group_ids: [character_group.id] } } }
 
-    before { put "/api/french_scenes/#{id}", params: valid_attributes, headers: authenticated_header(user), as: :json }
+    before { put "/api/french_scenes/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when french_scene exists' do
       it 'returns status code 200' do
@@ -120,7 +120,7 @@ RSpec.describe 'French Scenes API' do
       end
 
       it 'updates the french scene to delete a character' do
-        put "/api/french_scenes/#{id}", params: { french_scene: { character_ids: [], character_group_ids: [character_group.id]}}, headers: authenticated_header(user), as: :json 
+        put "/api/french_scenes/#{id}", params: { french_scene: { character_ids: [], character_group_ids: [character_group.id]}}, as: :json, headers: authenticated_header(user)
         updated_french_scene = FrenchScene.find(id)
         expect(updated_french_scene.characters).to be_empty
         expect(updated_french_scene.character_groups.size).to eq(1)
@@ -143,7 +143,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for DELETE /french_scenes/:id
   describe 'DELETE /french_scenes/:id' do
     before {
-      delete "/api/french_scenes/#{id}", headers: authenticated_header(user), as: :json
+      delete "/api/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do

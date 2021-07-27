@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'Spaces API', type: :request do
   # initialize test data
-  include ApiHelper
   let!(:spaces) { create_list(:space, 4, :has_theaters) }
   let(:space_id) { spaces.first.id }
   let!(:user) { create(:user)}
@@ -60,7 +59,7 @@ RSpec.describe 'Spaces API', type: :request do
     let(:valid_attributes) { { space: { name: 'The Vogelodeon' } } }
 
     context 'when the request is valid' do
-      before { post '/api/spaces', params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { post '/api/spaces', params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'creates a space' do
         expect(json['name']).to eq('The Vogelodeon')
@@ -72,7 +71,7 @@ RSpec.describe 'Spaces API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/api/spaces', params: { space: { seating_capacity: 5 } }, headers: authenticated_header(user), as: :json }
+      before { post '/api/spaces', params: { space: { seating_capacity: 5 } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -90,7 +89,7 @@ RSpec.describe 'Spaces API', type: :request do
     let(:valid_attributes) { { space: { name: 'Mandigo Arena' } } }
 
     context 'when the record exists' do
-      before { put "/api/spaces/#{space_id}", params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { put "/api/spaces/#{space_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -111,7 +110,7 @@ RSpec.describe 'Spaces API', type: :request do
 
   # Test suite for space_names
   describe 'GET /api/spaces/space_names' do
-    before { get '/api/spaces/space_names', headers: authenticated_header(user), as: :json }
+    before { get '/api/spaces/space_names', as: :json, headers: authenticated_header(user) }
 
     it 'returns spaces ONLY NAMES' do
       # Note `json` is a custom helper to parse JSON responses

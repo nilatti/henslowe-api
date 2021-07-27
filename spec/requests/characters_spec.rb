@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'Characters API' do
   # Initialize the test data
-  include ApiHelper
+
   let!(:author) { create(:author) }
   let!(:play) { create(:play, author_id: author.id) }
   let!(:id) { play.characters.first.id }

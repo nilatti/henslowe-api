@@ -16,7 +16,7 @@ describe BuildRehearsalScheduleBlocks do
     @service = BuildRehearsalScheduleBlocks.new(break_length: @break_length, days_of_week: @days_of_week, default_user_ids: @default_user_ids, end_date: @end_date, end_time: @end_time, production_id: @production.id, time_between_breaks: @time_between_breaks, start_date: @start_date, start_time: @start_time)
   end
   it 'builds rehearsal blocks' do
-    blocks = @service.build_rehearsal_blocks(break_length: @break_length, end_time: @end_time, start_time: @start_time, time_between_breaks: @time_between_breaks)
+    blocks = @service.build_rehearsal_blocks(block_length: 60, break_length: @break_length, end_time: @end_time, start_time: @start_time, time_between_breaks: @time_between_breaks)
     expect(blocks.size).to eq(4)
     expect((blocks.first[:start_time]).hour).to be(9) #saves in UTC
     expect((blocks.first[:start_time]).min).to be(30)
@@ -35,6 +35,7 @@ describe BuildRehearsalScheduleBlocks do
   end
   it 'builds recurring rehearsals' do
     rehearsal_blocks_array = @service.build_recurring_rehearsals(
+      block_length: 60,
       break_length: @break_length,
       days_of_week: @days_of_week,
       default_users: @users,

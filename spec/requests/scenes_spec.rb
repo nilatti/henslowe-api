@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe 'Scenes API' do
   # Initialize the test data
-  include ApiHelper
   let!(:user) { create(:user)}
   let!(:play) { create(:play) }
   let!(:act_id) { play.acts.first.id }
@@ -17,7 +16,7 @@ RSpec.describe 'Scenes API' do
   # Test suite for GET /acts/:act_id/scenes
   describe 'GET api/acts/:act_id/scenes' do
     before {
-      get "/api/acts/#{act_id}/scenes", params: {act_id: act_id}, headers: authenticated_header(user), as: :json
+      get "/api/acts/#{act_id}/scenes", params: {act_id: act_id}, as: :json, headers: authenticated_header(user)
     }
 
     context 'when scene exists' do
@@ -34,7 +33,7 @@ RSpec.describe 'Scenes API' do
   # Test suite for GET /acts/:act_id/scenes/:id
   describe 'GET /acts/:act_id/scenes/:id' do
     before {
-      get "/api/acts/#{act_id}/scenes/#{id}", headers: authenticated_header(user), as: :json
+      get "/api/acts/#{act_id}/scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when scene exists' do
@@ -69,7 +68,7 @@ RSpec.describe 'Scenes API' do
     let(:valid_attributes) { { scene: { number: 1, act_id: act_id } } }
 
     context 'when request attributes are valid' do
-      before { post "/api/acts/#{act_id}/scenes", params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { post "/api/acts/#{act_id}/scenes", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -77,7 +76,7 @@ RSpec.describe 'Scenes API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/acts/#{act_id}/scenes", params: { scene: { summary: 'Baby', act_id: act_id } }, headers: authenticated_header(user), as: :json }
+      before { post "/api/acts/#{act_id}/scenes", params: { scene: { summary: 'Baby', act_id: act_id } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -94,7 +93,7 @@ RSpec.describe 'Scenes API' do
   describe 'PUT /api/scenes/:id' do
     let(:valid_attributes) { { scene: { number: 2 } } }
 
-    before { put "/api/scenes/#{id}", params: valid_attributes, headers: authenticated_header(user), as: :json }
+    before { put "/api/scenes/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when scene exists' do
       it 'returns status code 200' do
@@ -123,7 +122,7 @@ RSpec.describe 'Scenes API' do
   # Test suite for DELETE /scenes/:id
   describe 'DELETE /scenes/:id' do
     before {
-      delete "/api/scenes/#{id}"
+      delete "/api/scenes/#{id}", headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do
@@ -131,7 +130,7 @@ RSpec.describe 'Scenes API' do
     end
   end
   describe 'gets scene script' do
-    before { get "/api/scenes/#{id}/scene_script", headers: authenticated_header(user), params: {scene: id} }
+    before { get "/api/scenes/#{id}/scene_script", params: {scene: id}, headers: authenticated_header(user) }
     it 'returns status 200' do
       expect(response).to have_http_status(200)
     end

@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'Specializations API', type: :request do
   # initialize test data
-  include ApiHelper
   let!(:user) { create(:user)}
   let!(:specializations) { create_list(:specialization, 4) }
   let(:specialization_id) { specializations.first.id }
@@ -56,7 +55,7 @@ RSpec.describe 'Specializations API', type: :request do
     let(:valid_attributes) { { specialization: { title: 'Chief Whimsey Officer' } } }
 
     context 'when the request is valid' do
-      before { post '/api/specializations', params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { post '/api/specializations', params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'creates a specialization' do
         expect(json['title']).to eq('Chief Whimsey Officer')
@@ -68,7 +67,7 @@ RSpec.describe 'Specializations API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/api/specializations', params: { specialization: { seating_capacity: 5 } }, headers: authenticated_header(user), as: :json }
+      before { post '/api/specializations', params: { specialization: { seating_capacity: 5 } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -86,7 +85,7 @@ RSpec.describe 'Specializations API', type: :request do
     let(:valid_attributes) { { specialization: { title: 'Grand Vizier' } } }
 
     context 'when the record exists' do
-      before { put "/api/specializations/#{specialization_id}", params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { put "/api/specializations/#{specialization_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
