@@ -5,20 +5,21 @@ Sidekiq::Testing.fake!
 
 RSpec.describe 'Productions API' do
   # Initialize the test data
-  include ApiHelper
   let!(:user) { create(:user, role: "superadmin")}
   let!(:theater) {create(:theater)}
   let!(:other_theater) {create(:theater)}
   let!(:id) { productions.first.id }
+  let!(:default_users) { create_list(:user, 5) }
   let!(:rehearsal_schedule_pattern) {
-    { "block_length": "60", 
+    { "block_length": "60",
       "break_length": "5",
-      "days_of_week": ['Monday', 'Wednesday'], 
-      "end_date": "2020-03-20", 
+      "days_of_week": ['Monday', 'Wednesday'],
+      "default_user_ids": default_users.map { |u| u.id},
+      "end_date": "2020-03-20",
       "end_time": "17:00:00",
-      "production_id": productions.first.id, 
-      "time_between_breaks": "55", 
-      "start_date": "2020-02-20", 
+      "production_id": productions.first.id,
+      "time_between_breaks": "55",
+      "start_date": "2020-02-20",
       "start_time": "12:00:00"}
     }
     let!(:productions) { create_list(:production, 5, theater: theater) }
@@ -27,9 +28,9 @@ RSpec.describe 'Productions API' do
   #8 days of rehearsal, 5 hours of rehearsal time, blocks of 1 hour. Should create...... 40 rehearsal blocks?
 
   # Test suite for GET /productions
-  describe 'GET api/productions' do 
+  describe 'GET api/productions' do
     before {
-      get "/api/productions", headers: authenticated_header(user), as: :json
+      get "/api/productions", as: :json, headers: authenticated_header(user)
     }
 
     context 'when productions exist' do
@@ -45,7 +46,7 @@ RSpec.describe 'Productions API' do
 
   # Test suite for GET /productions/:id
   describe 'GET /productions/:id' do
-    before { get "/api/productions/#{id}", headers: authenticated_header(user), as: :json }
+    before { get "/api/productions/#{id}", as: :json, headers: authenticated_header(user) }
 
     context 'when production exists' do
       it 'returns status code 200' do
@@ -75,7 +76,7 @@ RSpec.describe 'Productions API' do
     let(:valid_attributes) { { production: attributes_for(:production, theater_id: theater.id) } }
 
     context 'when request attributes are valid' do
-      before { post "/api/productions", params: valid_attributes, headers: authenticated_header(user), as: :json }
+      before { post "/api/productions", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -83,7 +84,7 @@ RSpec.describe 'Productions API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/productions", params: { production: { start_date: Time.now, end_date: Time.now - 3.days } }, headers: authenticated_header(user), as: :json }
+      before { post "/api/productions", params: { production: { start_date: Time.now, end_date: Time.now - 3.days } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -100,7 +101,7 @@ RSpec.describe 'Productions API' do
   describe 'PUT /api/productions/:id' do
     let(:valid_attributes) { { production: attributes_for(:production, start_date: Time.now)  } }
 
-    before { put "/api/productions/#{id}", params: valid_attributes, headers: authenticated_header(user), as: :json }
+    before { put "/api/productions/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when production exists' do
       it 'returns status code 200' do
@@ -123,7 +124,7 @@ RSpec.describe 'Productions API' do
 
   # Test suite for DELETE /productions/:id
   describe 'DELETE /productions/:id' do
-    before { delete "/api/productions/#{id}", headers: authenticated_header(user), as: :json }
+    before { delete "/api/productions/#{id}", as: :json, headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
@@ -131,13 +132,13 @@ RSpec.describe 'Productions API' do
   end
 
   describe 'put /api/productions/:production_id/build_rehearsal_schedule' do
-    before { put "/api/productions/#{id}/build_rehearsal_schedule", as: :json, headers: authenticated_header(user), params: {production: {rehearsal_schedule_pattern: rehearsal_schedule_pattern} } }
+    before { put "/api/productions/#{id}/build_rehearsal_schedule", as: :json, params: {production: {rehearsal_schedule_pattern: rehearsal_schedule_pattern} }, headers: authenticated_header(user) }
     it 'returns 200' do
       expect(response).to have_http_status(200)
     end
-    it 'starts production build worker' do 
+    it 'starts production build worker' do
       expect(BuildRehearsalScheduleWorker.jobs.size).to eql(1)
-      BuildRehearsalScheduleWorker.drain 
+      BuildRehearsalScheduleWorker.drain
       expect(BuildRehearsalScheduleWorker.jobs.size).to eql(0)
       expect(Rehearsal.all.size).to eq(40)
       expect(Rehearsal.all.first.production.id).to eq(id)
@@ -145,18 +146,18 @@ RSpec.describe 'Productions API' do
   end
 
   describe 'get /api/productions/production_names' do
-    before { get "/api/productions/production_names"}
+    before { get "/api/productions/production_names", headers: authenticated_header(user)}
     it "returns 200" do
       expect(response).to have_http_status(200)
     end
     it 'returns all the productions, only names and ids' do
       expect(json.size).to eq(10)
       production = json[0]
-      expect(production['theater']).not_to be_empty 
+      expect(production['theater']).not_to be_empty
       expect(production['theater']).to include("name")
       expect(production['theater']).to include("id")
       expect(production['theater']).not_to include("address")
-      expect(production['play']).not_to be_empty 
+      expect(production['play']).not_to be_empty
       expect(production['play']).to include("title")
       expect(production['play']).to include("id")
       expect(production['play']).not_to include("author")
@@ -164,12 +165,12 @@ RSpec.describe 'Productions API' do
     end
   end
 
-  describe 'get /api/productions/get_productions_for_theater' do 
+  describe 'get /api/productions/get_productions_for_theater' do
     before { get "/api/productions/get_productions_for_theater", params: {theater: theater.id}, as: :json, headers: authenticated_header(user)}
     it 'returns 200' do
       expect(response).to have_http_status(200)
     end
-    it 'returns all productions for this theater, but not for other theaters' do 
+    it 'returns all productions for this theater, but not for other theaters' do
       expect(json[0]['theater']['id']).to eq(theater.id)
       expect(json).not_to include(other_theater.id)
     end

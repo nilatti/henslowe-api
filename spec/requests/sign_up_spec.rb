@@ -27,6 +27,7 @@ RSpec.describe 'POST /sign_up', type: :request do
     end
 
     it 'returns bad request status' do
+      puts response.body
       expect(response.status).to eq 400
     end
 

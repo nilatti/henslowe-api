@@ -3,11 +3,10 @@ require 'rails_helper'
 
 RSpec.describe 'Users API' do
   # Initialize the test data
-  include ApiHelper
   let!(:user) { create(:user) }
   let!(:users) {create_list(:user, 10)}
   let!(:id) { user.id }
-
+#tktktktkt test user create https://rubyyagi.com/rails-api-authentication-devise-doorkeeper/
   # Test suite for GET /productions/:production_id/rehearsals
   describe 'GET api/users' do
     before {
@@ -20,7 +19,7 @@ RSpec.describe 'Users API' do
       end
 
       it 'returns all users' do
-        expect(json.size).to eq(11)
+        expect(json.size).to eq(12)
       end
     end
   end
@@ -61,10 +60,10 @@ RSpec.describe 'Users API' do
           "user_id": user.id,
           "start_date": "2020-02-20",
           "start_time": "12:00:00"}
-      put "/api/users/#{user.id}/build_conflict_schedule", as: :json, headers: authenticated_header(user), params: {user: {conflict_schedule_pattern: conflict_schedule_pattern} }
+      put "/api/users/#{user.id}/build_conflict_schedule", as: :json, params: {conflict_schedule_pattern: conflict_schedule_pattern}, headers: authenticated_header(user)
     }
     it 'returns 200' do
-      puts(response.body)
+      puts response.body
       expect(response).to have_http_status(200)
     end
     it 'starts production build worker' do

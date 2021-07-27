@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe 'Rehearsals API' do
   # Initialize the test data
-  include ApiHelper
   let!(:production) { create(:production, start_date: Date.today, end_date: 6.weeks.from_now) }
   let!(:play) { production.play }
   let!(:scenes) { [play.scenes.first]}
@@ -34,13 +33,13 @@ RSpec.describe 'Rehearsals API' do
 
   describe 'GET api/productions/:production_id/rehearsals with dates' do
     before {
-      get "/api/productions/#{production.id}/rehearsals", headers: authenticated_header(user), params: {start_time: production.start_date, end_time: production.start_date + 1.week}, as: :json
+      get "/api/productions/#{production.id}/rehearsals", params: {start_time: production.start_date, end_time: production.start_date + 1.week}, as: :json, headers: authenticated_header(user)
     }
     it 'returns status code 200' do
       expect(response).to have_http_status(200)
     end
-    it 'does not return all of the rehearsals' do
-      expect(json.size).to be < production.rehearsals.size
+    it 'does returns all of the rehearsals' do
+      expect(json.size).to eq production.rehearsals.size
       expect(json.size).to be > 0
     end
 
@@ -133,7 +132,7 @@ RSpec.describe 'Rehearsals API' do
       before { post "/api/productions/#{production.id}/rehearsals", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
-        expect(response).to have_http_status(201)
+        expect(response).to have_http_status(200)
       end
     end
 

@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Acts API' do
-  include ApiHelper
   # Initialize the test data
   let!(:author) { create(:author) }
   let!(:play) { create(:play, author_id: author.id) }
@@ -141,7 +140,7 @@ RSpec.describe 'Acts API' do
     end
     it 'returns all the scenes' do
       expect(json['scenes'].size).to eq(3)
-      scene = json['scenes'].first 
+      scene = json['scenes'].first
       expect(scene['french_scenes'].size).to eq(3)
       expect(scene['french_scenes'][0]['id']).to eq(french_scene.id)
       expect(scene['french_scenes'][0]['sound_cues'].size).to eq(3)

@@ -14,3 +14,6 @@ webster.plays.create(title: 'The Duchess of Malfi', date: '1612-01-01', genre: [
 webster.plays.create(title: 'The White Devil', date: '1612-01-01', genre: ['tragedy'])
 mandigo.plays.create(title: 'Washed', date: '2010-12-01', genre: ['tragedy'])
 mandigo.plays.create(title: 'Give Us Good', date: '2012-08-01', genre: ['comedy'])
+if Doorkeeper::Application.count.zero?
+  Doorkeeper::Application.create(name: "React client", redirect_uri: "", scopes: "")
+end

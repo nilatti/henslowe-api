@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_31_021925) do
+ActiveRecord::Schema.define(version: 2021_07_20_125431) do
 
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
@@ -24,6 +24,34 @@ ActiveRecord::Schema.define(version: 2021_05_31_021925) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
+  end
+
+  create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", charset: "utf8mb3", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "acts", charset: "utf8mb3", force: :cascade do |t|
@@ -243,28 +271,32 @@ ActiveRecord::Schema.define(version: 2021_05_31_021925) do
     t.index ["french_scene_id"], name: "index_lines_on_french_scene_id"
   end
 
-  create_table "oauth_access_grants", charset: "utf8mb3", force: :cascade do |t|
-    t.bigint "resource_owner_id", null: false
-    t.integer "application_id"
-    t.string "token", null: false
-    t.integer "expires_in", null: false
-    t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
-    t.string "scopes", default: "", null: false
-    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
-  end
-
   create_table "oauth_access_tokens", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "resource_owner_id"
-    t.integer "application_id"
-    t.text "token", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
     t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  end
+
+  create_table "oauth_applications", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri"
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
   create_table "on_stages", charset: "utf8mb3", force: :cascade do |t|
@@ -480,6 +512,8 @@ ActiveRecord::Schema.define(version: 2021_05_31_021925) do
     t.index ["play_id"], name: "index_words_on_play_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "acts", "plays"
   add_foreign_key "character_groups", "plays"
   add_foreign_key "characters", "character_groups"
@@ -500,7 +534,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_021925) do
   add_foreign_key "lines", "character_groups"
   add_foreign_key "lines", "characters"
   add_foreign_key "lines", "french_scenes"
-  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "on_stages", "character_groups"
   add_foreign_key "plays", "authors"
   add_foreign_key "productions", "theaters"

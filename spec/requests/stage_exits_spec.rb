@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'StageExits API', type: :request do
   # initialize test data
-  include ApiHelper
   let!(:production) { create(:production)}
   let!(:stage_exits) { create_list(:stage_exit, 4, production: production) }
   let(:stage_exit_id) { stage_exits.first.id }

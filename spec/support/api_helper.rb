@@ -1,7 +1,9 @@
 module ApiHelper
   def authenticated_header(user)
-    headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-    # This will add a valid token for `user` in the `Authorization` header
-    return Devise::JWT::TestHelpers.auth_headers(headers, user)
+    # application = FactoryBot.create(:application)
+    user = FactoryBot.create(:user)
+    application = create(:application)
+    token = FactoryBot.create(:access_token, application: application, resource_owner_id: user.id)
+    headers = { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token.token }
   end
 end
