@@ -1,5 +1,5 @@
 class PlaysController < ApiController
-  before_action :set_author, only: %i[index, create]
+  before_action :set_author, only: %i[index create]
   before_action :set_play, only: %i[
     show
     update

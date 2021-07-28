@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    skip_controllers :authorizations, :applications, :authorized_applications
+  end
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   ActiveAdmin.routes(self)
@@ -15,7 +17,7 @@ Rails.application.routes.draw do
      match '/users', to: 'registrations#create', via: :post
    end
     # resources :users do
-    resources :users, only: [:index, :show, :update, :destroy] do
+    resources :users, only: [:create, :index, :show, :update, :destroy] do
       resources :conflicts
       resources :conflict_patterns
       member do

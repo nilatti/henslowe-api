@@ -1,4 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
+  # skip_before_action :doorkeeper_authorize!, only: %i[create]
   respond_to :json
 
   def create

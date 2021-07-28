@@ -1,28 +1,16 @@
-# frozen_string_literal: true
-
 Doorkeeper.configure do
   orm :active_record
 
-  resource_owner_from_credentials do |routes|
-    email = "#{params[:email]}".downcase
-    Rails.logger.info email
-    puts(email)
-    puts "Calling user search!"
-    # return if email.blank?
-    puts (User.find_by(email: email).id)
-    user = User.find_by(email: email)
-    puts(user)
-    if user
-      user
-    else
-      User.new
-    end
+  resource_owner_from_credentials do |_routes|
+    User.authenticate(params[:email], params[:password])
   end
-base_controller 'ApiController'
-  use_refresh_token
   grant_flows %w[password]
+  allow_blank_redirect_uri true
   skip_authorization do
     true
   end
+  use_refresh_token
 end
-Doorkeeper::OAuth::TokenResponse.send :prepend, CustomTokenResponse
+Rails.application.reloader.to_prepare do
+  Doorkeeper::OAuth::TokenResponse.send :prepend, CustomTokenResponse
+end
