@@ -44,7 +44,7 @@ RSpec.describe Scene, type: :model do
 
    it "finds onstages for play (but only one per character or group)" do
     on_stages = {
-      character_ids: [play.characters.first.id, play.characters[1].id, play.characters.last.id],
+      character_ids: [play.characters[0].id, play.characters[1].id, play.characters[2].id],
       character_group_ids: [play.character_groups.first.id, play.character_groups.last.id]
     }
     create(:on_stage, french_scene: scene.french_scenes.first, character: play.characters.first)
