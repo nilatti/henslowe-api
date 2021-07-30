@@ -377,7 +377,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   puma (~> 4.3)
   rack-cors
-  rails (~> 6.1.1)
+  rails (~> 6.1.4)
   redis (~> 4.0)
   rspec-rails
   rspec-sidekiq
