@@ -1,8 +1,10 @@
 Doorkeeper.configure do
   orm :active_record
-
+  puts "doorkeeper called"
   resource_owner_from_credentials do |_routes|
     User.authenticate(params[:email], params[:password])
+    puts "auth user"
+    puts(User.authenticate(params[:email], params[:password]))
   end
   grant_flows %w[password]
   allow_blank_redirect_uri true

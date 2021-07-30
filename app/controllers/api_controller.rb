@@ -10,8 +10,9 @@ class ApiController < ActionController::API
   end
 
   def current_user
-       @current_user ||= User.find_by(id: doorkeeper_token[:resource_owner_id])
-     end
+    @current_user ||= User.find_by(id: doorkeeper_token[:resource_owner_id])
+    puts (@current_user.email)
+  end
 #   def current_user
 #
 #   @current_user ||= if doorkeeper_token
