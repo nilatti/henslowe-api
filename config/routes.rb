@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   end
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
-  ActiveAdmin.routes(self)
   scope 'api' do
   devise_for :users,
              path: '',
