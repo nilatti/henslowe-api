@@ -43,12 +43,23 @@ test:
 #   DATABASE_URL="mysql2://myuser:mypass@localhost/somedatabase"
 #
 # You can use this database configuration with:
-#
-#   production:
-#     url: <%= ENV['DATABASE_URL'] %>
+
+  # production:
+  #   <<: *default
 #
 production:
   <<: *default
-  database: june_20_production
-  username: june_20
-  password: <%= ENV['JUNE_20_DATABASE_PASSWORD'] %>
+  adapter: mysql2
+  encoding: utf8
+  # database: hc_production
+  database: <%= ENV['RDS_DB_NAME'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  # url: <%= ENV['DATABASE_URL'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  port: <%= ENV['RDS_PORT'] %>
+# production:
+#   <<: *default
+#   database: june_20_production
+#   username: june_20
+#   password: <%= ENV['JUNE_20_DATABASE_PASSWORD'] %>

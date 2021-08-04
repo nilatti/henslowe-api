@@ -216,7 +216,7 @@ GEM
     parser (3.0.2.0)
       ast (~> 2.4.1)
     public_suffix (4.0.6)
-    puma (4.3.8)
+    puma (5.3.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -373,9 +373,10 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   montrose
   mysql2 (>= 0.3.18, < 0.6.0)
+  nio4r (= 2.5.7)
   numbers_and_words
   omniauth-google-oauth2
-  puma (~> 4.3)
+  puma (= 5.3.2)
   rack-cors
   rails (~> 6.1.4)
   redis (~> 4.0)

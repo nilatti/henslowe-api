@@ -37,7 +37,6 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Run Tests
       run: |
-        cp config/database.yml.ci config/database.yml
         sudo service mysql start
         bundle exec rails db:prepare
       env:
@@ -45,7 +44,8 @@ jobs:
         RAILS_ENV: development
     - name: Generate deployment package
       run: |
-        zip -r deploy.zip . -x '*.git*'
+        bundle package
+        zip -r deploy.zip app bin build config db/schema.rb lib public vendor config.ru Gemfile Gemfile.lock Rakefile
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v11
       with:
