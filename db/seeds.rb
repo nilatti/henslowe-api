@@ -1,19 +1,9 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
-
-webster = Author.create!(birthdate: '1580-01-01', deathdate: '1634-01-01', nationality: 'English', first_name: 'John', last_name: 'Webster', gender: 'male')
-mandigo = Author.create!(birthdate: '1985-12-14', nationality: 'American', first_name: 'Pam', last_name: 'Mandigo', gender: 'female')
-shakespeare = Author.create!(birthdate: '1564-04-23', deathdate: '1616-04-23', nationality: 'English', first_name: 'William', last_name: 'Shakespeare', gender: 'male')
-webster.plays.create(title: 'The Duchess of Malfi', date: '1612-01-01', genre: ['tragedy'])
-webster.plays.create(title: 'The White Devil', date: '1612-01-01', genre: ['tragedy'])
-mandigo.plays.create(title: 'Washed', date: '2010-12-01', genre: ['tragedy'])
-mandigo.plays.create(title: 'Give Us Good', date: '2012-08-01', genre: ['comedy'])
-if Doorkeeper::Application.count.zero?
-  Doorkeeper::Application.create(name: "React client", redirect_uri: "", scopes: "")
-end
+Theater.create({"name"=>"Grand Rapids Civic Theater", "street_address"=>"30 N DIVISION", "city"=>"Grand Rapids", "state"=>"MI", "zip"=>"", "phone_number"=>"616.222.6650", "mission_statement"=>"We are committed to enhance the cultural life of West Michigan by creating opportunities for people to enjoy live theatre performances using community artists, and to provide access to a comprehensive theatre arts education program for all ages.", "website"=>"https://www.grct.org/", "calendar_url"=>nil, "logo"=>nil})
+Theater.create({"name"=>"Harrisonburg High School Stage Streaks", "street_address"=>"1001 Garbers Church Rd", "city"=>"Harrisonburg", "state"=>"VA", "zip"=>"22801", "phone_number"=>"55555555555", "mission_statement"=>"make plays that rock so hard and stick it to the man.", "website"=>"hhs theater.com", "calendar_url"=>nil, "logo"=>nil})
+Theater.create({"name"=>"Pigeon Creek Shakespeare", "street_address"=>"225 Franklin Avenue, Suite B", "city"=>"Grand Haven", "state"=>"MI", "zip"=>"49417", "phone_number"=>"", "mission_statement"=>"Based in Grand Haven, Michigan, the Pigeon Creek Shakespeare Company seeks to offer performances of Shakespeare's works to Michigan audiences in a variety of non-traditional theatre venues.\n\nPigeon Creek Shakespeare employs techniques of theatrical performance such as universal lighting and audience contact to adapt its productions to multiple performance venues, and to actively engage audience members in performance.\n\nThe company's goals are to explore the original theatrical practices of the acting companies of Shakespeare's time; to provide high quality productions of works by Shakespeare and his contemporaries to regional theatre audiences; to provide local actors, directors, and stage managers the opportunity to work with these wonderful scripts and to receive training in an original practice approach to Shakespeare's plays; and to maintain an organizational philosophy in which theatre practitioners participate in the administration of the company on a regular basis.", "website"=>"pcshakespeare.com", "calendar_url"=>nil, "logo"=>"https://res.cloudinary.com/nilatti/image/upload/v1596419719/henslowes_cloud/qivnoailfupz3hprps70.webp"})
+Author.create({"birthdate"=>Thu, 09 Sep 2010, "deathdate"=>nil, "nationality"=>"American", "first_name"=>"Silas", "middle_name"=>"Anansi", "last_name"=>"Huber", "gender"=>""})
+Author.create({"birthdate"=>Sat, 14 Dec 1985, "deathdate"=>nil, "nationality"=>"American", "first_name"=>"Pamela", "middle_name"=>"Dynonichus", "last_name"=>"Mandigozo", "gender"=>"female"})
+Author.create({"birthdate"=>nil, "deathdate"=>nil, "nationality"=>"American", "first_name"=>"Meg", "middle_name"=>"", "last_name"=>"Miroshnik", "gender"=>""})
+Author.create({"birthdate"=>Sun, 23 Apr 1564, "deathdate"=>Sat, 23 Apr 1616, "nationality"=>"English", "first_name"=>"William", "middle_name"=>nil, "last_name"=>"Shakespeare", "gender"=>"male"})
+Author.create({"birthdate"=>Fri, 01 Jan 1580, "deathdate"=>Sun, 01 Jan 1634, "nationality"=>"English", "first_name"=>"John", "middle_name"=>nil, "last_name"=>"Webster", "gender"=>"male"})
+Author.create({"birthdate"=>nil, "deathdate"=>nil, "nationality"=>nil, "first_name"=>"TJ", "middle_name"=>nil, "last_name"=>"Young", "gender"=>nil})
