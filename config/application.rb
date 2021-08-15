@@ -26,12 +26,6 @@ module June20
     config.to_prepare do
       DeviseController.respond_to :html, :json
     end
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
-      end
-    end
     config.after_initialize do
 
     require 'custom_token_response'
@@ -43,8 +37,7 @@ end
     config.middleware.use ActionDispatch::Session::CookieStore
     config.app_generators.scaffold_controller = :scaffold_controller
     config.x.cors_allowed_origins
-    config.hosts = ['localhost', 'www.example.com', 'henslowescloud.com', 'api.henslowescloud.com']
-    # config.hosts = 'henslowescloud.com'
+    config.hosts = ['localhost', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com']
     config.api_only = true
     config.active_job.queue_adapter = :sidekiq
 
