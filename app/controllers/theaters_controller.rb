@@ -1,4 +1,5 @@
 class TheatersController < ApiController
+  skip_before_action :doorkeeper_authorize!, only: %i[index show theater_names]
   before_action :set_theater, only: %i[show update destroy]
 
   # GET /theaters

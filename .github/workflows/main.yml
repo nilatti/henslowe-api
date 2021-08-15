@@ -45,7 +45,7 @@ jobs:
     - name: Generate deployment package
       run: |
         bundle package
-        zip -r deploy.zip app bin build config db/schema.rb lib public vendor config.ru Gemfile Gemfile.lock Rakefile
+        zip -r deploy.zip app bin build config db lib public vendor config.ru Gemfile Gemfile.lock Rakefile .platform
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v11
       with:
