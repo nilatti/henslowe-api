@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-    devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2]
+    # devise :database_authenticatable, :registerable,
+         # :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2]
          # :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   ROLES = %i[superadmin regular]
@@ -27,7 +27,16 @@ class User < ApplicationRecord
     user = User.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil
   end
-  
+
+  def self.from_omniauth(auth)
+    user = User.find_or_create_by(email: auth['info']['email']) do |user|
+      user.provider = auth['provider']
+      user.uid = auth['uid']
+      user.email = auth['info']['email']
+    end
+    return user
+  end
+
   def castings_for_production(production)
     jobs = production_jobs(production)
     acting_jobs = jobs.select { |job| job.specialization.title == "Actor"}
