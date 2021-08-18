@@ -35,7 +35,6 @@ end
     config.action_controller.forgery_protection_origin_check = false
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Flash
-    config.session_store :cookie_store, key: '_interslice_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_henslowe'
     config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, key: '_henslowe')
