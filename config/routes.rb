@@ -11,22 +11,9 @@ Rails.application.routes.draw do
   post 'auth/:provider/callback', to: 'sessions#create'
 
   get 'auth/failure', to: redirect('/')
-
-  get 'signout', to: 'sessions#destroy', as: 'signout'
   resources :sessions, only: %i(new create destroy)
   scope 'api' do
-  # devise_for :users,
-  #            path: '',
-  #            controllers: {
-  #              omniauth_callbacks: 'users/omniauth_callbacks',
-  #              sessions: 'sessions',
-  #              registrations: 'registrations'
-  #            }
-  #  devise_scope :user do
-  #    match '/users', to: 'registrations#create', via: :post
-  #  end
     resources :users do
-    # resources :users, only: [:create, :index, :show, :update, :destroy] do
       resources :conflicts
       resources :conflict_patterns
       member do

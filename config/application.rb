@@ -23,9 +23,6 @@ module June20
 
     config.load_defaults 6.0
     config.autoload_paths << "#{Rails.root}/lib"
-    # config.to_prepare do
-    #   DeviseController.respond_to :html, :json
-    # end
     config.after_initialize do
 
     require 'custom_token_response'

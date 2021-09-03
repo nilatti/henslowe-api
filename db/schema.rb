@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_20_125431) do
+ActiveRecord::Schema.define(version: 2021_08_15_192412) do
 
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
@@ -269,6 +269,20 @@ ActiveRecord::Schema.define(version: 2021_07_20_125431) do
     t.index ["character_group_id"], name: "index_lines_on_character_group_id"
     t.index ["character_id"], name: "index_lines_on_character_id"
     t.index ["french_scene_id"], name: "index_lines_on_french_scene_id"
+  end
+
+  create_table "oauth_access_grants", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
+    t.string "scopes", default: "", null: false
+    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
   create_table "oauth_access_tokens", charset: "utf8mb3", force: :cascade do |t|
@@ -534,7 +548,10 @@ ActiveRecord::Schema.define(version: 2021_07_20_125431) do
   add_foreign_key "lines", "character_groups"
   add_foreign_key "lines", "characters"
   add_foreign_key "lines", "french_scenes"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "on_stages", "character_groups"
   add_foreign_key "plays", "authors"
   add_foreign_key "productions", "theaters"

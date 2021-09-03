@@ -8,8 +8,6 @@ require File.expand_path('../config/environment', __dir__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 
-require 'devise'
-require 'devise/jwt/test_helpers'
 require_relative 'support/controller_macros'
 
 Dir['spec/support/**/*.rb'].each do |file|
@@ -32,7 +30,20 @@ end
 #
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 # Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
-
+OmniAuth.config.test_mode = true
+  OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+      :provider => "google_oauth2",
+      :uid => "123456789",
+      :info => {
+        :name => "Tony Stark",
+        :email => "tony@stark.com"
+      },
+      :credentials => {
+        :token => "token",
+        :refresh_token => "refresh token"
+      }
+    }
+  )
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
@@ -50,11 +61,9 @@ end
 RSpec.configure do |config|
   config.include RequestSpecHelper, type: :request
   config.include OmniauthMacros
-  config.include ApiHelper
+  config.include ApiHelpers
   config.include FactoryBot::Syntax::Methods
   config.include DefaultFormat, type: :request
-  config.include Devise::Test::ControllerHelpers, :type => :controller
-  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FactoryBot::Syntax::Methods
   config.extend ControllerMacros, :type => :controller
   config.extend ControllerMacros, :type => :request

@@ -1,14 +1,8 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-    # devise :database_authenticatable, :registerable,
-         # :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2]
-         # :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-
   ROLES = %i[superadmin regular]
 
   validates_uniqueness_of :email, case_sensitive: false
-  validates_presence_of :first_name, :last_name, :phone_number, :email
+  validates_presence_of :first_name, :last_name, :email
   has_many :conflicts, dependent: :destroy
   has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
@@ -22,7 +16,6 @@ class User < ApplicationRecord
 
   default_scope {order(:last_name, :first_name, :email)}
 
-  # the authenticate method from devise documentation
   def self.authenticate(email, password)
     user = User.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil
@@ -33,6 +26,8 @@ class User < ApplicationRecord
       user.provider = auth['provider']
       user.uid = auth['uid']
       user.email = auth['info']['email']
+      user.first_name = auth['info']['first_name']
+      user.last_name = auth['info']['last_name']
     end
     return user
   end

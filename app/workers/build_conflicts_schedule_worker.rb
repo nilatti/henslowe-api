@@ -3,7 +3,11 @@ class BuildConflictsScheduleWorker
 
   def perform(category, conflict_pattern_id, days_of_week, end_date, end_time, space_id, start_date, start_time, user_id)
     days_of_week = days_of_week.split(',')
-    space_id = space_id.to_i
+    if space_id
+      space_id = space_id.to_i
+    else
+      space_id = nil
+    end
     user_id = user_id.to_i
     logger.info "starting build conflicts schedule."
     logger.info(start_date)

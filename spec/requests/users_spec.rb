@@ -6,7 +6,7 @@ RSpec.describe 'Users API' do
   let!(:user) { create(:user) }
   let!(:users) {create_list(:user, 10)}
   let!(:id) { user.id }
-#tktktktkt test user create https://rubyyagi.com/rails-api-authentication-devise-doorkeeper/
+  let!(:space) {create(:space)}
   # Test suite for GET /productions/:production_id/rehearsals
   describe 'GET api/users' do
     before {
@@ -19,7 +19,7 @@ RSpec.describe 'Users API' do
       end
 
       it 'returns all users' do
-        expect(json.size).to eq(12)
+        expect(json.size).to eq(11)
       end
     end
   end
@@ -58,6 +58,7 @@ RSpec.describe 'Users API' do
           "end_date": "2020-03-20",
           "end_time": "17:00:00",
           "user_id": user.id,
+          "space_id": space.id,
           "start_date": "2020-02-20",
           "start_time": "12:00:00"}
       put "/api/users/#{user.id}/build_conflict_schedule", as: :json, params: {conflict_schedule_pattern: conflict_schedule_pattern}, headers: authenticated_header(user)
