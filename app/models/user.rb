@@ -124,8 +124,49 @@ class User < ApplicationRecord
       return false
     end
   end
-
   def theater_jobs(theater)
     self.jobs.select { |job| job.theater_id == theater.id }
+  end
+  def jobs_overlap(target_user)
+    if self.superadmin?
+      return "superadmin"
+    elsif self == target_user
+      return "self"
+    end
+    # determines level of relationship between current user and target user, which then determines the amount of access user has to target user information.
+    # current theater admin can see everything
+    # current production admin can see a lot of things
+    # current production peer can see less than production admin
+    # current theater peer can see less than production peer
+    # past peers can see limited amount
+    self_user_theaters = self.jobs.map {|job| job.theater.id}.to_set
+    target_user_theaters = target_user.jobs.map {|job| job.theater.id}.to_set
+    theaters_overlap = self_user_theaters & target_user_theaters
+    if theaters_overlap.size == 0
+      return "none"
+    end
+    # check for current jobs for both users
+    target_user_current_jobs = target_user.jobs.select {|job| job.end_date < Date.today + 1.month }
+    self_user_current_jobs = self.jobs.select {|job| job.end_date < Date.today + 1.month }
+    if target_user_current_jobs.size == 0 || self_user_current_jobs.size == 0
+      return "past peer"
+    end
+    theater_admin = theaters_overlap.select {|theater_id| self.theater_admin?(Theater.find(theater_id))}
+    if theater_admin.size > 0
+      return "theater admin"
+    end
+    self_user_productions = self.jobs.map {|job| job.production.id}.to_set
+    target_user_productions = target_user.jobs.map {|job| job.production.id}.to_set
+    productions_overlap = self_user_productions & target_user_productions
+    if productions_overlap.size > 0
+      production_admin = productions_overlap.select {|production_id| self.production_admin?(Production.find(production_id))}
+      if production_admin.size > 0
+        return "production admin"
+      else
+        return "production peer"
+      end
+    else
+      return "theater peer"
+    end
   end
 end

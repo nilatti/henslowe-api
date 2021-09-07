@@ -14,13 +14,10 @@ class SessionsController  < ApiController
   end
 
   def create
-    puts "sessions create called with auth hash"
-    puts (request.env['omniauth.auth'])
-    puts "finding user"
     user = User.from_omniauth(auth_hash)
     if user
       created_jwt = CoreModules::JsonWebToken.encode({id: user.id})
-      cookies.signed[:jwt] = {value:  created_jwt, httponly: true, expires: 1.hour.from_now}
+      cookies.signed[:jwt] = {value: created_jwt, httponly: true, expires: 1.hour.from_now}
       render json: {user: {
         email: user.email,
         first_name: user.first_name,

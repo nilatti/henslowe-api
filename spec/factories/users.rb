@@ -11,8 +11,8 @@ FactoryBot.define do
     gender { Faker::Gender.type }
     last_name { Faker::Name.last_name }
     middle_name { Faker::Name.middle_name }
-    # password {'testtesttest'}
     phone_number { Faker::PhoneNumber.cell_phone }
+    preferred_name { Faker::Name.first_name}
     program_name { Faker::Name.name }
     role { "regular" }
     state { Faker::Address.state_abbr }

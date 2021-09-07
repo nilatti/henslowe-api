@@ -7,7 +7,7 @@ class ApiController < ActionController::API
   # respond_to :json
   # skip_protect_from_forgery
 
-  # before_action :authenticate_current_user
+  before_action :authenticate_current_user
   rescue_from CanCan::AccessDenied do |exception|
     render json: { message: exception.message }, status: 403
   end
@@ -20,7 +20,7 @@ class ApiController < ActionController::API
     end
     if user then return user else return false end
   end
-  
+
   def authenticate_current_user
     if cookies.signed[:jwt]
       jwt = cookies.signed[:jwt]

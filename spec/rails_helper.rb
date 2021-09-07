@@ -31,19 +31,19 @@ end
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 # Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 OmniAuth.config.test_mode = true
-  OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
-      :provider => "google_oauth2",
-      :uid => "123456789",
-      :info => {
-        :name => "Tony Stark",
-        :email => "tony@stark.com"
-      },
-      :credentials => {
-        :token => "token",
-        :refresh_token => "refresh token"
-      }
+OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+    :provider => "google_oauth2",
+    :uid => "123456789",
+    :info => {
+      :name => "Tony Stark",
+      :email => "tony@stark.com"
+    },
+    :credentials => {
+      :token => "token",
+      :refresh_token => "refresh token"
     }
-  )
+  }
+)
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin

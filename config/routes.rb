@@ -5,9 +5,6 @@ Rails.application.routes.draw do
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
-
-
-
   post 'auth/:provider/callback', to: 'sessions#create'
 
   get 'auth/failure', to: redirect('/')
