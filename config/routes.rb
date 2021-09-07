@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  # use_doorkeeper do
-  #   skip_controllers :authorizations, :applications, :authorized_applications
-  # end
-
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
   post 'auth/:provider/callback', to: 'sessions#create'

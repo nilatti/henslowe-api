@@ -22,7 +22,6 @@ gem 'bcrypt', '~> 3.1.7'
 #Active Admin
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
-# gem 'doorkeeper', '~> 5.4.0'
 gem 'nio4r', '=2.5.7'
 gem 'sidekiq'
 
