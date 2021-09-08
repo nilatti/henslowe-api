@@ -22,9 +22,9 @@ gem 'bcrypt', '~> 3.1.7'
 #Active Admin
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
-gem 'nio4r', '=2.5.7'
+gem 'nio4r'#  , '=2.5.7'
 gem 'sidekiq'
-
+gem 'figaro'
 gem 'activerecord-import'
 # montrose provides recurrence logic
 gem "montrose"

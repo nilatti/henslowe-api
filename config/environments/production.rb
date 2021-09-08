@@ -69,6 +69,9 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+  config.hosts << "hcapi-env.eba-epmrxskb.us-east-1.elasticbeanstalk.com"
+  config.hosts << IPAddr.new("172.31.50.143")
+  config.hosts << IPAddr.new("172.31.29.10")
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
