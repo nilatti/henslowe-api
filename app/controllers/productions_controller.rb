@@ -8,16 +8,20 @@ class ProductionsController < ApiController
 
   # GET /productions
   def index
-    @productions = Production.all
-
+    @productions = []
+    if current_user.superadmin?
+      @productions = Production.all
+    else
+      @productions = current_user.productions
+    end
     json_response(@productions.as_json(include: [:play, :theater]))
-    # render json: @productions
   end
 
   # GET /productions/1
   def show
     json_response(@production.as_json(include:
         [
+
           :theater,
           :stage_exits,
           jobs: {
@@ -32,6 +36,9 @@ class ProductionsController < ApiController
           },
           play: {
             include: :characters
+          },
+          rehearsals: {
+            include: [:acts, :users, french_scenes: {methods: :pretty_name}, scenes: {methods: :pretty_name}]
           }
         ]
       )
@@ -107,7 +114,13 @@ class ProductionsController < ApiController
   end
 
   def production_names
-    @productions = Production.all
+    @productions = []
+    if current_user.superadmin?
+      @productions = Production.all
+    else
+      @productions = current_user.productions
+    end
+
     render json: @productions.as_json(only: [:id, :name], include: [play: { only: [:id, :title]}, theater: { only: [:name, :id]}])
   end
 

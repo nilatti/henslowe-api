@@ -17,7 +17,7 @@ class SessionsController  < ApiController
     user = User.from_omniauth(auth_hash)
     if user
       created_jwt = CoreModules::JsonWebToken.encode({id: user.id})
-      cookies.signed[:jwt] = {value: created_jwt, httponly: true, expires: 1.hour.from_now}
+      cookies.signed[:jwt] = {value: created_jwt, httponly: true, expires: 1.month.from_now}
       render json: {user: {
         email: user.email,
         first_name: user.first_name,

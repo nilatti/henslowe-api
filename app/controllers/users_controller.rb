@@ -1,5 +1,5 @@
 class UsersController < ApiController
-  load_and_authorize_resource
+  # load_and_authorize_resource
   before_action :set_user, only: %i[show update destroy]
 
   # GET /Users
@@ -10,85 +10,127 @@ class UsersController < ApiController
 
   # GET /Users/1
   def show
-    overlap = current_user.jobs_overlap(@user)
-    puts overlap
-    if overlap == "none"
-      json_response(@user.as_json(only: [
-          :bio,
-          :city,
-          :description,
-          :email,
-          :first_name,
-          :gender,
-          :id,
-          :last_name,
-          :preferred_name,
-          :program_name,
-          :state,
-          :website
-        ]))
-    elsif overlap == "past peer"
-      json_response(@user.as_json(only: [
-          :bio,
-          :city,
-          :description,
-          :email,
-          :first_name,
-          :gender,
-          :id,
-          :last_name,
-          :preferred_name,
-          :program_name,
-          :state,
-          :website
-        ],
-        include: :jobs
-      ))
-    elsif overlap == "theater peer"
-      json_response(@user.as_json(only: [
-          :bio,
-          :city,
-          :description,
-          :email,
-          :first_name,
-          :gender,
-          :id,
-          :last_name,
-          :phone_number,
-          :preferred_name,
-          :program_name,
-          :state,
-          :street_address,
-          :website,
-          :zip
-        ],
-        include: [:jobs, :conflicts, :conflict_patterns]
-      ))
-    elsif overlap == "production peer"
-      json_response(@user.as_json(only: [
-          :bio,
-          :city,
-          :description,
-          :email,
-          :emergency_contact_name,
-          :emergency_contact_number,
-          :first_name,
-          :gender,
-          :id,
-          :last_name,
-          :phone_number,
-          :preferred_name,
-          :program_name,
-          :state,
-          :street_address,
-          :timezone,
-          :website,
-          :zip
-        ],
-        include: [:jobs, :conflicts, :conflict_patterns]
-      ))
-    elsif overlap == "superadmin" || overlap == "self" ||overlap == "theater admin" || overlap == "production admin"
-      json_response(@user.as_json(include: [:conflicts, :conflict_patterns, :jobs]))
+    if current_user && @user
+      overlap = current_user.jobs_overlap(@user)
+      if overlap == "none"
+        json_response(@user.as_json(only: [
+            :bio,
+            :city,
+            :description,
+            :email,
+            :first_name,
+            :gender,
+            :id,
+            :last_name,
+            :preferred_name,
+            :program_name,
+            :state,
+            :website
+          ]))
+      elsif overlap == "past peer"
+        json_response(@user.as_json(only: [
+            :bio,
+            :city,
+            :description,
+            :email,
+            :first_name,
+            :gender,
+            :id,
+            :last_name,
+            :preferred_name,
+            :program_name,
+            :state,
+            :website
+          ],
+          include: :jobs
+        ))
+      elsif overlap == "theater peer"
+        json_response(@user.as_json(only: [
+            :bio,
+            :city,
+            :description,
+            :email,
+            :first_name,
+            :gender,
+            :id,
+            :last_name,
+            :phone_number,
+            :preferred_name,
+            :program_name,
+            :state,
+            :street_address,
+            :website,
+            :zip
+          ],
+          include: [:conflicts, :conflict_patterns, :jobs]
+        ))
+      elsif overlap == "production peer"
+        json_response(@user.as_json(only: [
+            :bio,
+            :city,
+            :description,
+            :email,
+            :emergency_contact_name,
+            :emergency_contact_number,
+            :first_name,
+            :gender,
+            :id,
+            :last_name,
+            :phone_number,
+            :preferred_name,
+            :program_name,
+            :state,
+            :street_address,
+            :timezone,
+            :website,
+            :zip
+          ],
+          include: [:jobs, :conflicts, :conflict_patterns]
+        ))
+      elsif overlap == "superadmin" || overlap == "self" ||overlap == "theater admin" || overlap == "production admin"
+        json_response(@user.as_json(include:
+          [
+            :conflicts,
+            :conflict_patterns,
+            jobs: {
+              include: [
+                production: {
+                  include: {
+                    play: {
+                      only: [
+                        :id,
+                        :title
+                        ]
+                      }
+                    }
+                  },
+                specialization: {
+                  only: :title
+                },
+                theater: {
+                  only: :name
+                }
+              ]
+            },
+            rehearsals: {
+              include: [
+                :acts,
+                :users,
+                french_scenes: {
+                  methods:
+                  :pretty_name
+                },
+                scenes: {
+                  methods:
+                  :pretty_name
+                }
+              ]
+            }
+          ]
+        ))
+      end
+    else
+      return head :forbidden
     end
   end
 
