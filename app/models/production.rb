@@ -2,6 +2,7 @@ class Production < ApplicationRecord
   attr_accessor :play_id
   belongs_to :theater
   has_many :jobs, dependent: :destroy
+  has_many :users, through: :jobs
 
   has_one :play, dependent: :destroy
 

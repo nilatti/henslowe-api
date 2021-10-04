@@ -7,12 +7,15 @@ FactoryBot.define do
     theater
     user
 
-    trait :actor_job do 
+    trait :actor_job do
       association :specialization, :actor
     end
 
-    trait :auditioner_job do 
+    trait :auditioner_job do
       association :specialization, :auditioner
+    end
+    trait :admin_job do
+      association :specialization, :admin
     end
   end
 end

@@ -23,22 +23,22 @@ module June20
 
     config.load_defaults 6.0
     config.autoload_paths << "#{Rails.root}/lib"
-    config.to_prepare do
-      DeviseController.respond_to :html, :json
-    end
     config.after_initialize do
 
     require 'custom_token_response'
 
 end
+    config.action_dispatch.cookies_same_site_protection = :lax
+    config.action_controller.forgery_protection_origin_check = false
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Flash
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_henslowe'
+    config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, key: '_henslowe')
     config.app_generators.scaffold_controller = :scaffold_controller
     config.x.cors_allowed_origins
     config.hosts = ['localhost', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com']
-    config.api_only = true
+    config.api_only = false
     config.active_job.queue_adapter = :sidekiq
 
   end

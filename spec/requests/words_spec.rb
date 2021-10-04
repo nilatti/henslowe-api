@@ -2,6 +2,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Words API' do
+  before(:each) do
+    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
+    puts Rails.application.env_config["omniauth.auth"]
+    get '/sessions/create'
+  end
   # Initialize the test data
   let!(:play) { create(:play) }
   let!(:play_words) { create_list(:word, 10, play: play)}

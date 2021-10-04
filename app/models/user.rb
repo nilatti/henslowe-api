@@ -1,14 +1,8 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-    devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :omniauthable, omniauth_providers: %i[google_oauth2]
-         # :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-
   ROLES = %i[superadmin regular]
 
   validates_uniqueness_of :email, case_sensitive: false
-  validates_presence_of :first_name, :last_name, :phone_number, :email
+  validates_presence_of :first_name, :last_name, :email
   has_many :conflicts, dependent: :destroy
   has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
@@ -19,15 +13,26 @@ class User < ApplicationRecord
   has_many :productions, through: :jobs
   has_many :theaters, through: :jobs
   has_many :specializations, through: :jobs
+  has_and_belongs_to_many :rehearsals
 
   default_scope {order(:last_name, :first_name, :email)}
 
-  # the authenticate method from devise documentation
   def self.authenticate(email, password)
     user = User.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil
   end
-  
+
+  def self.from_omniauth(auth)
+    user = User.find_or_create_by(email: auth['info']['email']) do |user|
+      user.provider = auth['provider']
+      user.uid = auth['uid']
+      user.email = auth['info']['email']
+      user.first_name = auth['info']['first_name']
+      user.last_name = auth['info']['last_name']
+    end
+    return user
+  end
+
   def castings_for_production(production)
     jobs = production_jobs(production)
     acting_jobs = jobs.select { |job| job.specialization.title == "Actor"}
@@ -120,8 +125,49 @@ class User < ApplicationRecord
       return false
     end
   end
-
   def theater_jobs(theater)
     self.jobs.select { |job| job.theater_id == theater.id }
+  end
+  def jobs_overlap(target_user)
+    if self.superadmin?
+      return "superadmin"
+    elsif self == target_user
+      return "self"
+    end
+    # determines level of relationship between current user and target user, which then determines the amount of access user has to target user information.
+    # current theater admin can see everything
+    # current production admin can see a lot of things
+    # current production peer can see less than production admin
+    # current theater peer can see less than production peer
+    # past peers can see limited amount
+    self_user_theaters = self.jobs.map {|job| job.theater.id}.to_set
+    target_user_theaters = target_user.jobs.map {|job| job.theater.id}.to_set
+    theaters_overlap = self_user_theaters & target_user_theaters
+    if theaters_overlap.size == 0
+      return "none"
+    end
+    # check for current jobs for both users
+    target_user_current_jobs = target_user.jobs.select {|job| job.end_date < Date.today + 1.month }
+    self_user_current_jobs = self.jobs.select {|job| job.end_date < Date.today + 1.month }
+    if target_user_current_jobs.size == 0 || self_user_current_jobs.size == 0
+      return "past peer"
+    end
+    theater_admin = theaters_overlap.select {|theater_id| self.theater_admin?(Theater.find(theater_id))}
+    if theater_admin.size > 0
+      return "theater admin"
+    end
+    self_user_productions = self.jobs.map {|job| job.production.id}.to_set
+    target_user_productions = target_user.jobs.map {|job| job.production.id}.to_set
+    productions_overlap = self_user_productions & target_user_productions
+    if productions_overlap.size > 0
+      production_admin = productions_overlap.select {|production_id| self.production_admin?(Production.find(production_id))}
+      if production_admin.size > 0
+        return "production admin"
+      else
+        return "production peer"
+      end
+    else
+      return "theater peer"
+    end
   end
 end

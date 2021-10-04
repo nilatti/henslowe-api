@@ -1,5 +1,5 @@
 class AuthorsController < ApiController
-  skip_before_action :doorkeeper_authorize!, only: %i[index show author_names]
+  # skip_before_action :doorkeeper_authorize!, only: %i[index show author_names]
   before_action :set_author, only: %i[show update destroy]
 
   # GET /authors

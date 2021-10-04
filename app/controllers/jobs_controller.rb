@@ -4,7 +4,6 @@ class JobsController < ApiController
   # GET /jobs
   def index
     @jobs = Job.filter(params.slice(:production, :specialization, :theater, :user))
-
     json_response(
       @jobs.as_json(
         include: [
@@ -44,7 +43,17 @@ class JobsController < ApiController
     @job = Job.new(job_params)
 
     if @job.save
-      render json: @job, status: :created, location: @job
+      render json:@job.as_json(
+        include: [
+          :character,
+          :specialization,
+          :theater,
+          :user,
+          production: {
+            include: {play: { only: [:title]}}
+          }
+        ]
+      ), status: :created, location: @job
     else
       render json: @job.errors, status: :unprocessable_entity
     end

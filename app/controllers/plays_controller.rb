@@ -1,5 +1,5 @@
 class PlaysController < ApiController
-  skip_before_action :doorkeeper_authorize!, only: %i[index show play_act_on_stages play_french_scene_on_stages play_on_stages play_scene_on_stages play_script play_skeleton play_titles]
+  # skip_before_action :doorkeeper_authorize!, only: %i[index show play_act_on_stages play_french_scene_on_stages play_on_stages play_scene_on_stages play_script play_skeleton play_titles]
   before_action :set_author, only: %i[index create]
   before_action :set_play, only: %i[
     show
@@ -173,6 +173,8 @@ class PlaysController < ApiController
   end
 
   def play_titles
+    puts ("current user")
+    puts current_user
     @plays = Play.where(canonical: true)
     render json: @plays.as_json(only: %i[author_id id title])
   end

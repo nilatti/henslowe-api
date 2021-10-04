@@ -20,13 +20,11 @@ gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 #Active Admin
-gem 'devise'
-gem 'devise-jwt', '~> 0.7.0'
 gem 'omniauth-google-oauth2'
-gem 'doorkeeper', '~> 5.4.0'
-gem 'nio4r', '=2.5.7'
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem 'nio4r'#  , '=2.5.7'
 gem 'sidekiq'
-
+gem 'figaro'
 gem 'activerecord-import'
 # montrose provides recurrence logic
 gem "montrose"
