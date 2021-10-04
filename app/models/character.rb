@@ -5,6 +5,7 @@ class Character < ApplicationRecord
   has_many :on_stages, dependent: :destroy
   has_many :french_scenes, through: :on_stages
   has_many :lines, dependent: :destroy
+  has_many :users, through: :jobs
   has_and_belongs_to_many :entrance_exits, dependent: :destroy
   has_and_belongs_to_many :stage_directions, dependent: :destroy
   default_scope { order('name ASC') }
