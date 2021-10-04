@@ -4,8 +4,20 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-
     user ||= User.new
+    return unless user.present?
+      cannot :index, User
+      # cannot :show, User
+      can :read, User
+      can :manage, User, { id: user.id } #user can view their own records
+      can :show, User do |target_user|
+        if user.jobs_overlap(target_user) == "theater admin"
+          true
+        end
+      end
+
+    return unless user.superadmin?
+      can :index, User
     if user.superadmin?
       can :manage, :all
 
@@ -25,7 +37,7 @@ class Ability
           user.production_admin_for_play?(play) || user.theater_admin_for_play?(play)
         end
       end
-      
+
       can :manage, Job do |job|
         user.theater_admin?(job.theater) || user.production_admin?(job.production)
       end
@@ -35,8 +47,8 @@ class Ability
       can :read, [Act, Scene, FrenchScene, Character]
       can :read, Author
       can :read, Play
-      can [:show], User
-      cannot :index, User
+      # can [:show], User
+      # cannot :index, User
       can :manage, User, :id => user.id
       cannot :read, Job
       can :read, Job, :user_id => user.id

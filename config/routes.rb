@@ -1,22 +1,12 @@
 Rails.application.routes.draw do
-  use_doorkeeper do
-    skip_controllers :authorizations, :applications, :authorized_applications
-  end
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
+  post 'auth/:provider/callback', to: 'sessions#create'
+
+  get 'auth/failure', to: redirect('/')
+  resources :sessions, only: %i(new create destroy)
   scope 'api' do
-  devise_for :users,
-             path: '',
-             controllers: {
-               omniauth_callbacks: 'users/omniauth_callbacks',
-               sessions: 'sessions',
-               registrations: 'registrations'
-             }
-   devise_scope :user do
-     match '/users', to: 'registrations#create', via: :post
-   end
-    # resources :users do
-    resources :users, only: [:create, :index, :show, :update, :destroy] do
+    resources :users do
       resources :conflicts
       resources :conflict_patterns
       member do
@@ -36,6 +26,7 @@ Rails.application.routes.draw do
       resources :rehearsals
       member do
         put :build_rehearsal_schedule
+        get :get_production_skeleton
         get :get_production_with_play_text
       end
       resources :stage_exits
@@ -89,7 +80,7 @@ Rails.application.routes.draw do
       resources :characters
       resources :character_groups
     end
-    root to: "plays#index"
+    root to: "theaters#index"
     resources :acts do
       member do
         get :act_script
