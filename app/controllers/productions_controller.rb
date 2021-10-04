@@ -3,6 +3,7 @@ class ProductionsController < ApiController
     :show,
     :update,
     :destroy,
+    :get_production_skeleton,
     :get_production_with_play_text
   ]
 
@@ -127,6 +128,10 @@ class ProductionsController < ApiController
   def get_productions_for_theater
     @productions = Production.where(theater: params[:theater])
     json_response(@productions.as_json(include: [play: { only: :title}, theater: { only: [:name, :id]}]))
+  end
+
+  def get_production_skeleton
+    json_response(@production.as_json(include: [{theater: {only: [:id, :name]}}, {play: {only: [:id, :title]}}]))
   end
 
   def get_production_with_play_text

@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       resources :rehearsals
       member do
         put :build_rehearsal_schedule
+        get :get_production_skeleton
         get :get_production_with_play_text
       end
       resources :stage_exits

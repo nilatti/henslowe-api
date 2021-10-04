@@ -4,20 +4,6 @@ class JobsController < ApiController
   # GET /jobs
   def index
     @jobs = Job.filter(params.slice(:production, :specialization, :theater, :user))
-    puts("JOBS")
-    puts (@jobs.as_json(
-      include: [
-        :specialization,
-        :theater,
-        :character,
-        production: {
-          include: {play: { only: [:title]}}
-        },
-        user: {
-          include: :conflicts
-        }
-      ]
-    ))
     json_response(
       @jobs.as_json(
         include: [
