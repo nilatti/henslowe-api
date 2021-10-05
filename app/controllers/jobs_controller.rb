@@ -41,7 +41,9 @@ class JobsController < ApiController
   # POST /jobs
   def create
     @job = Job.new(job_params)
-
+    if job_params['character_id'] || job_params['character_group_id']
+      UpdateOnStagesWorker.perform_async(job_params['character_id'], job_params['character_group_id'], job_params['user_id'])
+    end
     if @job.save
       render json:@job.as_json(
         include: [
@@ -61,6 +63,9 @@ class JobsController < ApiController
 
   # PATCH/PUT /jobs/1
   def update
+    if job_params['character_id'] || job_params['character_group_id']
+      UpdateOnStagesWorker.perform_async(job_params['character_id'], job_params['character_group_id'], job_params['user_id'])
+    end
     if @job.update(job_params)
       json_response(
         @job.as_json(
