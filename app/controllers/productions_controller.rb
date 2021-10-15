@@ -31,7 +31,7 @@ class ProductionsController < ApiController
               :theater,
               :character,
               user: {
-                include: :conflicts
+                include: [:conflicts, :jobs],
               }
             ]
           },

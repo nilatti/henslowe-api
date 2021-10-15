@@ -181,7 +181,10 @@ class UsersController < ApiController
       json_response(@user.as_json(include: [:conflicts, :conflict_patterns, :jobs]))
   end
 
-  private
+  def fake
+    @users = User.where(fake: true)
+    json_response(@users.as_json(include: :jobs))
+  end
 
   private
 

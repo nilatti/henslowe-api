@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   resources :sessions, only: %i(new create destroy)
   scope 'api' do
     resources :users do
+      collection do
+        get :fake
+      end
       resources :conflicts
       resources :conflict_patterns
       member do
