@@ -173,8 +173,6 @@ class PlaysController < ApiController
   end
 
   def play_titles
-    puts ("current user")
-    puts current_user
     @plays = Play.where(canonical: true)
     render json: @plays.as_json(only: %i[author_id id title])
   end

@@ -18,14 +18,16 @@ class SessionsController  < ApiController
     if user
       created_jwt = CoreModules::JsonWebToken.encode({id: user.id})
       cookies.signed[:jwt] = {value: created_jwt, httponly: true, expires: 1.month.from_now}
-      render json: {user: {
-        email: user.email,
-        first_name: user.first_name,
-        id: user.id,
-        last_name: user.last_name,
-        preferred_name: user.preferred_name,
-        program_name: user.program_name
-      }}
+      json_response(user.as_json(
+        only: [
+          :email,
+          :first_name,
+          :id,
+          :last_name,
+          :preferred_name,
+          :program_name,
+        ]
+      ))
     else
       render json: {status: 'incorrect email or password', code: 422}
     end

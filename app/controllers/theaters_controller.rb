@@ -14,6 +14,9 @@ class TheatersController < ApiController
     json_response(@theater.as_json(include:
       [
         :spaces,
+        jobs: {
+          include: [:character, :specialization, :user, production: {include: {play: { only: :title}}}]
+        },
         productions: {
           include: :play
         }
