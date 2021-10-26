@@ -166,9 +166,10 @@ class PlaysController < ApiController
     render json: @play.as_json(include: {
       production: {only: [:lines_per_minute]},
       characters: {only: [:name, :id]},
-      acts: {include: {scenes: {include: {french_scenes: {only: [:id, :number]}}, only: [:id, :number]}}, only: [:id, :number]}
+      acts: {include: {scenes: {include: {french_scenes: {only: [:id, :number]}}, only: [:id, :number]}}, only: [:id, :number]},
+      author: {only: [:first_name, :id, :last_name]}
       },
-      only: [:canonical, :id, :title]
+      only: [:canonical, :id, :synopsis, :text_notes, :title]
     )
   end
 

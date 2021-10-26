@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_15_192412) do
+ActiveRecord::Schema.define(version: 2021_10_26_112444) do
 
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 2021_08_15_192412) do
 
   create_table "lines", charset: "latin1", force: :cascade do |t|
     t.string "ana"
-    t.bigint "character_id", null: false
+    t.bigint "character_id"
     t.text "corresp"
     t.bigint "french_scene_id", null: false
     t.string "next"
