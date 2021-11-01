@@ -31,7 +31,7 @@ class ActsController < ApiController
   # PATCH/PUT /acts/1
   def update
     if @act.update(act_params)
-      render json: @act
+      render json: @act.as_json(include: {scenes: { include: :french_scenes } })
     else
       render json: @act.errors, status: :unprocessable_entity
     end

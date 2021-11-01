@@ -6,7 +6,7 @@ class OnStagesController < ApiController
   def index
     @on_stages = @french_scene.on_stages
 
-    json_response(@on_stages.as_json(include: [:character, :user]))
+    json_response(@on_stages.as_json(include: [:character, :character_group, :user]))
   end
 
   # GET /on_stages/1
@@ -19,7 +19,7 @@ class OnStagesController < ApiController
     @on_stage = OnStage.new(on_stage_params)
 
     if @on_stage.save
-      render json: @on_stage, status: :created, location: @on_stage
+      json_response(@on_stage.as_json(include: [:character, :character_group, :user]))
     else
       render json: @on_stage.errors, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class OnStagesController < ApiController
   # PATCH/PUT /on_stages/1
   def update
     if @on_stage.update(on_stage_params)
-      render json: @on_stage
+      json_response(@on_stage.as_json(include: [:character, :character_group, :user]))
     else
       render json: @on_stage.errors, status: :unprocessable_entity
     end
@@ -37,6 +37,7 @@ class OnStagesController < ApiController
   # DELETE /on_stages/1
   def destroy
     @on_stage.destroy
+    head :no_content
   end
 
   private
@@ -54,6 +55,7 @@ class OnStagesController < ApiController
       params.require(:on_stage).permit(
         :category,
         :character_id,
+        :character_group_id,
         :description,
         :french_scene_id,
         :nonspeaking,

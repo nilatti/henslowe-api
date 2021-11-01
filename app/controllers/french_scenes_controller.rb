@@ -29,6 +29,7 @@ class FrenchScenesController < ApiController
     @french_scene = FrenchScene.new(french_scene_params)
     if @french_scene.save
         json_response(@french_scene.as_json(
+          methods: :pretty_name,
           include: [
             :characters,
             on_stages: {
@@ -48,6 +49,7 @@ class FrenchScenesController < ApiController
   def update
     if @french_scene.update(french_scene_params)
       json_response(@french_scene.as_json(
+        methods: :pretty_name,
           include: [
             :characters,
             on_stages: {
