@@ -10,7 +10,45 @@ class SpecializationsController < ApiController
 
   # GET /specializations/1
   def show
-    json_response(@specialization.as_json)
+    json_response(@specialization.as_json(
+      include:{
+        jobs: {
+          include: [
+            character: {
+              only: [
+                :name,
+                :xml_id
+              ]
+            },
+            production: {
+              only: [
+                play: {
+                  only: [
+                    :title
+                  ]
+                }
+              ]
+            },
+            theater: {
+              only: [
+                :id,
+                :name
+              ]
+            },
+            user: {
+              only: [
+                :email,
+                :fake,
+                :first_name,
+                :id,
+                :last_name,
+                :preferred_name,
+                :program_name
+              ]
+            }
+          ]
+        }}
+    ))
   end
 
   # POST /specializations

@@ -1,7 +1,7 @@
 class Specialization < ApplicationRecord
   validates :title, presence: true
-  belongs_to :job, optional: true
-
+  has_many :jobs
+  default_scope { order('title ASC') }
   scope :actor, -> { where title: 'Actor' }
   scope :auditioner, -> { where title: 'Auditioner' }
   scope :actor_or_auditioner, -> { actor.or(auditioner)}
