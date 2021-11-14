@@ -94,6 +94,12 @@ class UsersController < ApiController
             :conflict_patterns,
             jobs: {
               include: [
+                character: {
+                  only: :name
+                },
+                character_group: {
+                  only: :name
+                },
                 production: {
                   include: {
                     play: {

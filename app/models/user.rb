@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :jobs, dependent: :destroy
   has_many :characters, through: :jobs
   has_many :on_stages, through: :characters
+  has_many :character_group, through: :jobs
+  has_many :on_stages, through: :character_group
   has_many :french_scenes, through: :on_stages
   has_many :productions, through: :jobs
   has_many :theaters, through: :jobs

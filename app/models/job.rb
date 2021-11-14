@@ -1,6 +1,7 @@
 class Job < ApplicationRecord
   include Filterable
   belongs_to :character, optional: true
+  belongs_to :character_group, optional: true
   belongs_to :production, optional: true
   belongs_to :specialization, optional: true
   belongs_to :theater, optional: true
