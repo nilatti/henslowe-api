@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_14_202803) do
+ActiveRecord::Schema.define(version: 2021_11_18_131643) do
 
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
@@ -510,6 +510,7 @@ ActiveRecord::Schema.define(version: 2021_11_14_202803) do
     t.string "role", default: "regular"
     t.string "provider"
     t.string "uid"
+    t.string "stripe_customer_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, length: 255
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
