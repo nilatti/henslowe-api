@@ -1,46 +1,46 @@
 class ChargesController < ApiController
-  def create
+  def create_payment_intent
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-
-    # order = Order.find(params[:orderId])
-    amount = 500
-
-    charge = Stripe::Charge.create(
-      # :customer => customer.id,
-      :amount => amount,
-      :description => "test",
-      :currency => "usd",
-      :source => params[:stripe_token]
-    )
-  rescue Stripe::CardError => e
-    flash[:errors] = e.message
-    redirect_to charges_path
+    user = User.find(current_user.id)
+    if !user.stripe_customer_id
+      customer = Stripe::Customer.create({
+        email: current_user.email
+      });
+      user.stripe_customer_id = customer['id']
+      user.save
+    end
+    intent = Stripe::PaymentIntent.create({
+      amount: params[:amount],
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      currency: 'usd',
+      customer: user.stripe_customer_id,
+      setup_future_usage: 'off_session'
+    })
+    render json: {clientSecret: intent.client_secret}
   end
 
   def create_checkout_session
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    prices = Stripe::Price.list(
-      lookup_keys: [params['lookup_key']],
-      expand: ['data.product']
-    )
-
-    begin
-      session = Stripe::Checkout::Session.create({
-        mode: 'subscription',
-        line_items: [{
-          quantity: 1,
-          price: prices.data[0].id
-        }],
-        success_url: YOUR_DOMAIN + '/success.html?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: YOUR_DOMAIN + '/cancel.html',
-      })
-    rescue StandardError => e
-      halt 400,
-          { 'Content-Type' => 'application/json' },
-          { 'error': { message: e.error.message } }.to_json
+    user = User.find(current_user.id)
+    if !user.stripe_customer_id
+      customer = Stripe::Customer.create({
+        email: current_user.email
+      });
+      user.stripe_customer_id = customer['id']
+      user.save
     end
-    puts(session.url)
-
-    redirect session.url, 303
+    session = Stripe::Checkout::Session.create({
+      cancel_url: "http://localhost:3000/",
+      customer: user.stripe_customer_id,
+      success_url: "http://localhost:3000/",
+      mode: 'subscription',
+      line_items: [{
+        quantity: 1,
+        price: params[:price]
+        }]
+      })
+      render json: {stripeUrl: session.url}
   end
 end

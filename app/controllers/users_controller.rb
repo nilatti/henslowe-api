@@ -144,46 +144,6 @@ class UsersController < ApiController
     @user = User.create!(user_params)
     json_response(@user, :created)
   end
-
-  def create_customer
-  require 'stripe'
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    response = Stripe::Customer.create({
-      email: current_user.email,
-    })
-    current_user.stripe_customer_id = response['id']
-    current_user.save
-
-    # tk update user record to save stripe ID
-    # {
-#   "id": "cus_KbU2rHEoYl7zJG",
-#   "object": "customer",
-#   "address": null,
-#   "balance": 0,
-#   "created": 1637028412,
-#   "currency": "usd",
-#   "default_source": null,
-#   "delinquent": false,
-#   "description": "My First Test Customer (created for API docs)",
-#   "discount": null,
-#   "email": null,
-#   "invoice_prefix": "E70946B",
-#   "invoice_settings": {
-#     "custom_fields": null,
-#     "default_payment_method": null,
-#     "footer": null
-#   },
-#   "livemode": false,
-#   "metadata": {},
-#   "name": null,
-#   "next_invoice_sequence": 1,
-#   "phone": null,
-#   "preferred_locales": [],
-#   "shipping": null,
-#   "tax_exempt": "none"
-# }
-  end
-
   def update
     @user.update(user_params)
     json_response(@user)
