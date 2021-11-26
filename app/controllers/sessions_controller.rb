@@ -26,6 +26,8 @@ class SessionsController  < ApiController
           :last_name,
           :preferred_name,
           :program_name,
+          :subscription_end_date,
+          :subscription_status
         ]
       ))
     else

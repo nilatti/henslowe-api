@@ -9,10 +9,16 @@ Rails.application.routes.draw do
     resources :charges do
       collection do
         post :create_checkout_session
-        post :create_payment_intent
+        post :update_payment_info
       end
     end
-    resources :subscriptions
+    resources :subscriptions do
+      collection do
+        get :get_subscriptions_for_user
+        get :delete_subscription
+        get :renew_subscription
+      end
+    end
     resources :users do
       member do
         get :create_customer
@@ -51,6 +57,7 @@ Rails.application.routes.draw do
     resources :stage_exits
 
     resources :theaters do
+      resources :jobs
       collection do
         get :theater_names
       end

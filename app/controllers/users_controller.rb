@@ -216,6 +216,8 @@ class UsersController < ApiController
       :program_name,
       :state,
       :street_address,
+      :subscription_end_date,
+      :subscription_status,
       :timezone,
       :website,
       :zip
