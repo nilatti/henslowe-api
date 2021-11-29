@@ -6,7 +6,23 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   resources :sessions, only: %i(new create destroy)
   scope 'api' do
+    resources :charges do
+      collection do
+        post :create_checkout_session
+        post :update_payment_info
+      end
+    end
+    resources :subscriptions do
+      collection do
+        get :get_subscriptions_for_user
+        get :delete_subscription
+        get :renew_subscription
+      end
+    end
     resources :users do
+      member do
+        get :create_customer
+      end
       collection do
         get :fake
       end
@@ -41,6 +57,7 @@ Rails.application.routes.draw do
     resources :stage_exits
 
     resources :theaters do
+      resources :jobs
       collection do
         get :theater_names
       end

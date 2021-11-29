@@ -169,7 +169,7 @@ class PlaysController < ApiController
       acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number]}}, only: [:id, :number]}}, only: [:id, :number]},
       author: {only: [:first_name, :id, :last_name]}
       },
-      only: [:canonical, :id, :synopsis, :text_notes, :title]
+      only: [:canonical, :id, :production_id, :synopsis, :text_notes, :title]
     )
   end
 

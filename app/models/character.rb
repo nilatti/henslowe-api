@@ -9,7 +9,7 @@ class Character < ApplicationRecord
   has_and_belongs_to_many :entrance_exits, dependent: :destroy
   has_and_belongs_to_many :stage_directions, dependent: :destroy
   default_scope { order('name ASC') }
-  validates :name, presence: true
+  # validates :name, presence: true
 
   before_save :downcase_gender_and_age
 

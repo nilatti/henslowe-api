@@ -107,6 +107,11 @@ class UsersController < ApiController
                         :id,
                         :title
                         ]
+                      },
+                      theater: {
+                        only: [
+                          :id, :name
+                        ]
                       }
                     }
                   },
@@ -144,7 +149,6 @@ class UsersController < ApiController
     @user = User.create!(user_params)
     json_response(@user, :created)
   end
-
   def update
     @user.update(user_params)
     json_response(@user)
@@ -217,6 +221,8 @@ class UsersController < ApiController
       :program_name,
       :state,
       :street_address,
+      :subscription_end_date,
+      :subscription_status,
       :timezone,
       :website,
       :zip
