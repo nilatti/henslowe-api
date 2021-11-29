@@ -19,6 +19,7 @@ class User < ApplicationRecord
 
   default_scope {order(:last_name, :first_name, :email)}
 
+  after_create :make_new_fake_theater
   before_save :update_subscription_status
 
   def self.authenticate(email, password)
@@ -110,6 +111,10 @@ class User < ApplicationRecord
     end
   end
 
+  def make_new_fake_theater
+    Theater.create(fake: true, name: "#{self.first_name}'s Dream Theater", mission_statement: "This is a space for #{self.first_name} to create dream productions, play with text, and imagine.")
+  end
+
   def name
   	"#{first_name} #{last_name}"
   end
@@ -177,10 +182,12 @@ class User < ApplicationRecord
   end
 
   def update_subscription_status
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    subscriptions = Stripe::Subscription.list({customer: self.stripe_customer_id}).data
-    subscriptions.sort_by(&:current_period_end)
-    self.subscription_status = subscriptions.last.status
-    self.subscription_end_date = DateTime.strptime("#{subscriptions.last.current_period_end}",'%s')
+    if self.stripe_customer_id
+      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      subscriptions = Stripe::Subscription.list({customer: self.stripe_customer_id}).data
+      subscriptions.sort_by(&:current_period_end)
+      self.subscription_status = subscriptions.last.status
+      self.subscription_end_date = DateTime.strptime("#{subscriptions.last.current_period_end}",'%s')
+    end
   end
 end

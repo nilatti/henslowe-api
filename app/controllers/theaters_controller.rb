@@ -27,6 +27,8 @@ class TheatersController < ApiController
   # POST /theaters
   def create
     @theater = Theater.create!(theater_params)
+    specialization = Specialization.find_by(title: "Theater Admin")
+    Job.create(theater_id: @theater.id, specialization_id: specialization.id, user_id: current_user.id )
     json_response(@theater, :created)
   end
 
@@ -44,7 +46,7 @@ class TheatersController < ApiController
 
   def theater_names
     @theaters = Theater.all
-    render json: @theaters.as_json(only: %i[id name])
+    render json: @theaters.as_json(only: %i[id fake name])
   end
 
   private

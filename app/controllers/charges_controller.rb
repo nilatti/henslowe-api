@@ -26,7 +26,7 @@ class ChargesController < ApiController
     user = User.find(current_user.id)
 
     session = Stripe::Checkout::Session.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card'], 
       mode: 'setup',
       customer: user.stripe_customer_id,
       setup_intent_data: {

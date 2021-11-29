@@ -107,6 +107,11 @@ class UsersController < ApiController
                         :id,
                         :title
                         ]
+                      },
+                      theater: {
+                        only: [
+                          :id, :name
+                        ]
                       }
                     }
                   },
