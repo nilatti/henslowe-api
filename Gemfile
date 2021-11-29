@@ -9,7 +9,7 @@ gem 'rails', '~> 6.1.4'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.3.18', '< 0.6.0'
 # Use Puma as the app server
-gem 'puma', '=5.3.2'
+gem 'puma', '5.5.1'
 gem 'thin'
 gem 'foreman'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -40,6 +40,7 @@ gem 'syllabize'
 gem 'numbers_and_words'
 #manage who can see things
 gem 'cancancan'
+gem 'stripe'
 group :development, :test do
   gem 'rspec-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
