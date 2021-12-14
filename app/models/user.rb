@@ -112,7 +112,7 @@ class User < ApplicationRecord
   end
 
   def make_new_fake_theater
-    Theater.create(fake: true, name: "#{self.first_name}'s Dream Theater", mission_statement: "This is a space for #{self.first_name} to create dream productions, play with text, and imagine.")
+    MakeFakeTheaterWorker.perform_async(self.id)
   end
 
   def name
@@ -185,9 +185,11 @@ class User < ApplicationRecord
     if self.stripe_customer_id
       Stripe.api_key = ENV['STRIPE_SECRET_KEY']
       subscriptions = Stripe::Subscription.list({customer: self.stripe_customer_id}).data
-      subscriptions.sort_by(&:current_period_end)
-      self.subscription_status = subscriptions.last.status
-      self.subscription_end_date = DateTime.strptime("#{subscriptions.last.current_period_end}",'%s')
+      if subscriptions.length > 0
+        subscriptions.sort_by(&:current_period_end)
+        self.subscription_status = subscriptions.last.status
+        self.subscription_end_date = DateTime.strptime("#{subscriptions.last.current_period_end}",'%s')
+      end
     end
   end
 end

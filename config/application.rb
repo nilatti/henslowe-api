@@ -37,7 +37,7 @@ end
     config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, key: '_henslowe')
     config.app_generators.scaffold_controller = :scaffold_controller
     config.x.cors_allowed_origins
-    config.hosts = ['localhost', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com']
+    config.hosts = ['localhost', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com', 'hc-fargate-lb-1911618557.us-east-1.elb.amazonaws.com']
     config.api_only = false
     config.active_job.queue_adapter = :sidekiq
 
