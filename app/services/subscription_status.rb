@@ -19,8 +19,11 @@ class SubscriptionStatus
     subscriptions = Stripe::Subscription.list({customer: stripe_customer_id})
     active = subscriptions.data.select{|subscription| subscription.status == 'active'}
     active.sort_by(&:current_period_end)
-    user.stripe_subscription_id = active[-1].id
-    user.save
+    if active.size >0
+      user.stripe_subscription_id = active[-1].id
+      user.save
+    end
     return subscriptions
+
   end
 end

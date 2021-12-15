@@ -27,11 +27,8 @@ class TheatersController < ApiController
   # POST /theaters
   def create
     @theater = Theater.create!(theater_params)
-    specialization = Specialization.find_by(title: "Theater Admin")
-    Job.create(theater_id: @theater.id, specialization_id: specialization.id, user_id: current_user.id )
     json_response(@theater, :created)
   end
-
   # PATCH/PUT /theaters/1
   def update
     @theater.update(theater_params)

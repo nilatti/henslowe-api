@@ -1,7 +1,7 @@
 class SubscriptionsController < ApiController
   Stripe.api_key = ENV['STRIPE_SECRET_KEY']
   def index
-    prices = Stripe::Price.list()
+    prices = Stripe::Price.list({active: true})
     products = []
     prices.each do |price|
       api_product = Stripe::Product.retrieve(price.product)
@@ -14,20 +14,22 @@ class SubscriptionsController < ApiController
 
   def get_subscriptions_for_user
     user = User.find(params[:user_id])
-    subscriptions = SubscriptionStatus.new.get_subscriptions_for_user(user.stripe_customer_id).data
     products = []
-    subscriptions.each do |subscription|
-      api_product = Stripe::Product.retrieve(subscription.plan.product)
-      api_product.subscription_id = subscription.id
-      api_product.amount = subscription.plan.amount
-      api_product.current_period_end = subscription.current_period_end
-      api_product.current_period_start = subscription.current_period_start
-      api_product.status = subscription.status
-      api_product.subscription_id = subscription.id
-      api_product.cancel_at_period_end = subscription.cancel_at_period_end
-      api_product.interval = subscription.plan.interval
-      api_product.price_id = subscription.items.data[0].price.id
-      products.push(api_product)
+    if user.stripe_customer_id
+      subscriptions = SubscriptionStatus.new.get_subscriptions_for_user(user.stripe_customer_id).data
+      subscriptions.each do |subscription|
+        api_product = Stripe::Product.retrieve(subscription.plan.product)
+        api_product.subscription_id = subscription.id
+        api_product.amount = subscription.plan.amount
+        api_product.current_period_end = subscription.current_period_end
+        api_product.current_period_start = subscription.current_period_start
+        api_product.status = subscription.status
+        api_product.subscription_id = subscription.id
+        api_product.cancel_at_period_end = subscription.cancel_at_period_end
+        api_product.interval = subscription.plan.interval
+        api_product.price_id = subscription.items.data[0].price.id
+        products.push(api_product)
+      end
     end
     render json: products.to_json
   end
