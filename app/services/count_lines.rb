@@ -84,65 +84,81 @@ class CountLines
   end
 
   def import_line_counts(updated_lines:)
-    begin Line.upsert_all(updated_lines)
-    rescue
-      puts 'problem upserting lines'
+    ActiveRecord::Base.connection_pool.with_connection do
+      begin Line.upsert_all(updated_lines)
+      rescue
+        puts 'problem upserting lines'
+      end
     end
   end
 
   def update_characters(characters:)
     characters.each do |character|
-      character.original_line_count = character.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-      character.new_line_count = character.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-      character.save
+      ActiveRecord::Base.connection_pool.with_connection do
+        character.original_line_count = character.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+        character.new_line_count = character.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+        character.save
+      end
     end
   end
 
   def update_character_groups(character_groups:)
     character_groups.each do |character_group|
-      character_group.original_line_count = character_group.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-      character_group.new_line_count = character_group.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-      character_group.save
+      ActiveRecord::Base.connection_pool.with_connection do
+        character_group.original_line_count = character_group.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+        character_group.new_line_count = character_group.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+        character_group.save
+      end
     end
   end
 
   def update_act(act:)
-    act.original_line_count = act.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-    act.new_line_count = act.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-    act.save
-    act.scenes.each {|scene| update_scene(scene: scene)}
+    ActiveRecord::Base.connection_pool.with_connection do
+      act.original_line_count = act.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+      act.new_line_count = act.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+      act.save
+      act.scenes.each {|scene| update_scene(scene: scene)}
+    end
   end
 
   def update_french_scene(french_scene:)
-    french_scene.original_line_count = french_scene.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-    french_scene.new_line_count = french_scene.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-    french_scene.save
-    update_on_stage_nonspeaking(on_stages: french_scene.on_stages)
+    ActiveRecord::Base.connection_pool.with_connection do
+      french_scene.original_line_count = french_scene.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+      french_scene.new_line_count = french_scene.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+      french_scene.save
+      update_on_stage_nonspeaking(on_stages: french_scene.on_stages)
+    end
   end
 
   def update_on_stage_nonspeaking(on_stages:)
     on_stages.each do |on_stage|
-      speaking_characters = on_stage.french_scene.lines.map {|line| line.character}.uniq
-      if speaking_characters.include?(on_stage.character)
-        on_stage.nonspeaking = false
-      else
-        on_stage.nonspeaking = true
+      ActiveRecord::Base.connection_pool.with_connection do
+        speaking_characters = on_stage.french_scene.lines.map {|line| line.character}.uniq
+        if speaking_characters.include?(on_stage.character)
+          on_stage.nonspeaking = false
+        else
+          on_stage.nonspeaking = true
+        end
+        on_stage.save
       end
-      on_stage.save
     end
   end
 
   def update_play(play:)
-    play.original_line_count = play.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-    play.new_line_count = play.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-    play.save
-    play.acts.each {|act| update_act(act: act)}
+    ActiveRecord::Base.connection_pool.with_connection do
+      play.original_line_count = play.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+      play.new_line_count = play.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+      play.save
+      play.acts.each {|act| update_act(act: act)}
+    end
   end
 
   def update_scene(scene:)
-    scene.original_line_count = scene.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
-    scene.new_line_count = scene.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
-    scene.save
-    scene.french_scenes.each {|french_scene| update_french_scene(french_scene: french_scene)}
+    ActiveRecord::Base.connection_pool.with_connection do
+      scene.original_line_count = scene.lines.all.reduce(0) {|sum, line| line.original_line_count ? sum + line.original_line_count : 0}
+      scene.new_line_count = scene.lines.all.reduce(0) {|sum, line| line.new_line_count ? sum + line.new_line_count : 0 }
+      scene.save
+      scene.french_scenes.each {|french_scene| update_french_scene(french_scene: french_scene)}
+    end
   end
 end

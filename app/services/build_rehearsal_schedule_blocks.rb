@@ -51,14 +51,16 @@ class BuildRehearsalScheduleBlocks
     rehearsal_blocks_array = []
     days.each do |day|
       blocks.each do |block|
-        r = Rehearsal.new
-        r.end_time = Time.zone.parse("#{day.strftime('%F')} #{block[:end_time].strftime('%T')}")
-        r.production_id = @production_id
-        r.notes = block[:notes]
-        r.start_time = Time.zone.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%T')}")
-        r.save
-        r.users = default_users
-        r.save
+        ActiveRecord::Base.connection_pool.with_connection do
+          r = Rehearsal.new
+          r.end_time = Time.zone.parse("#{day.strftime('%F')} #{block[:end_time].strftime('%T')}")
+          r.production_id = @production_id
+          r.notes = block[:notes]
+          r.start_time = Time.zone.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%T')}")
+          r.save
+          r.users = default_users
+          r.save
+        end
       end
     end
   end

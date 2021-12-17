@@ -1,5 +1,5 @@
 class BuildConflictsScheduleWorker
-  include Sidekiq::Worker
+  include SuckerPunch::Job
 
   def perform(category, conflict_pattern_id, days_of_week, end_date, end_time, space_id, start_date, start_time, user_id)
     days_of_week = days_of_week.split(',')
@@ -30,13 +30,5 @@ class BuildConflictsScheduleWorker
       start_time: start_time,
       user_id: user_id
     ).run
-  end
-
-  def cancelled?
-    Sidekiq.redis {|c| c.exists("cancelled-#{jid}") }
-  end
-
-  def self.cancel!(jid)
-    Sidekiq.redis {|c| c.setex("cancelled-#{jid}", 86400, 1) }
   end
 end

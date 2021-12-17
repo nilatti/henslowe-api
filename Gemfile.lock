@@ -311,6 +311,8 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stripe (5.40.0)
+    sucker_punch (3.0.1)
+      concurrent-ruby (~> 1.0)
     syllabize (0.8.0)
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
@@ -365,6 +367,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (> 2.0.0)
   stripe
+  sucker_punch (~> 3.0)
   syllabize
   thin
 

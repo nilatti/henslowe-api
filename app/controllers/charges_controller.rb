@@ -10,6 +10,7 @@ class ChargesController < ApiController
       user.save
     end
     session = Stripe::Checkout::Session.create({
+      allow_promotion_codes: true,
       cancel_url: "#{ENV['BASE_URL_FRONT']}/checkout",
       customer: user.stripe_customer_id,
       success_url: "#{ENV['BASE_URL_FRONT']}/success",

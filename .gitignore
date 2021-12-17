@@ -26,3 +26,10 @@
 # Ignore application configuration
 /config/application.yml
 docker-compose.yml
+
+to_start.txt
+.env
+docker-compose-local.yml
+/vendor
+configure.sh
+ecs-params.yml
