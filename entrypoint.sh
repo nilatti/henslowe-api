@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-
-if [ -f tmp/pids/server.pid ]; then
-    rm tmp/pids/server.pid
+if [ -f /app/tmp/pids/server.pid ]; then
+  rm /app/tmp/pids/server.pid
 fi
 
-exec "$@"
+bundle exec rake db:migrate RAILS_ENV=production
+exec bundle exec "$@"

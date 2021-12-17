@@ -9,12 +9,16 @@ class UpdateOnStages
   def run
     update_user_for_characters(@character_id, @importable_on_stages, @user_id)
     update_user_for_character_groups(@character_group_id, @user_id)
-    OnStage.import @importable_on_stages, on_duplicate_key_update: [:user_id, :updated_at]
+    ActiveRecord::Base.connection_pool.with_connection do
+      OnStage.import @importable_on_stages, on_duplicate_key_update: [:user_id, :updated_at]
+    end
   end
 
   def update_user_for_characters(character_id, importable_on_stages, user_id)
-    on_stages = OnStage.where(character_id: character_id)
-    on_stages.each { |os| os.user_id = user_id; importable_on_stages << os }
+    ActiveRecord::Base.connection_pool.with_connection do
+      on_stages = OnStage.where(character_id: character_id)
+      on_stages.each { |os| os.user_id = user_id; importable_on_stages << os }
+    end
   end
 
   def update_user_for_character_groups(character_group_id, user_id)

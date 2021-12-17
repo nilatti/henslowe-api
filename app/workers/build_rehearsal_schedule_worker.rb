@@ -1,5 +1,5 @@
 class BuildRehearsalScheduleWorker
-  include Sidekiq::Worker
+  include SuckerPunch::Job
 
   def perform(break_length, days_of_week, default_user_ids, end_date, end_time, production_id, time_between_breaks, start_date, start_time)
     break_length = break_length.to_i
@@ -8,13 +8,5 @@ class BuildRehearsalScheduleWorker
     days_of_week = days_of_week.split(',')
     default_users = default_user_ids.split(',')
     BuildRehearsalScheduleBlocks.new(break_length: break_length, days_of_week: days_of_week, default_user_ids: default_user_ids, end_date: end_date, end_time: end_time, production_id: production_id, time_between_breaks: time_between_breaks, start_date: start_date, start_time: start_time).run
-  end
-
-  def cancelled?
-    Sidekiq.redis {|c| c.exists("cancelled-#{jid}") }
-  end
-
-  def self.cancel!(jid)
-    Sidekiq.redis {|c| c.setex("cancelled-#{jid}", 86400, 1) }
   end
 end

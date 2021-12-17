@@ -41,14 +41,23 @@ class ImportFromFolgerXmlAll
     puts "finished building characters at #{Time.current()}"
 
     build_characters(play: @play)
-    Character.import @characters
+    ActiveRecord::Base.connection_pool.with_connection do
+      Character.import @characters
+    end
     @db_characters = @play.characters
     build_acts(play: @play, parsed_xml: @parsed_xml)
-    Line.import @lines
-
-    StageDirection.import @stage_directions
-    OnStage.import @on_stages
-    Word.import @words
+    ActiveRecord::Base.connection_pool.with_connection do
+      Line.import @lines
+    end
+    ActiveRecord::Base.connection_pool.with_connection do
+      StageDirection.import @stage_directions
+    end
+    ActiveRecord::Base.connection_pool.with_connection do
+      OnStage.import @on_stages
+    end
+    ActiveRecord::Base.connection_pool.with_connection do
+      Word.import @words
+    end
     puts Time.current
     connect_lines_to_words(play: @play)
     build_lines_content(@play.lines)
@@ -261,7 +270,10 @@ class ImportFromFolgerXmlAll
     text_notes = "Adapted from the Folger Digital Texts, edited by "
     editors = global_parsed_xml.xpath('//titleStmt/editor').map(&:text).join(', ')
     text_notes << editors
-    global_play = Play.create(author: author, canonical: true, synopsis: synopsis, text_notes: text_notes, title: title)
+    global_play =''
+    ActiveRecord::Base.connection_pool.with_connection do
+      global_play = Play.create(author: author, canonical: true, synopsis: synopsis, text_notes: text_notes, title: title)
+    end
     return global_play
   end
 
@@ -322,14 +334,16 @@ class ImportFromFolgerXmlAll
 
   def build_sound_cue(french_scene:, item:)
     content = extract_content(item: item)
-    SoundCue.create(
-      original_content: content,
-      french_scene_id: french_scene.id,
-      line_number: item.attr('n'),
-      notes: item.attr('ana'),
-      kind: item.attr('type'),
-      xml_id: item.attr('xml:id')
-    )
+    ActiveRecord::Base.connection_pool.with_connection do
+      SoundCue.create(
+        original_content: content,
+        french_scene_id: french_scene.id,
+        line_number: item.attr('n'),
+        notes: item.attr('ana'),
+        kind: item.attr('type'),
+        xml_id: item.attr('xml:id')
+      )
+    end
   end
 
   def build_speech(french_scene:, item:, global_tracking_of_current_character: @current_character, global_tracking_of_play_characters: @db_characters,
@@ -400,13 +414,17 @@ class ImportFromFolgerXmlAll
       on_stage_characters = french_scene.on_stages.map {|on_stage| on_stage.character_id}.to_set
       speaking_but_not_on_stage = speaking_characters - on_stage_characters
       speaking_but_not_on_stage.each do |character|
-        OnStage.create(character_id: character, french_scene_id: french_scene.id, category: 'Character')
+        ActiveRecord::Base.connection_pool.with_connection do
+          OnStage.create(character_id: character, french_scene_id: french_scene.id, category: 'Character')
+        end
       end
       on_stage_but_not_speaking = on_stage_characters - speaking_characters
       on_stage_but_not_speaking.each do |character|
-        o = OnStage.find_by(character_id: character, french_scene_id: french_scene.id)
-        o.nonspeaking = true
-        o.save
+        ActiveRecord::Base.connection_pool.with_connection do
+          o = OnStage.find_by(character_id: character, french_scene_id: french_scene.id)
+          o.nonspeaking = true
+          o.save
+        end
       end
     end
   end
@@ -437,7 +455,9 @@ class ImportFromFolgerXmlAll
         end
       end
     end
-    Word.upsert_all(global_tracking_of_updated_words)
+    ActiveRecord::Base.connection_pool.with_connection do
+      Word.upsert_all(global_tracking_of_updated_words)
+    end
   end
 
   def determine_type_of_item(

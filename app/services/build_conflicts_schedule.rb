@@ -35,7 +35,9 @@ class BuildConflictsSchedule
     user_id: @user_id
     )
     @conflicts = build_conflicts
-    Conflict.import @conflicts
+    ActiveRecord::Base.connection_pool.with_connection do
+      Conflict.import @conflicts
+    end
   end
 
   def build_conflicts(

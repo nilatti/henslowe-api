@@ -179,7 +179,7 @@ class PlaysController < ApiController
   end
 
   def production_copy_complete
-    render json: @play.as_json(only: :production_copy_complete)
+    render json: @play.as_json(only: [:production_copy_complete, :copy_status])
   end
 
   private

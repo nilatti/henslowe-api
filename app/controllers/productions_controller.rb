@@ -53,8 +53,16 @@ class ProductionsController < ApiController
     if @production.save
       json_response(@production.as_json(include: [:theater]), :created)
       specialization = Specialization.find_by(title: "Production Admin")
-      Job.create(production_id: @production.id, specialization_id: specialization.id, theater_id: @production.theater_id, user_id: current_user.id )
-      PlayCopyWorker.perform_async(production_params['play_id'], @production.id)
+      Job.create(
+        production_id: @production.id,
+        specialization_id: specialization.id,
+        theater_id: @production.theater_id,
+        user_id: current_user.id
+      )
+      PlayCopyWorker.perform_async(
+        production_params['play_id'],
+        @production.id
+      )
     else
       render json: @production.errors, status: :unprocessable_entity
     end
