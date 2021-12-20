@@ -27,7 +27,8 @@ class SessionsController  < ApiController
           :preferred_name,
           :program_name,
           :subscription_end_date,
-          :subscription_status
+          :subscription_status,
+          :timezone
         ]
       ))
     else
