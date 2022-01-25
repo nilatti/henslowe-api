@@ -2,7 +2,7 @@ FROM ruby:2.7
 
 RUN apt-get update -qq && apt-get install
 
-RUN gem install bundler:2.2.6
+RUN gem install bundler:2.2.3
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 WORKDIR /app
