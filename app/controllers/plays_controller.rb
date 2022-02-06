@@ -174,13 +174,8 @@ class PlaysController < ApiController
   end
 
   def play_titles
-    # if current_user
-    #   puts current_user.email
-    #   @plays = Play.where(canonical: true)
-    #   render json: @plays.as_json(only: %i[author_id id title])
-    # else
-      render json: :no_content, status: :unauthorized
-    # end
+    @plays = Play.where(canonical: true)
+    render json: @plays.as_json(only: %i[author_id id title])
   end
 
   def production_copy_complete

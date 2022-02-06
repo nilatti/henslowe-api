@@ -10,6 +10,7 @@ class UsersController < ApiController
 
   # GET /Users/1
   def show
+    puts current_user.email
     if current_user && @user
       overlap = current_user.jobs_overlap(@user)
       if overlap == "none"

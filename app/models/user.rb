@@ -28,6 +28,7 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
+    puts(auth)
     user = User.includes(:jobs).find_or_create_by(email: auth['info']['email']) do |user|
       user.provider = auth['provider']
       user.uid = auth['uid']
