@@ -49,6 +49,6 @@ class StageDirectionsController < ApiController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stage_direction_params
-      params.require(:stage_direction).permit(:french_scene_id, :number, :kind, :new_content, :original_content, :xml_id)
+      params.require(:stage_direction).permit(:french_scene_id, :number, :kind, :new_content, :original_content, :xml_id, :characters, :character_groups)
     end
 end
