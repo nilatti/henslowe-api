@@ -9,7 +9,7 @@ class Production < ApplicationRecord
   has_many :stage_exits, dependent: :destroy
   has_many :rehearsals, dependent: :destroy
 
-  validate :end_date_after_start_date
+  # validate :end_date_after_start_date
 
   default_scope {order(:start_date)}
 private
