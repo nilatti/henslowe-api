@@ -112,7 +112,9 @@ class User < ApplicationRecord
   end
 
   def make_new_fake_theater
-    MakeFakeTheaterWorker.perform_async(self.id)
+    if !self.fake
+      MakeFakeTheaterWorker.perform_async(self.id)
+    end
   end
 
   def name
