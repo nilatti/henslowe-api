@@ -136,6 +136,7 @@ class PlaysController < ApiController
       [
         :characters,
         :character_groups,
+        production: { only: :lines_per_minute},
         acts: {
           include: {
             scenes: {
