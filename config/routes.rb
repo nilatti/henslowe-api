@@ -91,6 +91,7 @@ Rails.application.routes.draw do
         get :play_scene_on_stages
         get :play_script
         get :play_skeleton
+        get :render_cut_part_script, format: 'docx'
       end
 
       resources :acts do
@@ -104,6 +105,10 @@ Rails.application.routes.draw do
     resources :acts do
       member do
         get :act_script
+
+          get :render_cut_script, format: 'docx'
+          get :render_cuts_marked_part_script, format: 'docx'
+        get :render_cuts_marked_script, format: 'docx'
       end
       resources :scenes
       resources :rehearsals

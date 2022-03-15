@@ -1,18 +1,10 @@
 class PlaysController < ApiController
   # skip_before_action :doorkeeper_authorize!, only: %i[index show play_act_on_stages play_french_scene_on_stages play_on_stages play_scene_on_stages play_script play_skeleton play_titles]
   before_action :set_author, only: %i[index create]
-  before_action :set_play, only: %i[
-    show
-    update
-    destroy
-    play_script
-    play_skeleton
-    play_act_on_stages
-    play_french_scene_on_stages
-    play_on_stages
-    play_scene_on_stages
-    production_copy_complete
+  before_action :set_play, except: %i[
+    index
   ]
+
   # GET /plays
   def index
     if @author
@@ -181,6 +173,14 @@ class PlaysController < ApiController
 
   def production_copy_complete
     render json: @play.as_json(only: [:production_copy_complete, :copy_status])
+  end
+
+
+  def render_cut_part_script
+  end
+
+
+  def render_cuts_marked_part_script
   end
 
   private

@@ -1,0 +1,73 @@
+#-----------------------------------------------------
+# page settings
+#-----------------------------------------------------
+
+docx.page_numbers true do
+  align :center
+  label 'Page'
+end
+
+docx.font name: 'Courier New'
+
+docx.style id: 'AltFont', name: 'altFont', font: 'Palatino'
+
+
+#-----------------------------------------------------
+# cover
+#-----------------------------------------------------
+
+7.times do
+  docx.p
+end
+
+12.times do
+  docx.p
+end
+docx.p @play.title, style: 'Title', align: :right
+docx.p "by #{@play.author.first_name} #{@play.author.last_name}", style: 'Subtitle', align: :right
+docx.p
+docx.p "Cuts excised", italic: true
+docx.p Date.today.strftime('%B %d, %Y'), color: '666666', align: :right
+
+
+#-----------------------------------------------------
+# introduction
+#-----------------------------------------------------
+@play.acts.each do |act|
+  docx.page
+  docx.h2 act.pretty_name
+  act.scenes.each do |scene|
+    docx.h3 scene.pretty_name
+    scene.french_scenes.each do |french_scene|
+      current_character_id = 0
+      current_character = nil
+      fs_stage_directions = french_scene.stage_directions.to_a
+      fs_lines = french_scene.lines.to_a
+      fs_content = fs_stage_directions.concat(fs_lines)
+      fs_content.select! {|item| item.number.match(/(SD)?\s?\d\.\d\.(\d+)\.?\d?/)}
+      fs_content.sort_by! {|item| item.number.match(/(SD)?\s?\d\.\d\.(\d+)\.?\d?/)[2].to_i}
+      fs_content.each do |item|
+        if item.number.match('SD')
+          if item.new_content && item.new_content.length > 0
+            docx.p item.new_content, italic: true
+          else
+            docx.p item.original_content, italic: true
+          end
+        else
+          if item.character_id && item.character_id != current_character_id
+            current_character = @play.characters.find(item.character_id)
+            current_character_id = current_character.id
+            docx.p
+            docx.p "#{current_character.name} ", bold: true
+          end
+          if item.new_content && item.new_content.length > 0
+            docx.p "\t#{item.new_content}"
+          else
+            docx.p "\t#{item.original_content}"
+          end
+        end
+      end
+    end
+  end
+  docx.hr
+end

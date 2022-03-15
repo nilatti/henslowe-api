@@ -1,5 +1,5 @@
 class ActsController < ApiController
-  before_action :set_act, only: [:show, :update, :destroy, :act_script]
+  before_action :set_act, only: [:show, :update, :destroy, :act_script, :render_cut_script, :render_cuts_marked_script]
   before_action :set_play
   # GET /acts
   def index
@@ -60,6 +60,14 @@ class ActsController < ApiController
         }
       ]
     )
+  end
+
+  def render_cut_script
+    render { headers["Content-Disposition"] = "attachment; filename=\"cut_script.docx\"" }
+  end
+
+  def render_cuts_marked_script
+    render { headers["Content-Disposition"] = "attachment; filename=\"cuts_marked_script.docx\"" }
   end
 
   private

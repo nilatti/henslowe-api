@@ -16,11 +16,9 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 # Dotenv::Railtie.load
-
 module June20
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-
     config.load_defaults 6.0
     config.autoload_paths << "#{Rails.root}/lib"
     config.after_initialize do

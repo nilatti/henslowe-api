@@ -21,6 +21,10 @@ gem 'jsonapi-serializer'
 gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+# write word documents
+gem 'caracal-rails'
+# get line diffs
+gem 'differ'
 #Active Admin
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
@@ -43,6 +47,10 @@ gem 'numbers_and_words'
 #manage who can see things
 gem 'cancancan'
 gem 'stripe'
+
+#configure request timeouts
+# gem "rack-timeout"
+
 group :development, :test do
   gem 'rspec-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -64,6 +72,6 @@ group :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'capybara-screenshot'
-  gem 'selenium-webdriver'
+  # gem 'selenium-webdriver'
   gem 'rspec-sidekiq'
 end
