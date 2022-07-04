@@ -79,10 +79,10 @@ Rails.application.routes.draw do
       resources :plays
     end
     resources :plays do
-      resources :words
       collection do
         get :play_titles
       end
+      resources :words
       member do
         get :play_act_on_stages
         get :production_copy_complete
