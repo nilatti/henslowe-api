@@ -37,3 +37,39 @@ On some future pass, make rehearsal time and notes editable by double clicking
 when a tall form closes, scroll to the top of the containing element (somehow)
 
 make "schedule this content" and "schedule these people" buttons float along the side so that you don't have to scroll around to find them.
+export AWS_PROFILE=henslowe
+docker pull 045889525760.dkr.ecr.us-east-1.amazonaws.com/henslowe_api:latest
+
+docker run -i -t aa2c56601bd9 /bin/bash ## /s/aa2c etc with image id 
+
+
+rvm use gemset ruby-2.6.3@henslowe5
+
+rails s -p 3001
+# ** may need to do redis-server
+# bundle exec sidekiq
+cd client
+npm start
+
+
+cancel all redis cue this way: Sidekiq.redis { |conn| conn.flushdb }
+
+TO UPDATE HC IMAGE:
+#build new docker image
+docker build -t 045889525760.dkr.ecr.us-east-1.amazonaws.com/henslowe_api .
+
+#get ECR login and pass it to docker image thing
+  aws ecr get-login-password --region us-east-1 --profile hc_docker|sudo docker login --username AWS --password-stdin 045889525760.dkr.ecr.us-east-1.amazonaws.com
+#push image to AWS ECR
+docker push 045889525760.dkr.ecr.us-east-1.amazonaws.com/henslowe_api:latest
+#in AWS ECS, update service, checking the "force new deployment" box
+To build it all & run locally:
+docker-compose build
+
+#update task on AWS ECR
+ecs-cli compose --project-name hc-cluster --file docker-compose.yml --debug service up  --deployment-max-percent 200 --deployment-min-healthy-percent 50 --region us-east-1>
+
+#to migrate db just do it from the command line locally
+bundle exec rake db:migrate RAILS_ENV=production
+
+Making one test edit
