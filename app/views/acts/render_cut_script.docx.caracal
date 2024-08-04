@@ -52,7 +52,8 @@ docx.p Date.today.strftime('%B %d, %Y'), color: '666666', align: :right
           end
         else
           if item.character_id && item.character_id != current_character_id
-            current_character = @play.characters.find(item.character_id)
+            current_character = @play.characters.find(item.character_id) || @play.character_groups.find(item.character_id)
+            rescue ActiveRecord::RecordNotFound
             current_character_id = current_character.id
             if item.new_content && item.new_content != item.original_content && item.new_content.match(/^\s*$/)
             else
