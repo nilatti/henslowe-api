@@ -13,7 +13,13 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'timeout'
+
 RSpec.configure do |config|
+  config.around(:each) do |example|
+    Timeout.timeout(30) { example.run }
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

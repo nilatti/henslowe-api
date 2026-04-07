@@ -67,7 +67,9 @@ GEM
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
+    base64 (0.2.0)
     bcrypt (3.1.16)
+    bigdecimal (3.1.8)
     builder (3.2.4)
     cancancan (3.3.0)
     capistrano (3.16.0)
@@ -80,17 +82,6 @@ GEM
     capistrano-rails (1.6.1)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
-    capybara (3.35.3)
-      addressable
-      mini_mime (>= 0.1.3)
-      nokogiri (~> 1.8)
-      rack (>= 1.6.0)
-      rack-test (>= 0.6.3)
-      regexp_parser (>= 1.5, < 3.0)
-      xpath (~> 3.2)
-    capybara-screenshot (1.0.25)
-      capybara (>= 1.0, < 4)
-      launchy
     caracal (1.4.1)
       nokogiri (~> 1.6)
       rubyzip (~> 1.1)
@@ -110,6 +101,7 @@ GEM
     database_cleaner-core (2.0.1)
     diff-lcs (1.4.4)
     differ (0.1.2)
+    drb (2.2.1)
     erubi (1.10.0)
     eventmachine (1.2.7)
     factory_bot (6.2.0)
@@ -117,7 +109,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.19.0)
+    faker (3.5.1)
+      i18n (>= 1.8.11, < 2)
       i18n (>= 1.6, < 2)
     faraday (1.7.1)
       faraday-em_http (~> 1.0)
@@ -145,7 +138,7 @@ GEM
     globalid (0.5.2)
       activesupport (>= 5.0)
     hashie (4.1.0)
-    i18n (1.8.10)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
@@ -154,10 +147,9 @@ GEM
     jwt (2.2.3)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.1.5)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-      ruby_dep (~> 1.2)
+    listen (3.9.0)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.12.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -173,11 +165,16 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    mysql2 (0.5.3)
+    mutex_m (0.2.0)
+    mysql2 (0.5.6)
+    net-protocol (0.2.2)
+      timeout
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
+    net-smtp (0.5.1)
+      net-protocol
     net-ssh (6.1.0)
-    nio4r (2.5.8)
+    nio4r (2.7.3)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
@@ -189,6 +186,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    observer (0.1.2)
     omniauth (2.0.4)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -292,7 +290,6 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    ruby_dep (1.5.0)
     rubyzip (1.3.0)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
@@ -300,10 +297,6 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    spring (2.1.1)
-    spring-watcher-listen (2.0.1)
-      listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -324,6 +317,7 @@ GEM
       rack (>= 1, < 3)
     thor (1.1.0)
     tilt (2.0.10)
+    timeout (0.6.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
@@ -335,29 +329,33 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   activerecord-import
+  base64
   bcrypt (~> 3.1.7)
+  bigdecimal
   cancancan
   capistrano-rails
-  capybara
-  capybara-screenshot
   caracal-rails
   database_cleaner
   differ
   factory_bot_rails
-  faker
+  faker (~> 3.0)
   figaro
   foreman
   jbuilder (~> 2.5)
   jsonapi-serializer
-  listen (>= 3.0.5, < 3.2)
+  drb
+  listen (~> 3.9)
   montrose
-  mysql2 (>= 0.3.18, < 0.6.0)
+  mutex_m
+  mysql2 (~> 0.5)
+  net-smtp
   nio4r
   numbers_and_words
+  observer
   omniauth-google-oauth2
   omniauth-rails_csrf_protection (~> 1.0)
   puma (= 5.5.1)
@@ -370,12 +368,13 @@ DEPENDENCIES
   rubocop-rails
   shoulda-matchers (> 3.1)
   sidekiq
-  spring
-  spring-watcher-listen (> 2.0.0)
   stripe
   sucker_punch (~> 3.0)
   syllabize
   thin
 
+RUBY VERSION
+   ruby 3.3.11p205
+
 BUNDLED WITH
-   2.2.6
+   2.5.23
