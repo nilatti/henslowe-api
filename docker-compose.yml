@@ -27,4 +27,4 @@ services:
     volumes:
       - .:/app
     command: >
-      bash -c "until bundle exec rails runner 'ActiveRecord::Base.connection.execute(\"SELECT 1\")' 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec"
+      bash -c "until bundle exec rails runner 'ActiveRecord::Base.connection.execute(\"SELECT 1\")'; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec"

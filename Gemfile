@@ -7,7 +7,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 7.0'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5'
 # Use Puma as the app server
@@ -17,7 +17,7 @@ gem 'foreman'
 #sucker_punch replaces sidekiq for managing background tasks
 gem 'sucker_punch', '~> 3.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.11'
 gem 'jsonapi-serializer'
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
@@ -38,7 +38,7 @@ gem 'differ'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem 'nio4r'#  , '=2.5.7'
-gem 'sidekiq'
+gem 'sidekiq', '~> 7.0'
 gem 'figaro'
 gem 'activerecord-import'
 # montrose provides recurrence logic
@@ -61,7 +61,7 @@ gem 'stripe'
 # gem "rack-timeout"
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 6.0'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # gem 'dotenv-rails'
