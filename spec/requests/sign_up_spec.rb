@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'POST /sign_up', type: :request do
-  let(:url) { '/api/users' }
+  let(:url) { '/api/v1/users' }
   context 'when user is unauthenticated' do
 
     before {

@@ -10,7 +10,7 @@ RSpec.describe 'CharacterGroups API' do
   # Test suite for GET /plays/:play_id/character_groups
   describe 'GET api/plays/:play_id/character_groups' do
     before {
-      get "/api/plays/#{play.id}/character_groups", params: {play_id: play.id}, headers: authenticated_header(user)
+      get "/api/v1/plays/#{play.id}/character_groups", params: {play_id: play.id}, headers: authenticated_header(user)
     }
 
     context 'when play exists' do
@@ -26,7 +26,7 @@ RSpec.describe 'CharacterGroups API' do
 
   # Test suite for GET /plays/:play_id/character_groups/:id
   describe 'GET /plays/:play_id/character_groups/:id' do
-    before { get "/api/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
+    before { get "/api/v1/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -57,7 +57,7 @@ RSpec.describe 'CharacterGroups API' do
 
     context 'when request attributes are valid' do
       before {
-        post "/api/plays/#{play.id}/character_groups",
+        post "/api/v1/plays/#{play.id}/character_groups",
         params: valid_attributes,
         as: :json, headers: authenticated_header(user)
       }
@@ -68,7 +68,7 @@ RSpec.describe 'CharacterGroups API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/plays/#{play.id}/character_groups", params: { character_group: { age: 'Baby', play_id: play.id } }, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/plays/#{play.id}/character_groups", params: { character_group: { age: 'Baby', play_id: play.id } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         puts response.body
@@ -86,7 +86,7 @@ RSpec.describe 'CharacterGroups API' do
   describe 'PUT /api/plays/:play_id/character_groups/:id' do
     let(:valid_attributes) { { character_group: { name: 'Lady Elizabeth Grey' } } }
 
-    before { put "/api/plays/#{play.id}/character_groups/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/plays/#{play.id}/character_groups/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -114,7 +114,7 @@ RSpec.describe 'CharacterGroups API' do
 
   # Test suite for DELETE /character_groups/:id
   describe 'DELETE /character_groups/:id' do
-    before { delete "/api/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
+    before { delete "/api/v1/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

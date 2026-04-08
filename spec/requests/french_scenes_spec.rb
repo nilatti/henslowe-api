@@ -19,7 +19,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for GET /scenes/:scene_id/french_scenes
   describe 'GET api/scenes/:scene_id/french_scenes' do
     before {
-      get "/api/scenes/#{scene_id}/french_scenes", params: {scene_id: scene_id}, as: :json, headers: authenticated_header(user)
+      get "/api/v1/scenes/#{scene_id}/french_scenes", params: {scene_id: scene_id}, as: :json, headers: authenticated_header(user)
     }
 
     context 'when scene exists' do
@@ -36,7 +36,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for GET /scenes/:scene_id/french_scenes/:id
   describe 'GET /scenes/:scene_id/french_scenes/:id' do
     before {
-      get "/api/scenes/#{scene_id}/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
+      get "/api/v1/scenes/#{scene_id}/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when french_scene exists' do
@@ -75,7 +75,7 @@ RSpec.describe 'French Scenes API' do
     let(:valid_attributes) { { french_scene: { number: 1, scene_id: scene_id, character_ids: [ character.id ] } } }
 
     context 'when request attributes are valid' do
-      before { post "/api/scenes/#{scene_id}/french_scenes", params: valid_attributes, as: :json, headers: authenticated_header(user)}
+      before { post "/api/v1/scenes/#{scene_id}/french_scenes", params: valid_attributes, as: :json, headers: authenticated_header(user)}
 
       it 'returns status code 201' do
         expect(response).to have_http_status(200)
@@ -88,7 +88,7 @@ RSpec.describe 'French Scenes API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/scenes/#{scene_id}/french_scenes", params: { french_scene: { summary: 'Baby', scene_id: scene_id } }, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/scenes/#{scene_id}/french_scenes", params: { french_scene: { summary: 'Baby', scene_id: scene_id } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -105,7 +105,7 @@ RSpec.describe 'French Scenes API' do
   describe 'PUT /api/french_scenes/:id' do
     let(:valid_attributes) { { french_scene: { number: 'a', character_ids: [ character.id ], character_group_ids: [character_group.id] } } }
 
-    before { put "/api/french_scenes/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/french_scenes/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when french_scene exists' do
       it 'returns status code 200' do
@@ -120,7 +120,7 @@ RSpec.describe 'French Scenes API' do
       end
 
       it 'updates the french scene to delete a character' do
-        put "/api/french_scenes/#{id}", params: { french_scene: { character_ids: [], character_group_ids: [character_group.id]}}, as: :json, headers: authenticated_header(user)
+        put "/api/v1/french_scenes/#{id}", params: { french_scene: { character_ids: [], character_group_ids: [character_group.id]}}, as: :json, headers: authenticated_header(user)
         updated_french_scene = FrenchScene.find(id)
         expect(updated_french_scene.characters).to be_empty
         expect(updated_french_scene.character_groups.size).to eq(1)
@@ -143,7 +143,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for DELETE /french_scenes/:id
   describe 'DELETE /french_scenes/:id' do
     before {
-      delete "/api/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
+      delete "/api/v1/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do
@@ -152,7 +152,7 @@ RSpec.describe 'French Scenes API' do
   end
 
   describe 'gets french scene script' do
-    before { get "/api/french_scenes/#{id}/french_scene_script", headers: authenticated_header(user)}
+    before { get "/api/v1/french_scenes/#{id}/french_scene_script", headers: authenticated_header(user)}
     it 'returns status 200' do
       expect(response).to have_http_status(200)
     end

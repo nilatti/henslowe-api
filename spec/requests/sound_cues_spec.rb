@@ -9,7 +9,7 @@ RSpec.describe 'SoundCues API', type: :request do
   # Test suite for GET /sound_cues
   describe 'GET /sound_cues' do
     # make HTTP get request before each example
-    before { get '/api/sound_cues', headers: authenticated_header(user) }
+    before { get '/api/v1/sound_cues', headers: authenticated_header(user) }
 
     it 'returns sound_cues' do
       # Note `json` is a custom helper to parse JSON responses
@@ -24,7 +24,7 @@ RSpec.describe 'SoundCues API', type: :request do
 
   # Test suite for GET /sound_cues/:id
   describe 'GET api/sound_cues/:id' do
-    before { get "/api/sound_cues/#{sound_cue_id}", headers: authenticated_header(user) }
+    before { get "/api/v1/sound_cues/#{sound_cue_id}", headers: authenticated_header(user) }
     context 'when the record exists' do
       it 'returns the sound_cue' do
         expect(json).not_to be_empty
@@ -61,13 +61,13 @@ RSpec.describe 'SoundCues API', type: :request do
             french_scene_id: test_sound_cue.french_scene.id,
             original_content: test_sound_cue.original_content,
           } }
-        post '/api/sound_cues', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/sound_cues', params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(json['french_scene_id']).to eq(test_sound_cue.french_scene.id)
       end
     end
 
     # context 'when the request is invalid' do
-    #   before { post '/api/sound_cues', params: { sound_cue: { first_name: 'Failure' } }, as: :json }
+    #   before { post '/api/v1/sound_cues', params: { sound_cue: { first_name: 'Failure' } }, as: :json }
     #
     #   it 'returns status code 422' do
     #     expect(response).to have_http_status(422)
@@ -85,7 +85,7 @@ RSpec.describe 'SoundCues API', type: :request do
     let(:valid_attributes) { { sound_cue: attributes_for(:sound_cue, original_content: "BE LOUDER") } }
 
     context 'when the record exists' do
-      before { put "/api/sound_cues/#{sound_cue_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { put "/api/v1/sound_cues/#{sound_cue_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -96,7 +96,7 @@ RSpec.describe 'SoundCues API', type: :request do
   # Test suite for DELETE /sound_cues/:id
   describe 'DELETE /sound_cues/:id' do
     before {
-      delete "/api/sound_cues/#{sound_cue_id}", headers: authenticated_header(user)
+      delete "/api/v1/sound_cues/#{sound_cue_id}", headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do

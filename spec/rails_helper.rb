@@ -8,8 +8,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require "sidekiq/testing"
 
-require_relative 'support/controller_macros'
-
 Dir['spec/support/**/*.rb'].each do |file|
   require Rails.root.join(file).to_s
 end
@@ -65,8 +63,6 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include DefaultFormat, type: :request
   config.include FactoryBot::Syntax::Methods
-  config.extend ControllerMacros, :type => :controller
-  config.extend ControllerMacros, :type => :request
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, except:  %w(ar_internal_metadata))
     DatabaseCleaner.strategy = :transaction

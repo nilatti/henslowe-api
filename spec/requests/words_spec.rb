@@ -1,12 +1,6 @@
-# spec/requests/plays_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'Words API' do
-  before(:each) do
-    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
-    puts Rails.application.env_config["omniauth.auth"]
-    get '/sessions/create'
-  end
   # Initialize the test data
   let!(:play) { create(:play) }
   let!(:play_words) { create_list(:word, 10, play: play)}
@@ -16,7 +10,7 @@ RSpec.describe 'Words API' do
   # Test suite for GET /plays/:play_id/charworders
   describe 'GET api/plays/:play_id/words' do
     before {
-      get "/api/plays/#{play.id}/words", params: {play_id: play.id}, headers: authenticated_header(user)
+      get "/api/v1/plays/#{play.id}/words", params: {play_id: play.id}, headers: authenticated_header(user)
     }
 
     context 'when play exists' do
@@ -34,7 +28,7 @@ RSpec.describe 'Words API' do
   # Test suite for GET /plays/:play_id/words/:id
   describe 'GET /words/:id' do
     before {
-      get "/api/plays/#{play.id}/words/#{id}", headers: authenticated_header(user)
+      get "/api/v1/plays/#{play.id}/words/#{id}", headers: authenticated_header(user)
     }
 
     context 'when word exists' do
@@ -66,7 +60,7 @@ RSpec.describe 'Words API' do
 
     context 'when request attributes are valid' do
       before {
-        post "/api/plays/#{play.id}/words", params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post "/api/v1/plays/#{play.id}/words", params: valid_attributes, as: :json, headers: authenticated_header(user)
       }
 
       it 'returns status code 201' do
@@ -75,7 +69,7 @@ RSpec.describe 'Words API' do
     end
 
     # context 'when an invalid request' do
-    #   before { post "/api/plays/#{play.id}/words", params: { word: { line_number: nil, play_id: play.id } }, as: :json }
+    #   before { post "/api/v1/plays/#{play.id}/words", params: { word: { line_number: nil, play_id: play.id } }, as: :json }
     #
     #   it 'returns status code 422' do
     #     expect(response).to have_http_status(422)
@@ -92,7 +86,7 @@ RSpec.describe 'Words API' do
   describe 'PUT /api/words/:id' do
     let(:valid_attributes) { { "word"=>{"line_number"=>"2", "play_id"=>play.id} } }
 
-    before { put "/api/plays/#{play.id}/words/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user)  }
+    before { put "/api/v1/plays/#{play.id}/words/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user)  }
 
     context 'when word exists' do
       it 'returns status code 200' do
@@ -120,7 +114,7 @@ RSpec.describe 'Words API' do
 
   # Test suite for DELETE /words/:id
   describe 'DELETE /words/:id' do
-    before { delete "/api/plays/#{play.id}/words/#{id}", headers: authenticated_header(user)  }
+    before { delete "/api/v1/plays/#{play.id}/words/#{id}", headers: authenticated_header(user)  }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

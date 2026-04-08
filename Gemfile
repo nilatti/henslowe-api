@@ -51,6 +51,7 @@ gem 'syllabize'
 gem 'numbers_and_words'
 #manage who can see things
 gem 'cancancan'
+gem 'jwt', '~> 3.0'
 gem 'stripe'
 
 #configure request timeouts

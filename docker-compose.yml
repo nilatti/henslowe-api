@@ -27,4 +27,4 @@ services:
     volumes:
       - .:/app
     command: >
-      bash -c "until bundle exec rails runner 'ActiveRecord::Base.connection.execute(\"SELECT 1\")'; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec"
+      bash -c "until ruby -rmysql2 -e \"Mysql2::Client.new(host:'db',username:'${DB_USER}',password:'${DB_PASSWORD}')\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec spec/requests spec/models 2>&1 | tee /app/test_results.txt"

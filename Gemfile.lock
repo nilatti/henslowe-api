@@ -150,9 +150,6 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.14.1)
-      actionview (>= 7.0.0)
-      activesupport (>= 7.0.0)
     json (2.19.3)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
@@ -377,8 +374,6 @@ GEM
     stripe (19.0.0)
       bigdecimal
       logger
-    sucker_punch (3.3.0)
-      concurrent-ruby (~> 1.0)
     syllabize (0.8.0)
     thin (2.0.1)
       daemons (~> 1.0, >= 1.0.9)
@@ -421,8 +416,8 @@ DEPENDENCIES
   faker (~> 3.0)
   figaro
   foreman
-  jbuilder (~> 2.11)
   jsonapi-serializer
+  jwt (~> 3.0)
   listen (~> 3.9)
   montrose
   mutex_m
@@ -444,7 +439,6 @@ DEPENDENCIES
   shoulda-matchers (> 3.1)
   sidekiq (~> 7.0)
   stripe
-  sucker_punch (~> 3.0)
   syllabize
   thin
 

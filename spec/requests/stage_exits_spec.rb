@@ -9,7 +9,7 @@ RSpec.describe 'StageExits API', type: :request do
   # Test suite for GET /stage_exits
   describe 'GET /stage_exits' do
     # make HTTP get request before each example
-    before { get "/api/productions/#{production.id}/stage_exits", headers: authenticated_header(user) }
+    before { get "/api/v1/productions/#{production.id}/stage_exits", headers: authenticated_header(user) }
 
     it 'returns stage_exits' do
       # Note `json` is a custom helper to parse JSON responses
@@ -24,7 +24,7 @@ RSpec.describe 'StageExits API', type: :request do
 
   # Test suite for GET /stage_exits/:id
   describe 'GET api/stage_exits/:id' do
-    before { get "/api/stage_exits/#{stage_exit_id}", headers: authenticated_header(user) }
+    before { get "/api/v1/stage_exits/#{stage_exit_id}", headers: authenticated_header(user) }
     context 'when the record exists' do
       it 'returns the stage_exit' do
         expect(json).not_to be_empty
@@ -56,7 +56,7 @@ RSpec.describe 'StageExits API', type: :request do
 
     context 'when the request is valid' do
       before {
-        post "/api/productions/#{production.id}/stage_exits", params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post "/api/v1/productions/#{production.id}/stage_exits", params: valid_attributes, as: :json, headers: authenticated_header(user)
       }
 
       it 'creates a stage_exit' do
@@ -69,7 +69,7 @@ RSpec.describe 'StageExits API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post "/api/productions/#{production.id}/stage_exits", params: { stage_exit: { name: '' } }, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/productions/#{production.id}/stage_exits", params: { stage_exit: { name: '' } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -87,7 +87,7 @@ RSpec.describe 'StageExits API', type: :request do
     let(:valid_attributes) { { stage_exit: attributes_for(:stage_exit, name: "BE LOUDER") } }
 
     context 'when the record exists' do
-      before { put "/api/stage_exits/#{stage_exit_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { put "/api/v1/stage_exits/#{stage_exit_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -98,7 +98,7 @@ RSpec.describe 'StageExits API', type: :request do
   # Test suite for DELETE /stage_exits/:id
   describe 'DELETE /stage_exits/:id' do
     before {
-      delete "/api/stage_exits/#{stage_exit_id}", headers: authenticated_header(user)
+      delete "/api/v1/stage_exits/#{stage_exit_id}", headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do

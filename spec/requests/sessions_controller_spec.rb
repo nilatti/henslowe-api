@@ -1,5 +1,5 @@
 require 'rails_helper'
-describe SessionsController, type: :request do
+describe Api::V1::SessionsController, type: :request do
   let!(:user) { create(:user)}
     context 'When logging in and out' do
       before do

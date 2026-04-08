@@ -13,7 +13,7 @@ class ApiController < ActionController::API
   end
   helper_method :current_user
   def current_user
-    token = cookies.signed[:jwt]
+    token = cookies.signed[:jwt] || bearer_token
     decoded_token = CoreModules::JsonWebToken.decode(token)
     if decoded_token
       user = User.find_by(id: decoded_token["id"])
@@ -22,9 +22,14 @@ class ApiController < ActionController::API
   end
 
   def authenticate_current_user
-    if cookies.signed[:jwt]
-      jwt = cookies.signed[:jwt]
-      CoreModules::JsonWebToken.decode(jwt)
-    end
+    token = cookies.signed[:jwt] || bearer_token
+    CoreModules::JsonWebToken.decode(token) if token
+  end
+
+  private
+
+  def bearer_token
+    header = request.headers['Authorization']
+    header.split(' ').last if header&.start_with?('Bearer ')
   end
 end
