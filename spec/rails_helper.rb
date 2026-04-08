@@ -58,7 +58,6 @@ Shoulda::Matchers.configure do |config|
 end
 RSpec.configure do |config|
   config.include RequestSpecHelper, type: :request
-  config.include OmniauthMacros
   config.include ApiHelpers
   config.include FactoryBot::Syntax::Methods
   config.include DefaultFormat, type: :request
