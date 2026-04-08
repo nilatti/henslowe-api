@@ -25,7 +25,6 @@
 
 # Ignore application configuration
 /config/application.yml
-docker-compose.yml
 
 
 to_start.txt
