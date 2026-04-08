@@ -14,10 +14,6 @@ gem 'mysql2', '~> 0.5'
 gem 'puma', '5.5.1'
 gem 'thin'
 gem 'foreman'
-#sucker_punch replaces sidekiq for managing background tasks
-gem 'sucker_punch', '~> 3.0'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.11'
 gem 'jsonapi-serializer'
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
