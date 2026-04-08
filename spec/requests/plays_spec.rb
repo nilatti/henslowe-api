@@ -5,8 +5,8 @@ RSpec.describe 'Plays API' do
   # Initialize the test data
   let!(:user) { create(:user)}
   let!(:author) { create(:author) }
-  let!(:plays) { create_list(:play, 5, author_id: author.id, canonical: true) }
-  let!(:other_author_plays) { create_list(:play, 5, canonical: true)}
+  let!(:plays) { create_list(:play, 5, :with_full_structure, author_id: author.id, canonical: true) }
+  let!(:other_author_plays) { create_list(:play, 5, :with_full_structure, canonical: true)}
   let!(:author_id) { author.id }
   let!(:id) { plays.first.id }
   # Test suite for GET /authors/:author_id/plays

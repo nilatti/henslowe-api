@@ -5,8 +5,8 @@ RSpec.describe Scene, type: :model do
     expect(build(:scene)).to be_valid
   end
 
-  let(:play) { create(:play) }
-  let(:scene) { create(:scene, act: play.acts.first) }
+  let(:play) { create(:play, :with_full_structure) }
+  let(:scene) { create(:scene, :with_french_scenes, act: play.acts.first) }
 
   describe "ActiveRecord associations" do
     it { expect(scene).to belong_to(:act) }

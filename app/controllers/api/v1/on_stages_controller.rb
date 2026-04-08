@@ -21,7 +21,7 @@ class OnStagesController < ApiController
     @on_stage = OnStage.new(on_stage_params)
 
     if @on_stage.save
-      json_response(@on_stage.as_json(include: [:character, :character_group, :user]))
+      json_response(@on_stage.as_json(include: [:character, :character_group, :user]), :created)
     else
       render json: @on_stage.errors, status: :unprocessable_entity
     end

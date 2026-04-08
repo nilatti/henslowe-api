@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe 'Rehearsals API' do
   # Initialize the test data
-  let!(:production) { create(:production, start_date: Date.today, end_date: 6.weeks.from_now) }
-  let!(:play) { production.play }
+  let!(:play) { create(:play, :with_full_structure) }
+  let!(:production) { create(:production, play: play, start_date: Date.today, end_date: 6.weeks.from_now) }
   let!(:scenes) { [play.scenes.first]}
   let!(:french_scenes) { scenes.first.french_scenes }
   let!(:excess) {create_list(:rehearsal, 3, scenes: [play.scenes.last], production: production)}

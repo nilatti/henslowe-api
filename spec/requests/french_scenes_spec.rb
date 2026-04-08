@@ -6,7 +6,7 @@ RSpec.describe 'French Scenes API' do
 
   let!(:user) { create(:user)}
   let!(:author) { create(:author) }
-  let!(:play) { create(:play, author_id: author.id) }
+  let!(:play) { create(:play, :with_full_structure, author_id: author.id) }
   let!(:scene_id) { play.acts.first.scenes.first.id }
   let!(:id) { play.acts.first.scenes.first.french_scenes.first.id }
   let!(:french_scene) { play.acts.first.scenes.first.french_scenes.first }

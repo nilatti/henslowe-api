@@ -9,8 +9,8 @@ RSpec.describe 'POST /sign_up', type: :request do
       post url, params: valid_attributes
     }
 
-    it 'returns 200' do
-      expect(response.status).to eq 200
+    it 'returns 201' do
+      expect(response.status).to eq 201
     end
 
     it 'returns a new user' do

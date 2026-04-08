@@ -77,8 +77,7 @@ RSpec.describe 'theaters API', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(response.body)
-          .to match(/Validation failed: Name can't be blank/)
+        expect(JSON.parse(response.body)['name']).to include("can't be blank")
       end
     end
   end

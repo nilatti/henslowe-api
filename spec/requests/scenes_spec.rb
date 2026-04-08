@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe 'Scenes API' do
   # Initialize the test data
   let!(:user) { create(:user)}
-  let!(:play) { create(:play) }
+  let!(:play) { create(:play, :with_full_structure) }
   let!(:act_id) { play.acts.first.id }
   let!(:id) { play.acts.first.scenes.first.id }
 

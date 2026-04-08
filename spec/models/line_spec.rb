@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Line, type: :model do
   # before(:each) do
-  #   @play = create(:play, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
+  #   @play = create(:play, :with_full_structure, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
   #   @first_act = @play.acts.first
   #   @first_scene = @first_act.scenes.first
   #   @character = create(:character, play: @play)
   #   @line = create(:line, french_scene: @first_scene.french_scenes.first, character: @character, original_content: 'If music be the food of love, play on!', new_content: '')
   # end
 
-  let(:play) {create(:play, canonical: true)} #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
+  let(:play) {create(:play, :with_full_structure, canonical: true)} #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
   let(:character) {play.characters.first}
   let(:act) {play.acts.first}
   let(:scene) {act.scenes.first}

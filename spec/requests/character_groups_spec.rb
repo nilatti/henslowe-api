@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe 'CharacterGroups API' do
   # Initialize the test data
   let!(:author) { create(:author) }
-  let!(:play) { create(:play, author_id: author.id) }
+  let!(:play) { create(:play, :with_full_structure, author_id: author.id) }
   let!(:id) { play.character_groups.first.id }
   let!(:user) { create(:user)}
   # Test suite for GET /plays/:play_id/character_groups

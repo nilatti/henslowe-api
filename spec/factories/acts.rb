@@ -4,10 +4,12 @@ FactoryBot.define do
     summary { Faker:: Hipster.sentence}
     play
 
-    after(:create) do |act|
-      create_list(:scene, 3, act: act) do |scene, i|
-        scene.number = (i + 1)
-        scene.save
+    trait :with_scenes do
+      after(:create) do |act|
+        create_list(:scene, 3, :with_french_scenes, act: act) do |scene, i|
+          scene.number = (i + 1)
+          scene.save
+        end
       end
     end
   end
