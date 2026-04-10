@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'POST /sign_up', type: :request do
-  let(:url) { '/api/users' }
+  let(:url) { '/api/v1/users' }
   context 'when user is unauthenticated' do
 
     before {
@@ -9,8 +9,8 @@ RSpec.describe 'POST /sign_up', type: :request do
       post url, params: valid_attributes
     }
 
-    it 'returns 200' do
-      expect(response.status).to eq 200
+    it 'returns 201' do
+      expect(response.status).to eq 201
     end
 
     it 'returns a new user' do

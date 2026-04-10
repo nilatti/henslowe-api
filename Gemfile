@@ -1,26 +1,31 @@
 source 'https://rubygems.org'
 
+ruby '~> 3.3'
+
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 7.0'
 # Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.3.18', '< 0.6.0'
+gem 'mysql2', '~> 0.5'
 # Use Puma as the app server
 gem 'puma', '5.5.1'
 gem 'thin'
 gem 'foreman'
-#sucker_punch replaces sidekiq for managing background tasks
-gem 'sucker_punch', '~> 3.0'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
 gem 'jsonapi-serializer'
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+# Gems promoted out of Ruby stdlib in 3.1–3.4
+gem 'base64'
+gem 'bigdecimal'
+gem 'mutex_m'
+gem 'observer'
+gem 'drb'
+gem 'net-smtp'
 # write word documents
 gem 'caracal-rails'
 # get line diffs
@@ -29,7 +34,7 @@ gem 'differ'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem 'nio4r'#  , '=2.5.7'
-gem 'sidekiq'
+gem 'sidekiq', '~> 7.0'
 gem 'figaro'
 gem 'activerecord-import'
 # montrose provides recurrence logic
@@ -46,32 +51,28 @@ gem 'syllabize'
 gem 'numbers_and_words'
 #manage who can see things
 gem 'cancancan'
+gem 'jwt', '~> 3.0'
 gem 'stripe'
 
 #configure request timeouts
 # gem "rack-timeout"
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 6.0'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # gem 'dotenv-rails'
 end
 
 group :development do
-  gem 'listen', '>= 3.0.5', '< 3.2'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '> 2.0.0'
+  gem 'listen', '~> 3.9'
 end
 
 group :test do
   gem 'factory_bot_rails'
   gem 'shoulda-matchers', '> 3.1'
-  gem 'faker'
+  gem 'faker', '~> 3.0'
   gem 'database_cleaner'
-  gem 'capybara'
-  gem 'capybara-screenshot'
   # gem 'selenium-webdriver'
   gem 'rspec-sidekiq'
 end

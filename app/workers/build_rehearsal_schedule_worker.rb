@@ -1,5 +1,5 @@
 class BuildRehearsalScheduleWorker
-  include SuckerPunch::Job
+  include Sidekiq::Worker
 
   def perform(break_length, days_of_week, default_user_ids, end_date, end_time, production_id, time_between_breaks, start_date, start_time)
     break_length = break_length.to_i

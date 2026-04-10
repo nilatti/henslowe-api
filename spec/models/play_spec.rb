@@ -6,7 +6,7 @@ RSpec.describe Play, type: :model do
     expect(build(:play)).to be_valid
   end
 
-  let(:play) { create(:play) }
+  let(:play) { create(:play, :with_full_structure) }
 
   describe "ActiveModel validations" do
     it { expect(play).to validate_presence_of(:title)}

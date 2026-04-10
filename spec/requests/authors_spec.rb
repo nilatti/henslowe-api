@@ -9,7 +9,7 @@ RSpec.describe 'Authors API', type: :request do
   # Test suite for GET /authors
   describe 'GET /authors' do
     # make HTTP get request before each example
-    before { get '/api/authors', headers: authenticated_header(user) }
+    before { get '/api/v1/authors', headers: authenticated_header(user) }
 
     it 'returns authors' do
       # Note `json` is a custom helper to parse JSON responses
@@ -24,7 +24,7 @@ RSpec.describe 'Authors API', type: :request do
 
   # Test suite for GET /authors/:id
   describe 'GET api/authors/:id' do
-    before { get "/api/authors/#{author_id}", headers: authenticated_header(user) }
+    before { get "/api/v1/authors/#{author_id}", headers: authenticated_header(user) }
     context 'when the record exists' do
       it 'returns the author' do
         expect(json).not_to be_empty
@@ -56,7 +56,7 @@ RSpec.describe 'Authors API', type: :request do
     let(:valid_attributes) { { author: { first_name: 'Pam', last_name: 'Mandigo' } } }
 
     context 'when the request is valid' do
-      before { post '/api/authors', params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { post '/api/v1/authors', params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'creates a author' do
         expect(json['last_name']).to eq('Mandigo')
@@ -68,7 +68,7 @@ RSpec.describe 'Authors API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/api/authors', params: { author: { first_name: 'Failure' } }, as: :json, headers: authenticated_header(user) }
+      before { post '/api/v1/authors', params: { author: { first_name: 'Failure' } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -86,7 +86,7 @@ RSpec.describe 'Authors API', type: :request do
     let(:valid_attributes) { { author: { first_name: 'Pam', last_name: 'Mandigo' } } }
 
     context 'when the record exists' do
-      before { put "/api/authors/#{author_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { put "/api/v1/authors/#{author_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -97,7 +97,7 @@ RSpec.describe 'Authors API', type: :request do
   # Test suite for DELETE /authors/:id
   describe 'DELETE /authors/:id' do
     before {
-      delete "/api/authors/#{author_id}", headers: authenticated_header(user)
+      delete "/api/v1/authors/#{author_id}", headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do
@@ -107,7 +107,7 @@ RSpec.describe 'Authors API', type: :request do
 
   # Test suite for author_names
   describe 'GET /api/authors/author_names' do
-    before { get '/api/authors/author_names', headers: authenticated_header(user) }
+    before { get '/api/v1/authors/author_names', headers: authenticated_header(user) }
 
     it 'returns authors ONLY NAMES' do
       # Note `json` is a custom helper to parse JSON responses

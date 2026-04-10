@@ -12,7 +12,7 @@ RSpec.describe 'jobs API', type: :request do
   # Test suite for GET /jobs
   describe 'GET /jobs' do
     # make HTTP get request before each example
-    before { get '/api/jobs', as: :json, headers: authenticated_header(user) }
+    before { get '/api/v1/jobs', as: :json, headers: authenticated_header(user) }
 
     it 'returns jobs' do
       # Note `json` is a custom helper to parse JSON responses
@@ -27,7 +27,7 @@ RSpec.describe 'jobs API', type: :request do
 
   # Test suite for GET /jobs/:id
   describe 'GET api/jobs/:id' do
-    before { get "/api/jobs/#{job_id}", as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/jobs/#{job_id}", as: :json, headers: authenticated_header(user) }
     context 'when the record exists' do
       it 'returns the job' do
         expect(json).not_to be_empty
@@ -67,7 +67,7 @@ RSpec.describe 'jobs API', type: :request do
             start_date: test_job.start_date,
             user_id: test_job.user.id,
           } }
-        post '/api/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(json['user_id']).to eq(test_job.user.id)
       end
 
@@ -80,7 +80,7 @@ RSpec.describe 'jobs API', type: :request do
             start_date: test_job.start_date
           }
         }
-        post '/api/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(response).to have_http_status(201)
       end
 
@@ -92,13 +92,13 @@ RSpec.describe 'jobs API', type: :request do
             specialization_id: test_job.specialization.id,
           }
         }
-        post '/api/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(response).to have_http_status(201)
       end
     end
 
     context 'when the request is invalid' do
-      before { post '/api/jobs', params: { job: { end_date: '2001-09-01', start_date: '2002-11-01' } }, as: :json, headers: authenticated_header(user) }
+      before { post '/api/v1/jobs', params: { job: { end_date: '2001-09-01', start_date: '2002-11-01' } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -124,7 +124,7 @@ RSpec.describe 'jobs API', type: :request do
             start_date: test_job.start_date,
             theater_id: test_job.theater.id,
             } }
-          put "/api/jobs/#{job_id}", params: valid_attributes, as: :json, headers: authenticated_header(user)
+          put "/api/v1/jobs/#{job_id}", params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(response).to have_http_status(200)
       end
     end
@@ -132,7 +132,7 @@ RSpec.describe 'jobs API', type: :request do
 
   # Test suite for DELETE /jobs/:id
   describe 'DELETE /jobs/:id' do
-    before { delete "/api/jobs/#{job_id}", as: :json, headers: authenticated_header(user) }
+    before { delete "/api/v1/jobs/#{job_id}", as: :json, headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
@@ -142,7 +142,7 @@ RSpec.describe 'jobs API', type: :request do
   describe 'get actors for production' do
     before {
       create_list(:job, 2, :actor_job, production: production)
-      get '/api/jobs/get_actors_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
+      get '/api/v1/jobs/get_actors_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
     }
     it 'returns successfully' do
       expect(response).to have_http_status(200)
@@ -160,7 +160,7 @@ RSpec.describe 'jobs API', type: :request do
     before {
       create_list(:job, 2, :actor_job, production: production)
       create_list(:job, 3, :auditioner_job, production: production)
-      get '/api/jobs/get_actors_and_auditioners_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
+      get '/api/v1/jobs/get_actors_and_auditioners_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
     }
     it 'returns successfully' do
       expect(response).to have_http_status(200)
@@ -179,7 +179,7 @@ RSpec.describe 'jobs API', type: :request do
     before {
       create_list(:job, 3, :actor_job, theater: theater)
       create_list(:job, 3, :auditioner_job, theater: theater)
-      get '/api/jobs/get_actors_and_auditioners_for_theater', as: :json, params: { theater: theater.id}, headers: authenticated_header(user)}
+      get '/api/v1/jobs/get_actors_and_auditioners_for_theater', as: :json, params: { theater: theater.id}, headers: authenticated_header(user)}
     it 'returns successfully' do
       expect(response).to have_http_status(200)
     end

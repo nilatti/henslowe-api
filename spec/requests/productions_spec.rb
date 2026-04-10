@@ -30,7 +30,7 @@ RSpec.describe 'Productions API' do
   # Test suite for GET /productions
   describe 'GET api/productions' do
     before {
-      get "/api/productions", as: :json, headers: authenticated_header(user)
+      get "/api/v1/productions", as: :json, headers: authenticated_header(user)
     }
 
     context 'when productions exist' do
@@ -46,7 +46,7 @@ RSpec.describe 'Productions API' do
 
   # Test suite for GET /productions/:id
   describe 'GET /productions/:id' do
-    before { get "/api/productions/#{id}", as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/productions/#{id}", as: :json, headers: authenticated_header(user) }
 
     context 'when production exists' do
       it 'returns status code 200' do
@@ -76,7 +76,7 @@ RSpec.describe 'Productions API' do
     let(:valid_attributes) { { production: attributes_for(:production, theater_id: theater.id) } }
 
     context 'when request attributes are valid' do
-      before { post "/api/productions", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/productions", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -84,7 +84,7 @@ RSpec.describe 'Productions API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/productions", params: { production: { start_date: Time.now, end_date: Time.now - 3.days } }, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/productions", params: { production: { start_date: Time.now, end_date: Time.now - 3.days } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -101,7 +101,7 @@ RSpec.describe 'Productions API' do
   describe 'PUT /api/productions/:id' do
     let(:valid_attributes) { { production: attributes_for(:production, start_date: Time.now)  } }
 
-    before { put "/api/productions/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/productions/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when production exists' do
       it 'returns status code 200' do
@@ -124,7 +124,7 @@ RSpec.describe 'Productions API' do
 
   # Test suite for DELETE /productions/:id
   describe 'DELETE /productions/:id' do
-    before { delete "/api/productions/#{id}", as: :json, headers: authenticated_header(user) }
+    before { delete "/api/v1/productions/#{id}", as: :json, headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
@@ -132,7 +132,7 @@ RSpec.describe 'Productions API' do
   end
 
   describe 'put /api/productions/:production_id/build_rehearsal_schedule' do
-    before { put "/api/productions/#{id}/build_rehearsal_schedule", as: :json, params: {production: {rehearsal_schedule_pattern: rehearsal_schedule_pattern} }, headers: authenticated_header(user) }
+    before { put "/api/v1/productions/#{id}/build_rehearsal_schedule", as: :json, params: {production: {rehearsal_schedule_pattern: rehearsal_schedule_pattern} }, headers: authenticated_header(user) }
     it 'returns 200' do
       expect(response).to have_http_status(200)
     end
@@ -146,7 +146,7 @@ RSpec.describe 'Productions API' do
   end
 
   describe 'get /api/productions/production_names' do
-    before { get "/api/productions/production_names", headers: authenticated_header(user)}
+    before { get "/api/v1/productions/production_names", headers: authenticated_header(user)}
     it "returns 200" do
       expect(response).to have_http_status(200)
     end
@@ -166,7 +166,7 @@ RSpec.describe 'Productions API' do
   end
 
   describe 'get /api/productions/get_productions_for_theater' do
-    before { get "/api/productions/get_productions_for_theater", params: {theater: theater.id}, as: :json, headers: authenticated_header(user)}
+    before { get "/api/v1/productions/get_productions_for_theater", params: {theater: theater.id}, as: :json, headers: authenticated_header(user)}
     it 'returns 200' do
       expect(response).to have_http_status(200)
     end

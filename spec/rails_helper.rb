@@ -1,14 +1,12 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'database_cleaner'
-require "sidekiq/testing"
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
-
-require_relative 'support/controller_macros'
+require "sidekiq/testing"
 
 Dir['spec/support/**/*.rb'].each do |file|
   require Rails.root.join(file).to_s
@@ -60,13 +58,10 @@ Shoulda::Matchers.configure do |config|
 end
 RSpec.configure do |config|
   config.include RequestSpecHelper, type: :request
-  config.include OmniauthMacros
   config.include ApiHelpers
   config.include FactoryBot::Syntax::Methods
   config.include DefaultFormat, type: :request
   config.include FactoryBot::Syntax::Methods
-  config.extend ControllerMacros, :type => :controller
-  config.extend ControllerMacros, :type => :request
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, except:  %w(ar_internal_metadata))
     DatabaseCleaner.strategy = :transaction

@@ -5,7 +5,7 @@ class Play < ApplicationRecord
 
   default_scope {order(:title)}
 
-  serialize :genre, Array
+  serialize :genre, type: Array
   has_many :words, dependent: :destroy #this is so that words can be created in a batch and then matched to lines
   has_many :acts, -> { order(:number) }, dependent: :destroy
   has_many :characters, -> { order(:name) }, dependent: :destroy

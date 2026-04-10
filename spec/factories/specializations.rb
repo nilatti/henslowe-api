@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :specialization do
-    title { Faker::BossaNova.song }
+    title { Faker::Music::Prince.song }
     description { Faker::GreekPhilosophers.quote }
     theater_admin {false}
     production_admin {false}

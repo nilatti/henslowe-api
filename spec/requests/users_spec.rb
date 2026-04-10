@@ -12,7 +12,7 @@ RSpec.describe 'Users API' do
   # Test suite for GET /productions/:production_id/rehearsals
   describe 'GET api/users' do
     before {
-      get "/api/users/", headers: authenticated_header(user)
+      get "/api/v1/users/", headers: authenticated_header(user)
     }
 
     context 'when users exist' do
@@ -28,7 +28,7 @@ RSpec.describe 'Users API' do
 
   # Test suite for GET /users/:user_id/
   describe 'GET /users/:user_id/' do
-    before { get "/api/users/#{id}/", headers: authenticated_header(user) }
+    before { get "/api/v1/users/#{id}/", headers: authenticated_header(user) }
 
     context 'when user exists' do
       it 'returns status code 200' do
@@ -58,7 +58,7 @@ RSpec.describe 'Users API' do
     context 'when user is self' do
       before {
         login_user(user)
-        get "/api/users/#{id}/", headers: authenticated_header(user)
+        get "/api/v1/users/#{id}/", headers: authenticated_header(user)
       }
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -94,7 +94,7 @@ RSpec.describe 'Users API' do
       let!(:super_user) { create(:user, role: "superadmin") }
       before {
         login_user(super_user)
-        get "/api/users/#{id}/", headers: authenticated_header(super_user)
+        get "/api/v1/users/#{id}/", headers: authenticated_header(super_user)
       }
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -134,7 +134,7 @@ RSpec.describe 'Users API' do
         login_user(theater_admin_user)
         user_who_works_at_theater = create(:user)
         user_at_theater_job = create(:job, user: user_who_works_at_theater, theater: local_theater)
-        get "/api/users/#{user_who_works_at_theater.id}/", headers: authenticated_header(theater_admin_user)
+        get "/api/v1/users/#{user_who_works_at_theater.id}/", headers: authenticated_header(theater_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(user_who_works_at_theater.bio)
         expect(Date.parse(json['birthdate'])).to eq(user_who_works_at_theater.birthdate)
@@ -162,7 +162,7 @@ RSpec.describe 'Users API' do
       it "returns basic information for a user who doesn't have any jobs" do
         login_user(theater_admin_user)
         other_theater_user_without_jobs = create(:user)
-        get "/api/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(theater_admin_user)
+        get "/api/v1/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(theater_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_without_jobs.bio)
         expect(json['city']).to eq(other_theater_user_without_jobs.city)
@@ -182,7 +182,7 @@ RSpec.describe 'Users API' do
         other_theater = create(:theater)
         create_list(:job, 3, user: other_theater_user_with_jobs, theater: other_theater)
         login_user(theater_admin_user)
-        get "/api/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(theater_admin_user)
+        get "/api/v1/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(theater_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_with_jobs.bio)
         expect(json['city']).to eq(other_theater_user_with_jobs.city)
@@ -201,7 +201,7 @@ RSpec.describe 'Users API' do
         past_theater_employee_user = create(:user)
         past_theater_job = create(:job, start_date: Date.today - 9.years, end_date: Date.today - 8.years, theater: local_theater, user: past_theater_employee_user)
         login_user(theater_admin_user)
-        get "/api/users/#{past_theater_employee_user.id}/", headers: authenticated_header(theater_admin_user)
+        get "/api/v1/users/#{past_theater_employee_user.id}/", headers: authenticated_header(theater_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(past_theater_employee_user.bio)
         expect(json['city']).to eq(past_theater_employee_user.city)
@@ -228,7 +228,7 @@ RSpec.describe 'Users API' do
         login_user(production_admin_user)
         user_who_works_on_production = create(:user)
         user_on_production_job = create(:job, user: user_who_works_on_production, theater: local_theater, production: local_production)
-        get "/api/users/#{user_who_works_on_production.id}/", headers: authenticated_header(production_admin_user)
+        get "/api/v1/users/#{user_who_works_on_production.id}/", headers: authenticated_header(production_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(user_who_works_on_production.bio)
         expect(Date.parse(json['birthdate'])).to eq(user_who_works_on_production.birthdate)
@@ -256,7 +256,7 @@ RSpec.describe 'Users API' do
       it "returns basic information for a user who doesn't have any jobs" do
         login_user(production_admin_user)
         other_theater_user_without_jobs = create(:user)
-        get "/api/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(production_admin_user)
+        get "/api/v1/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(production_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_without_jobs.bio)
         expect(json['city']).to eq(other_theater_user_without_jobs.city)
@@ -276,7 +276,7 @@ RSpec.describe 'Users API' do
         other_theater = create(:theater)
         create_list(:job, 3, user: other_theater_user_with_jobs, theater: other_theater)
         login_user(production_admin_user)
-        get "/api/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(production_admin_user)
+        get "/api/v1/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(production_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_with_jobs.bio)
         expect(json['city']).to eq(other_theater_user_with_jobs.city)
@@ -295,7 +295,7 @@ RSpec.describe 'Users API' do
         past_theater_employee_user = create(:user)
         past_theater_job = create(:job, start_date: Date.today - 9.years, end_date: Date.today - 8.years, theater: local_theater, user: past_theater_employee_user, production: local_production)
         login_user(production_admin_user)
-        get "/api/users/#{past_theater_employee_user.id}/", headers: authenticated_header(production_admin_user)
+        get "/api/v1/users/#{past_theater_employee_user.id}/", headers: authenticated_header(production_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(past_theater_employee_user.bio)
         expect(json['city']).to eq(past_theater_employee_user.city)
@@ -322,7 +322,7 @@ RSpec.describe 'Users API' do
         login_user(production_user)
         production_peer = create(:user)
         production_peer_job = create(:job, user: production_peer, theater: local_theater, production: local_production)
-        get "/api/users/#{production_peer.id}/", headers: authenticated_header(production_user)
+        get "/api/v1/users/#{production_peer.id}/", headers: authenticated_header(production_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(production_peer.bio)
         expect(json['birthdate']).to be_nil
@@ -350,7 +350,7 @@ RSpec.describe 'Users API' do
       it "returns basic information for a user who doesn't have any jobs" do
         login_user(production_user)
         other_theater_user_without_jobs = create(:user)
-        get "/api/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(production_user)
+        get "/api/v1/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(production_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_without_jobs.bio)
         expect(json['birthdate']).to be_nil
@@ -379,7 +379,7 @@ RSpec.describe 'Users API' do
         other_theater = create(:theater)
         create_list(:job, 3, user: other_theater_user_with_jobs, theater: other_theater)
         login_user(production_user)
-        get "/api/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(production_user)
+        get "/api/v1/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(production_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_with_jobs.bio)
         expect(json['city']).to eq(other_theater_user_with_jobs.city)
@@ -405,7 +405,7 @@ RSpec.describe 'Users API' do
         login_user(theater_user)
         theater_peer = create(:user)
         theater_peer_job = create(:job, user: theater_peer, theater: local_theater)
-        get "/api/users/#{theater_peer.id}/", headers: authenticated_header(theater_user)
+        get "/api/v1/users/#{theater_peer.id}/", headers: authenticated_header(theater_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(theater_peer.bio)
         expect(json['birthdate']).to be_nil
@@ -433,7 +433,7 @@ RSpec.describe 'Users API' do
       it "returns basic information for a user who doesn't have any jobs" do
         login_user(theater_user)
         other_theater_user_without_jobs = create(:user)
-        get "/api/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(theater_user)
+        get "/api/v1/users/#{other_theater_user_without_jobs.id}/", headers: authenticated_header(theater_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_without_jobs.bio)
         expect(json['birthdate']).to be_nil
@@ -462,7 +462,7 @@ RSpec.describe 'Users API' do
         other_theater = create(:theater)
         create_list(:job, 3, user: other_theater_user_with_jobs, theater: other_theater)
         login_user(theater_user)
-        get "/api/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(theater_user)
+        get "/api/v1/users/#{other_theater_user_with_jobs.id}/", headers: authenticated_header(theater_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(other_theater_user_with_jobs.bio)
         expect(json['city']).to eq(other_theater_user_with_jobs.city)
@@ -492,7 +492,7 @@ RSpec.describe 'Users API' do
           "space_id": space.id,
           "start_date": "2020-02-20",
           "start_time": "12:00:00"}
-      put "/api/users/#{user.id}/build_conflict_schedule", as: :json, params: {conflict_schedule_pattern: conflict_schedule_pattern}, headers: authenticated_header(user)
+      put "/api/v1/users/#{user.id}/build_conflict_schedule", as: :json, params: {conflict_schedule_pattern: conflict_schedule_pattern}, headers: authenticated_header(user)
     }
     it 'returns 200' do
       expect(response).to have_http_status(200)

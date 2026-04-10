@@ -1,15 +1,10 @@
 require_relative 'boot'
 
-require "rails/all"
-# Pick the frameworks you want:
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
 require "action_cable/engine"
-# require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -19,7 +14,7 @@ Bundler.require(*Rails.groups)
 module June20
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
     config.autoload_paths << "#{Rails.root}/lib"
     config.after_initialize do
 
@@ -29,14 +24,12 @@ end
     config.action_dispatch.cookies_same_site_protection = :lax
     config.action_controller.forgery_protection_origin_check = false
     config.middleware.use Rack::MethodOverride
-    config.middleware.use ActionDispatch::Flash
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_henslowe'
-    config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore, key: '_henslowe')
     config.app_generators.scaffold_controller = :scaffold_controller
     config.x.cors_allowed_origins
     config.hosts = ['localhost', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com', 'hc-fargate-lb-1911618557.us-east-1.elb.amazonaws.com']
-    config.api_only = false
+    config.api_only = true
     config.active_job.queue_adapter = :sidekiq
 
   end

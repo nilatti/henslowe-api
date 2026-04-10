@@ -1,5 +1,5 @@
 class UpdateLineCountWorker
-  include SuckerPunch::Job
+  include Sidekiq::Worker
 
   def perform(line_id)
     puts ('perform called')

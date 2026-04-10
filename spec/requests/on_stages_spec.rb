@@ -13,7 +13,7 @@ RSpec.describe 'OnStages API' do
   # Test suite for GET /french_scenes/:french_scene_id/on_stages
   describe 'GET api/french_scenes/:french_scene_id/on_stages' do
     before {
-      get "/api/french_scenes/#{french_scene_id}/on_stages", params: {on_stage: {french_scene_id: french_scene_id, character_id: character.id}}, as: :json, headers: authenticated_header(user)
+      get "/api/v1/french_scenes/#{french_scene_id}/on_stages", params: {on_stage: {french_scene_id: french_scene_id, character_id: character.id}}, as: :json, headers: authenticated_header(user)
     }
 
     context 'when french_scene exists' do
@@ -30,7 +30,7 @@ RSpec.describe 'OnStages API' do
   # Test suite for GET /french_scenes/:french_scene_id/on_stages/:id
   describe 'GET /french_scenes/:french_scene_id/on_stages/:id' do
     before {
-      get "/api/french_scenes/#{french_scene_id}/on_stages/#{id}", as: :json, headers: authenticated_header(user)
+      get "/api/v1/french_scenes/#{french_scene_id}/on_stages/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when entrance exit exists' do
@@ -61,7 +61,7 @@ RSpec.describe 'OnStages API' do
     let(:valid_attributes) {{ on_stage: { character_id: character.id, french_scene_id: french_scene_id } }}
 
     context 'when request attributes are valid' do
-      before { post "/api/french_scenes/#{french_scene_id}/on_stages", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/french_scenes/#{french_scene_id}/on_stages", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -70,7 +70,7 @@ RSpec.describe 'OnStages API' do
 
     # context 'when an invalid request' do
     #   before {
-    #     post "/api/french_scenes/#{french_scene_id}/on_stages",
+    #     post "/api/v1/french_scenes/#{french_scene_id}/on_stages",
     #     params: {
     #       on_stage: {
     #         french_scene_id: french_scene_id,
@@ -96,7 +96,7 @@ RSpec.describe 'OnStages API' do
   describe 'PUT /api/on_stages/:id' do
     let(:valid_attributes) { { on_stage: { character_id: character.id } } }
 
-    before { put "/api/on_stages/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/on_stages/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when on_stages exists' do
       it 'returns status code 200' do
@@ -125,7 +125,7 @@ RSpec.describe 'OnStages API' do
   # Test suite for DELETE /on_stages/:id
   describe 'DELETE /on_stages/:id' do
     before {
-      delete "/api/on_stages/#{id}", as: :json, headers: authenticated_header(user)
+      delete "/api/v1/on_stages/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     it 'returns status code 204' do

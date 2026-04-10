@@ -24,8 +24,8 @@ module ApiHelpers
   end
 
   def authenticated_header(user)
-      # login_user(user)
-    headers = { 'Accept': 'application/json', 'Content-Type': 'application/json'}
+    token = CoreModules::JsonWebToken.encode({ id: user.id })
+    { 'Accept' => 'application/json', 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}" }
   end
 
 end

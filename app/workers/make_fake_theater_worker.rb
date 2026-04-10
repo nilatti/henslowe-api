@@ -1,5 +1,5 @@
 class MakeFakeTheaterWorker
-  include SuckerPunch::Job
+  include Sidekiq::Worker
 
   def perform(user_id)
     MakeFakeTheater.new(user_id: user_id).run

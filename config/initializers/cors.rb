@@ -1,9 +1,9 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins ['localhost:3000', 'henslowescloud.com', 'api.henslowescloud.com', 'www.henslowescloud.com', 'https://henslowescloud.com']
+    origins 'http://localhost:5173',      # new Vite dev server
+             'https://henslowescloud.com' # existing production domain
     resource '*',
       headers: :any,
-      methods: [:get, :post, :delete, :put, :patch, :options, :head],
-      credentials: true
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
   end
 end

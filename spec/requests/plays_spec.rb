@@ -5,14 +5,14 @@ RSpec.describe 'Plays API' do
   # Initialize the test data
   let!(:user) { create(:user)}
   let!(:author) { create(:author) }
-  let!(:plays) { create_list(:play, 5, author_id: author.id, canonical: true) }
-  let!(:other_author_plays) { create_list(:play, 5, canonical: true)}
+  let!(:plays) { create_list(:play, 5, :with_full_structure, author_id: author.id, canonical: true) }
+  let!(:other_author_plays) { create_list(:play, 5, :with_full_structure, canonical: true)}
   let!(:author_id) { author.id }
   let!(:id) { plays.first.id }
   # Test suite for GET /authors/:author_id/plays
   describe 'GET api/authors/:author_id/plays' do
     before {
-      get "/api/authors/#{author_id}/plays", params: {play: {author_id: author_id}}, as: :json, headers: authenticated_header(user)
+      get "/api/v1/authors/#{author_id}/plays", params: {play: {author_id: author_id}}, as: :json, headers: authenticated_header(user)
     }
 
     context 'when author exists' do
@@ -28,7 +28,7 @@ RSpec.describe 'Plays API' do
 
   describe 'GET api/plays' do
     before {
-      get "/api/plays", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays", as: :json, headers: authenticated_header(user)
     }
 
     context 'when there are plays by multiple playwrights' do
@@ -44,7 +44,7 @@ RSpec.describe 'Plays API' do
 
   # Test suite for GET /authors/:author_id/plays/:id
   describe 'GET /authors/:author_id/plays/:id' do
-    before { get "/api/authors/#{author_id}/plays/#{id}", as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/authors/#{author_id}/plays/#{id}", as: :json, headers: authenticated_header(user) }
 
     context 'when play exists' do
       it 'returns status code 200' do
@@ -78,7 +78,7 @@ RSpec.describe 'Plays API' do
 
   # Test suite for GET /plays/:id
   describe 'GET /plays/:id' do
-    before { get "/api/plays/#{id}", as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/plays/#{id}", as: :json, headers: authenticated_header(user) }
 
     context 'when play exists' do
       it 'returns status code 200' do
@@ -103,7 +103,7 @@ RSpec.describe 'Plays API' do
     let(:valid_attributes) { { play: { title: 'Give Us Good', author_id: author_id } } }
 
     context 'when request attributes are valid' do
-      before { post "/api/authors/#{author_id}/plays", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/authors/#{author_id}/plays", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -111,7 +111,7 @@ RSpec.describe 'Plays API' do
     end
 
     context 'when an invalid request' do
-      before { post "/api/authors/#{author_id}/plays", params: { play: { genre: 'failure' } }, as: :json, headers: authenticated_header(user) }
+      before { post "/api/v1/authors/#{author_id}/plays", params: { play: { genre: 'failure' } }, as: :json, headers: authenticated_header(user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -128,7 +128,7 @@ RSpec.describe 'Plays API' do
   describe 'PUT /api/authors/:author_id/plays/:id' do
     let(:valid_attributes) { { play: { title: 'The Magic Flute' } } }
 
-    before { put "/api/authors/#{author_id}/plays/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/authors/#{author_id}/plays/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when play exists' do
       it 'returns status code 200' do
@@ -159,7 +159,7 @@ RSpec.describe 'Plays API' do
     before {
       french_scene = plays.first.acts.first.scenes.first.french_scenes.first
       create_list(:line, 3, french_scene: french_scene)
-      get "/api/plays/#{id}/play_script/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_script/", as: :json, headers: authenticated_header(user)
     }
     it 'returns a play script' do
       expect(json['acts'].size).to eq(3)
@@ -170,7 +170,7 @@ RSpec.describe 'Plays API' do
     end
 
     it 'returns a play skeleton' do
-      get "/api/plays/#{id}/play_skeleton/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_skeleton/", as: :json, headers: authenticated_header(user)
       expect(json['acts'].size).to eq(3)
       expect(json['acts'][0]['scenes'].size).to eq(3)
       expect(json['acts'][0]['scenes'][0]['french_scenes'].size).to eq(3)
@@ -179,7 +179,7 @@ RSpec.describe 'Plays API' do
   end
 
   describe 'get play titles' do
-    before { get "/api/plays/play_titles", as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/plays/play_titles", as: :json, headers: authenticated_header(user) }
     it 'returns play titles' do
       expect(json.size).to eq(10)
       expect(json[0]).to include('title')
@@ -208,7 +208,7 @@ RSpec.describe 'Plays API' do
     }
 
     it 'returns on_stages organized by acts' do
-      get "/api/plays/#{id}/play_act_on_stages/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_act_on_stages/", as: :json, headers: authenticated_header(user)
       expect(json.size).to eq(3)
       expect(json[0]['find_on_stages'].size).to eq(3)
       expect(json[1]['find_on_stages'].size).to eq(1)
@@ -217,27 +217,27 @@ RSpec.describe 'Plays API' do
     end
 
     it 'returns on_stages organized by french_scenes' do
-      get "/api/plays/#{id}/play_french_scene_on_stages/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_french_scene_on_stages/", as: :json, headers: authenticated_header(user)
       expect(json.size).to eq(27)
       expect(json[0]['find_on_stages'].size).to eq(3)
       expect(json[1]['find_on_stages'].size).to eq(3)
     end
 
     it 'returns on_stages organized by scenes' do
-      get "/api/plays/#{id}/play_scene_on_stages/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_scene_on_stages/", as: :json, headers: authenticated_header(user)
       expect(json.size).to eq(9)
       expect(json[0]['find_on_stages'].size).to eq(3)
     end
 
     it 'returns on_stages for whole play' do
-      get "/api/plays/#{id}/play_on_stages/", as: :json, headers: authenticated_header(user)
+      get "/api/v1/plays/#{id}/play_on_stages/", as: :json, headers: authenticated_header(user)
       expect(json['find_on_stages'].size).to eq(3)
     end
   end
 
   # Test suite for DELETE /plays/:id
   describe 'DELETE /authors/:id' do
-    before { delete "/api/authors/#{author_id}/plays/#{id}", as: :json, headers: authenticated_header(user) }
+    before { delete "/api/v1/authors/#{author_id}/plays/#{id}", as: :json, headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

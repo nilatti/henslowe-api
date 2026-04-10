@@ -5,12 +5,14 @@ FactoryBot.define do
     genre {['comedy', 'musical']}
     author
 
-    after(:create) do |play|
-      create_list(:character, 3, play: play) 
-      create_list(:character_group, 3, play: play)
-      create_list(:act, 3, play: play) do |act, i|
-        act.number = (i + 1)
-        act.save
+    trait :with_full_structure do
+      after(:create) do |play|
+        create_list(:character, 3, play: play)
+        create_list(:character_group, 3, play: play)
+        create_list(:act, 3, :with_scenes, play: play) do |act, i|
+          act.number = (i + 1)
+          act.save
+        end
       end
     end
   end
