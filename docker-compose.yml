@@ -28,3 +28,21 @@ services:
       - .:/app
     command: >
       bash -c "until ruby -rmysql2 -e \"Mysql2::Client.new(host:'db',username:'${DB_USER}',password:'${DB_PASSWORD}')\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec spec/requests spec/models 2>&1 | tee /app/test_results.txt"
+
+  server:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    volumes:
+      - .:/app
+    ports:
+      - "3001:3001"
+    command: >
+      bash -c "bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0 -p 3001"
