@@ -26,7 +26,7 @@ RSpec.describe 'CharacterGroups API' do
 
   # Test suite for GET /plays/:play_id/character_groups/:id
   describe 'GET /plays/:play_id/character_groups/:id' do
-    before { get "/api/v1/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
+    before { get "/api/v1/character_groups/#{id}", headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -86,7 +86,7 @@ RSpec.describe 'CharacterGroups API' do
   describe 'PUT /api/plays/:play_id/character_groups/:id' do
     let(:valid_attributes) { { character_group: { name: 'Lady Elizabeth Grey' } } }
 
-    before { put "/api/v1/plays/#{play.id}/character_groups/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/character_groups/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -114,7 +114,7 @@ RSpec.describe 'CharacterGroups API' do
 
   # Test suite for DELETE /character_groups/:id
   describe 'DELETE /character_groups/:id' do
-    before { delete "/api/v1/plays/#{play.id}/character_groups/#{id}", headers: authenticated_header(user) }
+    before { delete "/api/v1/character_groups/#{id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

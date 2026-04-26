@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CountLines do
   before(:all) do
-    @play = create(:play, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
+    @play = create(:play, :with_full_structure, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
     first_act = @play.acts.first
     @first_scene = first_act.scenes.first
     @character1 = create(:character, play: @play)

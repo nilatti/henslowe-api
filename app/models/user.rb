@@ -2,15 +2,13 @@ class User < ApplicationRecord
   ROLES = %i[superadmin regular]
 
   validates_uniqueness_of :email, case_sensitive: false
-  validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :first_name, :last_name, :email, :phone_number
   has_many :conflicts, dependent: :destroy
   has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
   has_many :jobs, dependent: :destroy
   has_many :characters, through: :jobs
   has_many :on_stages, through: :characters
-  has_many :character_group, through: :jobs
-  has_many :on_stages, through: :character_group
   has_many :french_scenes, through: :on_stages
   has_many :productions, through: :jobs
   has_many :theaters, through: :jobs
@@ -21,11 +19,6 @@ class User < ApplicationRecord
 
   after_create :make_new_fake_theater
   before_save :update_subscription_status
-
-  def self.authenticate(email, password)
-    user = User.find_for_authentication(email: email)
-    user&.valid_password?(password) ? user : nil
-  end
 
   def self.from_omniauth(auth)
     user = User.includes(:jobs).find_or_create_by(email: auth['info']['email']) do |user|
@@ -185,7 +178,6 @@ class User < ApplicationRecord
 
   def update_subscription_status
     if self.stripe_customer_id
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
       subscriptions = Stripe::Subscription.list({customer: self.stripe_customer_id}).data
       if subscriptions.length > 0
         subscriptions.sort_by(&:current_period_end)

@@ -8,56 +8,46 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :sessions, only: %i(new create destroy)
+      resources :sessions, only: [:destroy]
       resources :charges do
         collection do
           post :create_checkout_session
           post :update_payment_info
         end
       end
-      resources :subscriptions do
+      resources :subscriptions, only: [:index] do
         collection do
-          get :get_subscriptions_for_user
-          get :delete_subscription
-          get :renew_subscription
+          get  :user_subscriptions
+          post :cancel
+          post :renew
         end
       end
       resources :users do
         member do
-          get :create_customer
+          post :create_customer
+          put :build_conflict_schedule
         end
         collection do
           get :fake
         end
-        resources :conflicts
-        resources :conflict_patterns
-        member do
-          put :build_conflict_schedule
-        end
+        resources :conflicts, shallow: true
+        resources :conflict_patterns, shallow: true
       end
-      resources :jobs do
-        collection do
-          get :get_actors_for_production
-          get :get_actors_and_auditioners_for_production
-          get :get_actors_and_auditioners_for_theater
-        end
-      end
+      resources :jobs
       resources :specializations
       resources :productions do
-        resources :jobs
-        resources :rehearsals
+        resources :jobs, shallow: true
+        resources :rehearsals, shallow: true
         member do
           put :build_rehearsal_schedule
-          get :get_production_skeleton
-          get :get_production_with_play_text
+          get :skeleton
+          get :full
         end
-        resources :stage_exits
+        resources :stage_exits, shallow: true
         collection do
           get :production_names
-          get :get_productions_for_theater
         end
       end
-      resources :stage_exits
       resources :theaters do
         resources :jobs
         collection do
@@ -65,8 +55,8 @@ Rails.application.routes.draw do
         end
       end
       resources :spaces do
-        resources :conflicts
-        resources :conflict_patterns
+        resources :conflicts, shallow: true
+        resources :conflict_patterns, shallow: true
         member do
           put :build_conflict_schedule
         end
@@ -84,7 +74,6 @@ Rails.application.routes.draw do
         collection do
           get :play_titles
         end
-        resources :words
         member do
           get :play_act_on_stages
           get :production_copy_complete
@@ -95,50 +84,36 @@ Rails.application.routes.draw do
           get :play_skeleton
           get :render_cut_part_script, format: 'docx'
         end
-        resources :acts do
-          resources :scenes
-          resources :rehearsals
+        resources :acts, shallow: true do
+          member do
+            get :act_script
+            get :render_cut_script, format: 'docx'
+            get :render_cuts_marked_part_script, format: 'docx'
+            get :render_cuts_marked_script, format: 'docx'
+          end
+          resources :scenes, shallow: true do
+            member do
+              get :scene_script
+            end
+            resources :french_scenes, shallow: true do
+              member do
+                get :french_scene_script
+              end
+              resources :lines, shallow: true
+              resources :entrance_exits, shallow: true
+              resources :on_stages, shallow: true
+              resources :rehearsals, shallow: true
+            end
+            resources :rehearsals, shallow: true
+          end
+          resources :rehearsals, shallow: true
         end
-        resources :characters
-        resources :character_groups
+        resources :characters, shallow: true
+        resources :character_groups, shallow: true
+        resources :words, shallow: true
       end
       root to: "theaters#index"
-      resources :acts do
-        member do
-          get :act_script
-          get :render_cut_script, format: 'docx'
-          get :render_cuts_marked_part_script, format: 'docx'
-          get :render_cuts_marked_script, format: 'docx'
-        end
-        resources :scenes
-        resources :rehearsals
-      end
-      resources :characters
-      resources :character_groups
-      resources :scenes do
-        member do
-          get :scene_script
-        end
-        resources :rehearsals
-        resources :french_scenes
-      end
-      resources :french_scenes do
-        resources :rehearsals
-        resources :lines
-        member do
-          get :french_scene_script
-        end
-        resources :entrance_exits
-        resources :on_stages
-      end
-      resources :conflicts
-      resources :conflict_patterns
-      resources :entrance_exits
-      resources :jobs
       resources :labels
-      resources :lines
-      resources :on_stages
-      resources :rehearsals
       resources :sound_cues
       resources :stage_directions
     end

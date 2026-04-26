@@ -5,7 +5,15 @@ class JobsController < ApiController
 
   # GET /jobs
   def index
-    @jobs = Job.filter(params.slice(:production, :specialization, :theater, :user))
+    @jobs = Job.all
+    @jobs = @jobs.where(production_id: params[:production_id]) if params[:production_id]
+    @jobs = @jobs.where(theater_id: params[:theater_id]) if params[:theater_id]
+    @jobs = @jobs.where(user_id: params[:user_id]) if params[:user_id]
+    if params[:roles]
+      roles = params[:roles].split(',')
+      specialization_ids = Specialization.where(title: roles).pluck(:id)
+      @jobs = @jobs.where(specialization_id: specialization_ids)
+    end
     json_response(
       @jobs.as_json(
         include: [
@@ -92,57 +100,6 @@ class JobsController < ApiController
   # DELETE /jobs/1
   def destroy
     @job.destroy
-  end
-
-  def get_actors_for_production
-    @jobs = Job.actor_for_production(params[:production])
-    json_response(
-      @jobs.as_json(
-        include: [
-          user: {
-            only: [
-              :first_name,
-              :last_name,
-              :preferred_name
-            ]
-          },
-        ]
-      )
-    )
-  end
-
-  def get_actors_and_auditioners_for_production
-    @jobs = Job.actor_or_auditioner_for_production(params[:production])
-    json_response(
-      @jobs.as_json(
-        include: [
-          user: {
-            only: [
-              :first_name,
-              :last_name,
-              :preferred_name
-            ]
-          },
-        ]
-      )
-    )
-  end
-
-  def get_actors_and_auditioners_for_theater
-    @jobs = Job.actor_or_auditioner_for_theater(params[:theater])
-    json_response(
-      @jobs.as_json(
-        include: [
-          user: {
-            only: [
-              :first_name,
-              :last_name,
-              :preferred_name
-            ]
-          },
-        ]
-      )
-    )
   end
 
   private

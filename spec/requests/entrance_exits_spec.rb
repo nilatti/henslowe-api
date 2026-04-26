@@ -30,7 +30,7 @@ RSpec.describe 'EntranceExits API' do
   # Test suite for GET /french_scenes/:french_scene_id/entrance_exits/:id
   describe 'GET /french_scenes/:french_scene_id/entrance_exits/:id' do
     before {
-      get "/api/v1/french_scenes/#{french_scene_id}/entrance_exits/#{id}", headers: authenticated_header(user)
+      get "/api/v1/entrance_exits/#{id}", headers: authenticated_header(user)
     }
 
     context 'when entrance exit exists' do

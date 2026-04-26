@@ -65,7 +65,9 @@ class ImportFromFolgerXmlAll
 
   def build_acts(
     play:,
-    parsed_xml:
+    parsed_xml:,
+    global_tracking_of_play_characters: nil,
+    global_tracking_of_play_character_groups: nil
   )
     puts "build acts called"
     @parsed_xml.xpath('//div1').each do |act|
@@ -96,6 +98,8 @@ class ImportFromFolgerXmlAll
           build_scene(
             act: @current_act,
             scene: scene,
+            global_tracking_of_play_characters: global_tracking_of_play_characters,
+            global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
           )
         end
       end
@@ -105,12 +109,16 @@ class ImportFromFolgerXmlAll
 
   def build_character(
       character:,
-      play:
+      play:,
+      global_tracking_of_play_characters: nil,
+      global_tracking_of_play_character_groups: nil
     )
+    char_tracking = global_tracking_of_play_characters || @characters
+    cg_lookup = global_tracking_of_play_character_groups || @db_character_groups
     character_group = ''
     if character.attr('corresp')
       corresp_string = character.attr('corresp').to_s.sub('#','')
-      character_group = @db_character_groups.find {|cg| cg.xml_id == corresp_string}
+      character_group = cg_lookup.find {|cg| cg.xml_id == corresp_string}
     end
     name = ''
     unless (character.xpath('persName/name').text).blank?
@@ -129,37 +137,43 @@ class ImportFromFolgerXmlAll
     if character_group.class == CharacterGroup
       character.character_group = character_group
     end
-    @characters << character
+    char_tracking << character
     return character
   end
 
-  def build_character_group(character_group:, play:)
+  def build_character_group(character_group:, play:, global_tracking_of_play_character_groups: nil)
     character_group = CharacterGroup.new(
       corresp: character_group.attr('corresp'),
       play_id: play.id,
       xml_id: character_group.attr('xml:id')
     )
-    @character_groups << character_group
+    tracking = global_tracking_of_play_character_groups || @character_groups
+    tracking << character_group
     return character_group
   end
 
   def build_characters(
       play:,
-      global_parsed_xml: @parsed_xml
+      global_parsed_xml: @parsed_xml,
+      global_tracking_of_play_characters: nil,
+      global_tracking_of_play_character_groups: nil
     )
+    cg_tracking = global_tracking_of_play_character_groups || @character_groups
+    char_tracking = global_tracking_of_play_characters || @characters
     puts "play is #{play.id}"
     character_groups = global_parsed_xml.xpath('//personGrp')
     puts (character_groups)
-    character_groups.each {|character_group| build_character_group(character_group: character_group, play: play)}
-    CharacterGroup.import @character_groups, on_duplicate_key_ignore: true
+    character_groups.each {|cg| build_character_group(character_group: cg, play: play, global_tracking_of_play_character_groups: cg_tracking)}
+    CharacterGroup.import cg_tracking, on_duplicate_key_ignore: true
     @db_character_groups = play.character_groups
     characters = global_parsed_xml.xpath('//person')
-    characters.each{|character| build_character(character: character, play: play)}
-    Character.import @characters, on_duplicate_key_ignore: true
+    characters.each {|c| build_character(character: c, play: play, global_tracking_of_play_characters: char_tracking, global_tracking_of_play_character_groups: cg_tracking)}
+    Character.import char_tracking, on_duplicate_key_ignore: true
     @db_characters = play.characters
+    return @db_characters
   end
 
-  def build_french_scene(french_scene_number:, scene: )
+  def build_french_scene(french_scene_number:, scene:, play: nil)
     @current_french_scene = FrenchScene.create(
       number: french_scene_number,
       scene: scene
@@ -233,19 +247,20 @@ class ImportFromFolgerXmlAll
   end
 
 
-  def build_on_stages(french_scene:, characters:) #expect characters from parser, so [0] = characters, [1] = character groups
+  def build_on_stages(french_scene:, characters:, global_tracking_of_on_stages: nil) #expect characters from parser, so [0] = characters, [1] = character groups
+    tracking = global_tracking_of_on_stages || @on_stages
     characters.flatten!(4)
     characters.uniq!
     characters.each do |char|
       if char.is_a? Character
-        @on_stages << OnStage.new(french_scene: french_scene, character: char, category: 'Character')
+        tracking << OnStage.new(french_scene: french_scene, character: char, category: 'Character')
       elsif char.is_a? CharacterGroup
-        @on_stages << OnStage.new(french_scene: french_scene, character_group: char, category: 'Character')
+        tracking << OnStage.new(french_scene: french_scene, character_group: char, category: 'Character')
       else
         puts "didn't match on class: #{char}"
       end
     end
-    return @on_stages
+    return tracking
   end
 
   def build_play(global_parsed_xml: @parsed_xml)
@@ -263,7 +278,10 @@ class ImportFromFolgerXmlAll
 
   def build_scene(
     act:,
-    scene:
+    scene:,
+    play: nil,
+    global_tracking_of_play_characters: nil,
+    global_tracking_of_play_character_groups: nil
     )
     @current_characters_on_stage = []
     scene_number = scene.attr('n') || 0
@@ -324,16 +342,21 @@ class ImportFromFolgerXmlAll
     puts "at global: #{@current_character}"
   end
 
-  def build_stage_direction(item:)
+  def build_stage_direction(item:, global_tracking_of_current_french_scene: nil, global_tracking_of_play_characters: nil, global_tracking_of_play_character_groups: nil)
+    current_fs = global_tracking_of_current_french_scene || @current_french_scene
     puts item
-    character_parser = extract_characters_from_xml_id_string(xml_ids: item.attr('who'))
+    character_parser = extract_characters_from_xml_id_string(
+      xml_ids: item.attr('who'),
+      global_tracking_of_play_characters: global_tracking_of_play_characters,
+      global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+    )
     puts "333 #{character_parser.length}"
     content = extract_content(item: item)
     characters = character_parser[0]
     character_groups = character_parser[1]
     if item.attr('type') == 'entrance' || item.attr('type') == 'exit'
       puts "333 #{item.attr('type')}"
-      track_onstage_characters(french_scene: @current_french_scene, stage_direction: item, characters: character_parser)
+      track_onstage_characters(french_scene: current_fs, stage_direction: item, characters: character_parser)
       puts "335 #{character_parser.size}"
     end
     puts "338 #{character_parser.length}"
@@ -341,7 +364,7 @@ class ImportFromFolgerXmlAll
       characters: characters,
       character_groups: character_groups,
       original_content: content,
-      french_scene_id: @current_french_scene.id,
+      french_scene_id: current_fs.id,
       number: item.attr('n'),
       kind: item.attr('type'),
       xml_id: item.attr('xml:id')
@@ -350,7 +373,8 @@ class ImportFromFolgerXmlAll
     return stage_direction
   end
 
-  def build_word(word:)
+  def build_word(word:, play: nil)
+    current_play = play || self.play
     kind = ''
     if word.matches?('w')
       kind = 'word'
@@ -363,7 +387,7 @@ class ImportFromFolgerXmlAll
       content: word.text,
       line_number: word.attr('n'),
       kind: kind,
-      play_id: play.id,
+      play_id: current_play.id,
       xml_id: word.attr('xml:id')
     )
     @words << new_word
@@ -448,21 +472,23 @@ class ImportFromFolgerXmlAll
     end
   end
 
-  def extract_characters_from_xml_id_string(xml_ids:) #should return array that contains two arrays character_parser = [[characters], [character_groups]]
+  def extract_characters_from_xml_id_string(xml_ids:, global_tracking_of_play_characters: nil, global_tracking_of_play_character_groups: nil) #should return array that contains two arrays character_parser = [[characters], [character_groups]]
+    char_lookup = global_tracking_of_play_characters || @db_characters
+    cg_lookup = global_tracking_of_play_character_groups || @db_character_groups
     character_parser = [[],[]]
     xml_id_arr = xml_ids.to_s.split(' ')
 
     xml_id_arr.each do |xml_id|
       xml_id.sub!('#', '')
-      character = @db_characters.find { |c| c.xml_id == xml_id }
-      character_group = @db_character_groups.find { |c| c.xml_id == xml_id }
+      character = char_lookup.find { |c| c.xml_id == xml_id }
+      character_group = cg_lookup.find { |c| c.xml_id == xml_id }
       if character
         character_parser[0] << character
       elsif character_group
         character_parser[1] << character_group
       else
         puts "Could not find character #{xml_id}"
-        character_parser[0] << @db_characters.find { |character| character.xml_id == 'CouldNotFindCharacter' }
+        character_parser[0] << char_lookup.find { |character| character.xml_id == 'CouldNotFindCharacter' }
       end
     end
     puts "467 #{character_parser}\n#{character_parser.size}"
@@ -502,22 +528,24 @@ class ImportFromFolgerXmlAll
   def track_onstage_characters(
     french_scene:,
     stage_direction:,
-    characters:
+    characters:,
+    global_tracking_of_current_characters_on_stage: nil
   )
+    tracking = global_tracking_of_current_characters_on_stage || @current_characters_on_stage
   puts "503 #{characters.size}"
     if stage_direction.attr('type') == 'entrance'
-      @current_characters_on_stage << characters
+      tracking << characters
     elsif stage_direction.attr('type') == 'exit'
       all_characters = characters.concat(character_groups)
       all_characters.flatten!(2)
       all_characters.uniq!
-      all_characters.each {|char| @current_characters_on_stage.delete(char)}
+      all_characters.each {|char| tracking.delete(char)}
     else
       puts "can't determine type of stage direction"
     end
-    @current_characters_on_stage.uniq!
-    build_on_stages(french_scene: french_scene, characters: @current_characters_on_stage)
-    return @current_characters_on_stage
+    tracking.uniq!
+    build_on_stages(french_scene: french_scene, characters: tracking)
+    return tracking
   end
 
   def verify_no_more_children(item)

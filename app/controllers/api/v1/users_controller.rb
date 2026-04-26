@@ -2,6 +2,7 @@ module Api
   module V1
 class UsersController < ApiController
   # load_and_authorize_resource
+  skip_before_action :authenticate_request, only: [:create]
   before_action :set_user, only: %i[show update destroy]
 
   # GET /Users
@@ -199,10 +200,6 @@ class UsersController < ApiController
   end
 
   private
-
-    def user_params
-      params.permit(:email, :password)
-    end
 
   # Only allow a trusted parameter "white list" through.
   def user_params

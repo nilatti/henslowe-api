@@ -27,7 +27,7 @@ RSpec.describe 'Characters API' do
 
   # Test suite for GET /plays/:play_id/characters/:id
   describe 'GET /plays/:play_id/characters/:id' do
-    before { get "/api/v1/plays/#{play.id}/characters/#{id}", headers: authenticated_header(user) }
+    before { get "/api/v1/characters/#{id}", headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -82,7 +82,7 @@ RSpec.describe 'Characters API' do
   describe 'PUT /api/plays/:play_id/characters/:id' do
     let(:valid_attributes) { { character: { name: 'Lady Elizabeth Grey' } } }
 
-    before { put "/api/v1/plays/#{play.id}/characters/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/characters/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when character exists' do
       it 'returns status code 200' do
@@ -110,7 +110,7 @@ RSpec.describe 'Characters API' do
 
   # Test suite for DELETE /characters/:id
   describe 'DELETE /characters/:id' do
-    before { delete "/api/v1/plays/#{play.id}/characters/#{id}", headers: authenticated_header(user) }
+    before { delete "/api/v1/characters/#{id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

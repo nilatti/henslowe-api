@@ -142,7 +142,7 @@ RSpec.describe 'jobs API', type: :request do
   describe 'get actors for production' do
     before {
       create_list(:job, 2, :actor_job, production: production)
-      get '/api/v1/jobs/get_actors_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
+      get '/api/v1/jobs', as: :json, params: { roles: 'Actor', production_id: production.id }, headers: authenticated_header(user)
     }
     it 'returns successfully' do
       expect(response).to have_http_status(200)
@@ -160,7 +160,7 @@ RSpec.describe 'jobs API', type: :request do
     before {
       create_list(:job, 2, :actor_job, production: production)
       create_list(:job, 3, :auditioner_job, production: production)
-      get '/api/v1/jobs/get_actors_and_auditioners_for_production', as: :json, params: { production: production.id}, headers: authenticated_header(user)
+      get '/api/v1/jobs', as: :json, params: { roles: 'Actor,Auditioner', production_id: production.id }, headers: authenticated_header(user)
     }
     it 'returns successfully' do
       expect(response).to have_http_status(200)
@@ -179,7 +179,8 @@ RSpec.describe 'jobs API', type: :request do
     before {
       create_list(:job, 3, :actor_job, theater: theater)
       create_list(:job, 3, :auditioner_job, theater: theater)
-      get '/api/v1/jobs/get_actors_and_auditioners_for_theater', as: :json, params: { theater: theater.id}, headers: authenticated_header(user)}
+      get '/api/v1/jobs', as: :json, params: { roles: 'Actor,Auditioner', theater_id: theater.id }, headers: authenticated_header(user)
+    }
     it 'returns successfully' do
       expect(response).to have_http_status(200)
     end
