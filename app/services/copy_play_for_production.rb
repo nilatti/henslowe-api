@@ -3,6 +3,8 @@ class CopyPlayForProduction
   def initialize(play_id:, production_id:)
     @original_play = Play.find(play_id)
     @production_id = production_id
+    @character_map = {}
+    @character_group_map = {}
   end
 
   def run
@@ -49,6 +51,7 @@ class CopyPlayForProduction
         new_character = original_character.dup
         new_character.play = new_play
         new_character.save!
+        @character_map[original_character.id] = new_character
       end
     end
   end
@@ -59,6 +62,7 @@ class CopyPlayForProduction
         new_character_group = original_character_group.dup
         new_character_group.play = new_play
         new_character_group.save!
+        @character_group_map[original_character_group.id] = new_character_group
       end
     end
   end
@@ -98,10 +102,10 @@ class CopyPlayForProduction
       ActiveRecord::Base.connection_pool.with_connection do
         new_line = original_line.dup
         new_line.french_scene = new_french_scene
-        if original_line.character
-          new_line.character = Character.find_by(name: original_line.character.name, play_id: @new_play.id)
-        elsif original_line.character_group
-          new_line.character_group = CharacterGroup.find_by(name: original_line.character_group.name, play_id: @new_play.id)
+        if original_line.character_id
+          new_line.character = @character_map[original_line.character_id]
+        elsif original_line.character_group_id
+          new_line.character_group = @character_group_map[original_line.character_group_id]
         end
         new_line.save!
       end
@@ -115,10 +119,10 @@ class CopyPlayForProduction
       ActiveRecord::Base.connection_pool.with_connection do
         new_on_stage = original_on_stage.dup
         new_on_stage.french_scene = new_french_scene
-        if original_on_stage.character
-          new_on_stage.character = Character.find_by(name: original_on_stage.character.name, play_id: @new_play.id)
-        elsif original_on_stage.character_group
-          new_on_stage.character_group = CharacterGroup.find_by(name: original_on_stage.character_group.name, play_id: @new_play.id)
+        if original_on_stage.character_id
+          new_on_stage.character = @character_map[original_on_stage.character_id]
+        elsif original_on_stage.character_group_id
+          new_on_stage.character_group = @character_group_map[original_on_stage.character_group_id]
         end
         new_on_stage.save!
       end
@@ -142,14 +146,10 @@ class CopyPlayForProduction
       ActiveRecord::Base.connection_pool.with_connection do
         new_stage_direction = original_stage_direction.dup
         new_stage_direction.french_scene = new_french_scene
-        if original_stage_direction.characters
-          original_stage_direction.characters.each do |character|
-            new_stage_direction.characters = Character.where(name: character.name, play_id: @new_play.id)
-          end
-        elsif original_stage_direction.character_groups
-          original_stage_direction.character_groups.each do |character_group|
-            new_stage_direction.character_groups = CharacterGroup.where(name: character_group.name, play_id: @new_play.id)
-          end
+        if original_stage_direction.characters.any?
+          new_stage_direction.characters = original_stage_direction.characters.map { |c| @character_map[c.id] }.compact
+        elsif original_stage_direction.character_groups.any?
+          new_stage_direction.character_groups = original_stage_direction.character_groups.map { |cg| @character_group_map[cg.id] }.compact
         end
         new_stage_direction.save!
       end

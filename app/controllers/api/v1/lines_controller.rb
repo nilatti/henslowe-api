@@ -6,7 +6,11 @@ class LinesController < ApiController
   # GET /lines
   # GET /lines.json
   def index
-    @lines = Line.all
+    @lines = if params[:french_scene_id]
+      Line.where(french_scene_id: params[:french_scene_id])
+    else
+      Line.all
+    end
     render json: @lines
   end
 

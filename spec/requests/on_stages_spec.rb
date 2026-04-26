@@ -30,7 +30,7 @@ RSpec.describe 'OnStages API' do
   # Test suite for GET /french_scenes/:french_scene_id/on_stages/:id
   describe 'GET /french_scenes/:french_scene_id/on_stages/:id' do
     before {
-      get "/api/v1/french_scenes/#{french_scene_id}/on_stages/#{id}", as: :json, headers: authenticated_header(user)
+      get "/api/v1/on_stages/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when entrance exit exists' do

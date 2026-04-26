@@ -165,8 +165,8 @@ RSpec.describe 'Productions API' do
     end
   end
 
-  describe 'get /api/productions/get_productions_for_theater' do
-    before { get "/api/v1/productions/get_productions_for_theater", params: {theater: theater.id}, as: :json, headers: authenticated_header(user)}
+  describe 'get /api/productions?theater_id=' do
+    before { get "/api/v1/productions", params: { theater_id: theater.id }, as: :json, headers: authenticated_header(user)}
     it 'returns 200' do
       expect(response).to have_http_status(200)
     end

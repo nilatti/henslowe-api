@@ -62,11 +62,10 @@ class BuildConflictsSchedule
         c.end_time = Time.zone.parse("#{day.strftime('%F')} #{end_time}")
         if user_id
           c.user = User.find(user_id)
-        end
-        c.regular = true
-        if space_id
+        elsif space_id
           c.space = Space.find(space_id)
         end
+        c.regular = true
         c.start_time = Time.zone.parse("#{day.strftime('%F')} #{start_time}")
         conflicts_array << c
     end
@@ -75,7 +74,7 @@ class BuildConflictsSchedule
 
   def build_conflict_days(days_of_week: @days_of_week, start_date: @start_date, end_date: @end_date)
     days_arr = days_of_week.flatten
-    days = days_arr.each {|day| day.to_sym}
+    days = days_arr.map { |day| day.downcase.to_sym }
     start_on = start_date
     end_on = end_date
     schedule = Montrose.every(:week, starts: start_on, until: end_on).on(days)

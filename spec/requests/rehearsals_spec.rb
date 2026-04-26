@@ -99,7 +99,7 @@ RSpec.describe 'Rehearsals API' do
 
   # Test suite for GET /productions/:production_id/rehearsals/:id
   describe 'GET /productions/:production_id/rehearsals/:id' do
-    before { get "/api/v1/productions/#{production.id}/rehearsals/#{id}", headers: authenticated_header(user) }
+    before { get "/api/v1/rehearsals/#{id}", headers: authenticated_header(user) }
 
     context 'when rehearsal exists' do
       it 'returns status code 200' do
@@ -154,7 +154,7 @@ RSpec.describe 'Rehearsals API' do
   describe 'PUT /api/productions/:production_id/rehearsals/:id' do
     let(:valid_attributes) { { rehearsal: { title: "Today we rehearse in the tub!" } } }
 
-    before { put "/api/v1/productions/#{production.id}/rehearsals/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+    before { put "/api/v1/rehearsals/#{id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
 
     context 'when rehearsal exists' do
       it 'returns status code 200' do
@@ -183,7 +183,7 @@ RSpec.describe 'Rehearsals API' do
   # Test suite for DELETE /rehearsals/:id
   describe 'DELETE /rehearsals/:id' do
 
-    before { delete "/api/v1/productions/#{production.id}/rehearsals/#{id}", headers: authenticated_header(user) }
+    before { delete "/api/v1/rehearsals/#{id}", headers: authenticated_header(user) }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

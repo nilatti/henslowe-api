@@ -1,48 +1,45 @@
 module Api
   module V1
-class SessionsController  < ApiController
-  before_action only: [:destroy] do
-    authenticate_cookie
-  end
+    class SessionsController < ApiController
+      skip_before_action :authenticate_request, only: [:create]
 
-  def destroy
-    user = current_user
-    if user
-      cookies.delete(:jwt)
-      render json: {status: 'OK', code: 200}
-    else
-      render json: {status: 'session not found', code: 404}
+      # POST /auth/:provider/callback
+      # This is called by OmniAuth after Google OAuth succeeds
+      def create
+        auth = request.env['omniauth.auth']
+
+        unless auth
+          render json: { error: 'OAuth authentication failed' }, status: :unauthorized
+          return
+        end
+
+        user = User.from_omniauth(auth)
+
+        if user.persisted?
+          token = JsonWebToken.encode(user_id: user.id)
+          render json: {
+            token: token,
+            user: {
+              id: user.id,
+              email: user.email,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              role: user.role
+            }
+          }, status: :ok
+        else
+          render json: {
+            error: 'Could not create or find user',
+            details: user.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+
+      # DELETE /api/v1/sessions
+      # JWT is stateless — logout is handled client-side by discarding the token
+      def destroy
+        render json: { message: 'Logged out successfully' }, status: :ok
+      end
     end
-  end
-
-  def create
-    user = User.from_omniauth(auth_hash)
-    if user
-      created_jwt = CoreModules::JsonWebToken.encode({id: user.id})
-      cookies.signed[:jwt] = {value: created_jwt, httponly: true, expires: 1.month.from_now}
-      json_response(user.as_json(
-        only: [
-          :email,
-          :first_name,
-          :id,
-          :last_name,
-          :preferred_name,
-          :program_name,
-          :subscription_end_date,
-          :subscription_status,
-          :timezone
-        ]
-      ))
-    else
-      render json: {status: 'incorrect email or password', code: 422}
-    end
-  end
-
-  protected
-
-  def auth_hash
-    request.env['omniauth.auth']
-  end
-end
   end
 end

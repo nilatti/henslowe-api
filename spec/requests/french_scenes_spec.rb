@@ -36,7 +36,7 @@ RSpec.describe 'French Scenes API' do
   # Test suite for GET /scenes/:scene_id/french_scenes/:id
   describe 'GET /scenes/:scene_id/french_scenes/:id' do
     before {
-      get "/api/v1/scenes/#{scene_id}/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
+      get "/api/v1/french_scenes/#{id}", as: :json, headers: authenticated_header(user)
     }
 
     context 'when french_scene exists' do

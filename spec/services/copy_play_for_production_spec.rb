@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CopyPlayForProduction do
   before(:all) do
     @production = create(:production)
-    @original_play = create(:play, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
+    @original_play = create(:play, :with_full_structure, canonical: true) #this play has three acts. each act has 3 scenes. each scene has 3 french scenes.
     first_act = @original_play.acts.first
     @first_scene = first_act.scenes.first
     character1 = create(:character, play: @original_play)

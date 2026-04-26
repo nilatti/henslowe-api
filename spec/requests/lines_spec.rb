@@ -3,13 +3,14 @@ require 'rails_helper'
 RSpec.describe 'lines API', type: :request do
   # initialize test data
   let!(:user) { create(:user)}
-  let!(:lines) { create_list(:line, 10) }
+  let!(:french_scene) { create(:french_scene) }
+  let!(:lines) { create_list(:line, 10, french_scene: french_scene) }
   let(:line_id) { lines.first.id }
 
-  # Test suite for GET /lines
-  describe 'GET /lines' do
+  # Test suite for GET /french_scenes/:french_scene_id/lines
+  describe 'GET /french_scenes/:french_scene_id/lines' do
     # make HTTP get request before each example
-    before { get '/api/v1/lines', as: :json, headers: authenticated_header(user) }
+    before { get "/api/v1/french_scenes/#{french_scene.id}/lines", as: :json, headers: authenticated_header(user) }
 
     it 'returns lines' do
       # Note `json` is a custom helper to parse JSON responses
@@ -64,7 +65,7 @@ RSpec.describe 'lines API', type: :request do
             character_id: test_line.character.id,
             original_content: test_line.original_content,
           } }
-        post '/api/v1/lines', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post "/api/v1/french_scenes/#{test_line.french_scene.id}/lines", params: valid_attributes, as: :json, headers: authenticated_header(user)
         expect(json['character_id']).to eq(test_line.character.id)
       end
     end

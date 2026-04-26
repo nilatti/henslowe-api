@@ -5,18 +5,18 @@ class ProductionsController < ApiController
     :show,
     :update,
     :destroy,
-    :get_production_skeleton,
-    :get_production_with_play_text
+    :skeleton,
+    :full
   ]
 
   # GET /productions
   def index
-    @productions = []
-    if current_user.superadmin?
-      @productions = Production.all
+    @productions = if current_user.superadmin?
+      Production.all
     else
-      @productions = current_user.productions
+      current_user.productions
     end
+    @productions = @productions.where(theater_id: params[:theater_id]) if params[:theater_id]
     json_response(@productions.as_json(include: [:play, :theater]))
   end
 
@@ -139,16 +139,11 @@ class ProductionsController < ApiController
     render json: @productions.as_json(only: [:id, :name], include: [play: { only: [:id, :title]}, theater: { only: [:name, :id]}])
   end
 
-  def get_productions_for_theater
-    @productions = Production.where(theater: params[:theater])
-    json_response(@productions.as_json(include: [play: { only: :title}, theater: { only: [:name, :id]}]))
-  end
-
-  def get_production_skeleton
+  def skeleton
     json_response(@production.as_json(include: [{theater: {only: [:id, :name]}}, {play: {only: [:id, :title]}}]))
   end
 
-  def get_production_with_play_text
+  def full
     json_response(@production.as_json(include:
         [
           :theater,
