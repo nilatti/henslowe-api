@@ -8,7 +8,27 @@ class UsersController < ApiController
   # GET /Users
   def index
     @users = User.all
-    json_response(@users)
+    json_response(@users.as_json(only: %i[
+      id
+      email
+      first_name
+      last_name
+      middle_name
+      preferred_name
+      program_name
+      fake
+      role
+      bio
+      city
+      state
+      website
+      gender
+      timezone
+      subscription_status
+      subscription_end_date
+      created_at
+      updated_at
+    ]))
   end
 
   # GET /Users/1

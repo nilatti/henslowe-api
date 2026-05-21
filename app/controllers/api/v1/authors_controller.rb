@@ -8,7 +8,18 @@ class AuthorsController < ApiController
   def index
     @authors = Author.all
 
-    json_response(@authors)
+    json_response(@authors.as_json(only: %i[
+      id
+      first_name
+      middle_name
+      last_name
+      nationality
+      gender
+      birthdate
+      deathdate
+      created_at
+      updated_at
+    ]))
   end
 
   # GET /authors/1

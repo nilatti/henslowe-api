@@ -2,7 +2,8 @@ class User < ApplicationRecord
   ROLES = %i[superadmin regular]
 
   validates_uniqueness_of :email, case_sensitive: false
-  validates_presence_of :first_name, :last_name, :email, :phone_number
+  validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :phone_number, unless: -> { provider.present? }
   has_many :conflicts, dependent: :destroy
   has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
@@ -108,6 +109,8 @@ class User < ApplicationRecord
     if !self.fake
       MakeFakeTheaterWorker.perform_async(self.id)
     end
+  rescue RedisClient::CannotConnectError, Redis::CannotConnectError => e
+    Rails.logger.warn "Redis unavailable, skipping MakeFakeTheaterWorker: #{e.message}"
   end
 
   def name

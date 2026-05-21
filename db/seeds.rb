@@ -177,7 +177,29 @@ if hamlet && hamlet.french_scenes.any? && OnStage.where(french_scene: hamlet.fre
   puts "OnStages seeded: #{OnStage.count}"
 end
 
+# Seed fake actors for doubling/casting planning
+fake_actors = [
+  { first_name: 'Fake', last_name: 'Actor 1', gender: 'cis female' },
+  { first_name: 'Fake', last_name: 'Actor 2', gender: 'cis female' },
+  { first_name: 'Fake', last_name: 'Actor 3', gender: 'cis male' },
+  { first_name: 'Fake', last_name: 'Actor 4', gender: 'cis male' },
+]
+
+fake_actors.each do |attrs|
+  User.find_or_create_by!(email: "#{attrs[:first_name].downcase}.#{attrs[:last_name].downcase.gsub(' ', '.')}@fake.example") do |u|
+    u.first_name = attrs[:first_name]
+    u.last_name  = attrs[:last_name]
+    u.gender     = attrs[:gender]
+    u.fake       = true
+    u.provider   = 'fake'
+    u.uid        = "fake-#{attrs[:last_name].downcase.gsub(' ', '-')}"
+  end
+end
+
+puts "Fake actors seeded: #{User.where(fake: true).count}"
+
 # Seed the primary dev user so they can log in via Google and manage productions
+# (defined here so conflicts seed below can reference dev_user)
 dev_user = User.find_or_create_by!(email: 'aili.k.huber@gmail.com') do |u|
   u.first_name = 'Aili'
   u.last_name  = 'Huber'
@@ -202,6 +224,24 @@ unless Production.exists?
   end
 end
 
+# Seed rehearsals for the Hamlet production
+hamlet_production_for_rehearsals = Production.joins(:play).find_by(plays: { title: 'Hamlet' })
+if hamlet_production_for_rehearsals && Rehearsal.where(production: hamlet_production_for_rehearsals).none?
+  rehearsal_count = 0
+  (0..13).each do |i|
+    date = Date.today + i
+    next if date.saturday? || date.sunday?
+    Rehearsal.create!(
+      production: hamlet_production_for_rehearsals,
+      start_time: date.to_time + 19.hours,
+      end_time:   date.to_time + 22.hours,
+      title: "Rehearsal #{rehearsal_count + 1}",
+    )
+    rehearsal_count += 1
+  end
+  puts "Rehearsals seeded: #{rehearsal_count}"
+end
+
 # Give the dev user a Director job on the Hamlet production so they have admin access
 theater = Theater.find_by(fake: false)
 hamlet_production = Production.joins(:play).find_by(plays: { title: 'Hamlet' }, theater: theater)
@@ -215,4 +255,27 @@ if hamlet_production && director_specialization && dev_user
     specialization_id: director_specialization.id
   )
   puts "Director job seeded for #{dev_user.email} on #{hamlet_production.play.title}"
+end
+
+# Seed conflicts for dev user
+if dev_user && Conflict.where(user_id: dev_user.id).none?
+  Conflict.create!(
+    user: dev_user,
+    start_time: Date.today + 3.days + 19.hours,
+    end_time:   Date.today + 3.days + 21.hours,
+    category:   'work'
+  )
+
+  ConflictPattern.create!(
+    user:        dev_user,
+    days_of_week: ['monday', 'wednesday'].to_json,
+    start_time:  '09:00:00',
+    end_time:    '17:00:00',
+    start_date:  Date.today,
+    end_date:    Date.today + 3.months,
+    category:    'work'
+  )
+
+  puts "Conflicts seeded: #{Conflict.where(user_id: dev_user.id).count}"
+  puts "Conflict patterns seeded: #{ConflictPattern.where(user_id: dev_user.id).count}"
 end

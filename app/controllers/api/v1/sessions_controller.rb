@@ -9,7 +9,7 @@ module Api
         auth = request.env['omniauth.auth']
 
         unless auth
-          render json: { error: 'OAuth authentication failed' }, status: :unauthorized
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=oauth_failed"
           return
         end
 
@@ -17,21 +17,18 @@ module Api
 
         if user.persisted?
           token = JsonWebToken.encode(user_id: user.id)
-          render json: {
-            token: token,
-            user: {
-              id: user.id,
-              email: user.email,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              role: user.role
-            }
-          }, status: :ok
+          user_params = {
+            id: user.id,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            role: user.role,
+            subscription_status: user.subscription_status
+          }.to_query
+
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?token=#{token}&#{user_params}"
         else
-          render json: {
-            error: 'Could not create or find user',
-            details: user.errors.full_messages
-          }, status: :unprocessable_entity
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=user_not_found&details=#{user.errors.full_messages.join(',')}"
         end
       end
 

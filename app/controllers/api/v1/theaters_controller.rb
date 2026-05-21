@@ -2,13 +2,25 @@ module Api
   module V1
 class TheatersController < ApiController
   # skip_before_action :doorkeeper_authorize!, only: %i[index show theater_names]
-  before_action :set_theater, only: %i[show update destroy]
+  before_action :set_theater, only: %i[show update destroy theater_skeleton]
 
   # GET /theaters
   def index
     @theaters = Theater.all
 
-    json_response(@theaters)
+    json_response(@theaters.as_json(only: %i[
+      id
+      name
+      city
+      state
+      zip
+      phone_number
+      website
+      logo
+      fake
+      created_at
+      updated_at
+    ]))
   end
 
   # GET /theaters/1
@@ -54,6 +66,38 @@ class TheatersController < ApiController
   def theater_names
     @theaters = Theater.all
     render json: @theaters.as_json(only: %i[id fake name])
+  end
+
+  def theater_skeleton
+    theater_staff = @theater.jobs.where(production_id: nil, user_id: User.select(:id))
+    render json: @theater.as_json(
+      only: %i[
+        id name street_address city state zip
+        phone_number mission_statement website
+        calendar_url logo fake
+      ],
+      include: {
+        spaces: {
+          only: %i[id name seating_capacity city state]
+        },
+        productions: {
+          only: %i[id start_date end_date],
+          include: {
+            play: {
+              only: %i[id title]
+            }
+          }
+        }
+      }
+    ).merge(
+      'jobs' => theater_staff.as_json(
+        only: %i[id specialization_id user_id],
+        include: {
+          specialization: { only: %i[id title] },
+          user: { only: %i[id first_name last_name email] }
+        }
+      )
+    )
   end
 
   private

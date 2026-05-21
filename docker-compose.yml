@@ -8,6 +8,9 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/docker-init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
@@ -29,20 +32,54 @@ services:
     command: >
       bash -c "until ruby -rmysql2 -e \"Mysql2::Client.new(host:'db',username:'${DB_USER}',password:'${DB_PASSWORD}')\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec spec/requests spec/models spec/services 2>&1 | tee /app/test_results.txt"
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
   server:
     build: .
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       RAILS_ENV: development
       DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      REDIS_URL: redis://redis:6379/0
     volumes:
       - .:/app
     ports:
       - "3001:3001"
     command: >
-      bash -c "bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0 -p 3001"
+      bash -c "bundle exec rails db:prepare && mkdir -p tmp/pids && bundle exec puma -C config/puma.rb -b tcp://0.0.0.0:3001 -e development"
+
+  worker:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/app
+    command: bundle exec sidekiq
+
+volumes:
+  mysql_data:

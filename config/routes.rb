@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   # OmniAuth callback stays at /auth/:provider/callback but routes to namespaced controller
-  post 'auth/:provider/callback', to: 'api/v1/sessions#create'
+  get 'auth/:provider/callback', to: 'api/v1/sessions#create'
   get 'auth/failure', to: redirect('/')
 
   namespace :api do
@@ -50,6 +50,9 @@ Rails.application.routes.draw do
       end
       resources :theaters do
         resources :jobs
+        member do
+          get :theater_skeleton
+        end
         collection do
           get :theater_names
         end
