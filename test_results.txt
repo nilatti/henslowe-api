@@ -1,6 +1,1128 @@
 [33m[rspec-sidekiq] WARNING! Sidekiq will *NOT* process jobs in this environment. See https://github.com/wspurgin/rspec-sidekiq/wiki/FAQ-&-Troubleshooting[0m
-....
+......................F...F.2026-06-05T15:15:21.278Z pid=13 tid=ay1 INFO: Sidekiq 7.3.9 connecting to Redis with options {:size=>10, :pool_name=>"internal", :url=>"redis://localhost:6379/0"}
+.....F..F..Fset play
+.set play
+F.F.....................{"name":["can't be blank"]}
+.................................................................................................................set play
+.set play
+.set play
+.set play
+.set play
+.set play
+.set play
+.set play
+....set play
+.set play
+.set play
+.set play
+.set play
+.set play
+set play
+..set play
+.set play
+.set play
+.set play
+.set play
+.............................................................{"errors":[{"title":"Bad Request"}]}
+..................................................................................................build conflict schedule called
+.build conflict schedule called
+2026-06-05T15:18:12.358Z pid=13 tid=ay1 INFO: starting build conflicts schedule.
+2026-06-05T15:18:12.358Z pid=13 tid=ay1 INFO: 2020-02-20
+2026-06-05T15:18:12.358Z pid=13 tid=ay1 INFO: 2020-03-20
+2026-06-05T15:18:12.358Z pid=13 tid=ay1 INFO: ready to call builder
+................................................................................................................................................................................................Duplicating act 1425
+Duplicating scene 3863
+Duplicating french scene 11170
+Duplicating french scene 11171
+Duplicating french scene 11172
+Duplicating scene 3864
+Duplicating french scene 11173
+Duplicating french scene 11174
+Duplicating french scene 11175
+Duplicating scene 3865
+Duplicating french scene 11176
+Duplicating french scene 11177
+Duplicating french scene 11178
+Duplicating act 1426
+Duplicating scene 3866
+Duplicating french scene 11179
+Duplicating french scene 11180
+Duplicating french scene 11181
+Duplicating scene 3867
+Duplicating french scene 11182
+Duplicating french scene 11183
+Duplicating french scene 11184
+Duplicating scene 3868
+Duplicating french scene 11185
+Duplicating french scene 11186
+Duplicating french scene 11187
+Duplicating act 1427
+Duplicating scene 3869
+Duplicating french scene 11188
+Duplicating french scene 11189
+Duplicating french scene 11190
+Duplicating scene 3870
+Duplicating french scene 11191
+Duplicating french scene 11192
+Duplicating french scene 11193
+Duplicating scene 3871
+Duplicating french scene 11194
+Duplicating french scene 11195
+Duplicating french scene 11196
+......count lines initialized
+...........play is 8096
+<personGrp xml:id="LORDS_AYL"/>
+<personGrp xml:id="LORDS.SENIOR_AYL" corresp="#LORDS_AYL"/>
+<personGrp xml:id="LORDS.FREDERICK_AYL" corresp="#LORDS_AYL"/>
+.play is 8096
+<personGrp xml:id="LORDS_AYL"/>
+<personGrp xml:id="LORDS.SENIOR_AYL" corresp="#LORDS_AYL"/>
+<personGrp xml:id="LORDS.FREDERICK_AYL" corresp="#LORDS_AYL"/>
+Could not find character fakecharacter!
+467 [[#<Character id: nil, name: "Adam", age: nil, gender: "male", description: "Old guy", created_at: nil, updated_at: nil, play_id: 8096, xml_id: "Adam_AYL", corresp: nil, character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: nil, name: "Duke Frederick", age: nil, gender: "male", description: "the usurping duke", created_at: nil, updated_at: nil, play_id: 8096, xml_id: "DukeFrederick_AYL", corresp: nil, character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: nil, name: "\n          Could Not Find Character\n        ", age: nil, gender: "neutral", description: "\n        \n          Bogus person for lines that we...", created_at: nil, updated_at: nil, play_id: 8096, xml_id: "CouldNotFindCharacter", corresp: nil, character_group_id: nil, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: nil, name: nil, xml_id: "LORDS.FREDERICK_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: nil, updated_at: nil>]]
+2
+..play is 8096
+<personGrp xml:id="LORDS_AYL"/>
+<personGrp xml:id="LORDS.SENIOR_AYL" corresp="#LORDS_AYL"/>
+<personGrp xml:id="LORDS.FREDERICK_AYL" corresp="#LORDS_AYL"/>
+503 2
+503 1
+.build acts called
+building act 
+building ACT 1 at 2026-06-05 15:18:40 UTC
+header is Scene 1
+current scene is 1
+item is stage direction
+<stage xml:id="stg-0000" n="SD 1.1.0" type="entrance" who="#Orlando_AYL #Adam_AYL">
+<w xml:id="w0000070" n="SD 1.1.0">Enter</w>
+<c xml:id="c0000080" n="SD 1.1.0"> </c>
+<w xml:id="w0000090" n="SD 1.1.0">Orlando</w>
+<c xml:id="c0000100" n="SD 1.1.0"> </c>
+<w xml:id="w0000110" n="SD 1.1.0">and</w>
+<c xml:id="c0000120" n="SD 1.1.0"> </c>
+<w xml:id="w0000130" n="SD 1.1.0">Adam</w>
+<pc xml:id="p0000140" n="SD 1.1.0">.</pc>
+</stage>
+467 [[#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2069, name: "Adam", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.876726000 +0000", updated_at: "2026-06-05 15:18:39.876726000 +0000", play_id: 8096, xml_id: "Adam_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Orlando
+this is not one of those
+inside build line, character: [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Orlando
+this is not one of those
+inside build line, character: [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Orlando
+this is not one of those
+inside build line, character: [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Orlando
+this is not one of those
+this is not one of those
+this is not one of those
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0025.1" n="SD 1.1.25.1" type="entrance" who="#Oliver_AYL">
+<w xml:id="w0005000" n="SD 1.1.25.1">Enter</w>
+<c xml:id="c0005010" n="SD 1.1.25.1"> </c>
+<w xml:id="w0005020" n="SD 1.1.25.1">Oliver</w>
+<pc xml:id="p0005030" n="SD 1.1.25.1">.</pc>
+</stage>
+467 [[#<Character id: 2071, name: "Oliver", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.890581000 +0000", updated_at: "2026-06-05 15:18:39.890581000 +0000", play_id: 8096, xml_id: "Oliver_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2069, name: "Adam", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.876726000 +0000", updated_at: "2026-06-05 15:18:39.876726000 +0000", play_id: 8096, xml_id: "Adam_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2069, name: "Adam", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.876726000 +0000", updated_at: "2026-06-05 15:18:39.876726000 +0000", play_id: 8096, xml_id: "Adam_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2069, name: "Adam", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.876726000 +0000", updated_at: "2026-06-05 15:18:39.876726000 +0000", play_id: 8096, xml_id: "Adam_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2069, name: "Adam", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.876726000 +0000", updated_at: "2026-06-05 15:18:39.876726000 +0000", play_id: 8096, xml_id: "Adam_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Adam
+this is not one of those
+item is stage direction
+<stage xml:id="stg-0170.1" n="SD 1.1.170.1" type="exit" who="#Oliver_AYL">
+<w xml:id="w0030430" n="SD 1.1.170.1">He</w>
+<c xml:id="c0030440" n="SD 1.1.170.1"> </c>
+<w xml:id="w0030450" n="SD 1.1.170.1">exits</w>
+<pc xml:id="p0030460" n="SD 1.1.170.1">.</pc>
+</stage>
+467 [[#<Character id: 2071, name: "Oliver", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.890581000 +0000", updated_at: "2026-06-05 15:18:39.890581000 +0000", play_id: 8096, xml_id: "Oliver_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 4
+338 4
+header is Scene 2
+current scene is 2
+item is stage direction
+<stage xml:id="stg-0170.2" n="SD 1.2.0" type="entrance" who="#Rosalind_AYL #Celia_AYL">
+<w xml:id="w0030500" n="SD 1.2.0">Enter</w>
+<c xml:id="c0030510" n="SD 1.2.0"> </c>
+<w xml:id="w0030520" n="SD 1.2.0">Rosalind</w>
+<c xml:id="c0030530" n="SD 1.2.0"> </c>
+<w xml:id="w0030540" n="SD 1.2.0">and</w>
+<c xml:id="c0030550" n="SD 1.2.0"> </c>
+<w xml:id="w0030560" n="SD 1.2.0">Celia</w>
+<pc xml:id="p0030570" n="SD 1.2.0">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+building speech
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0312.1" n="SD 1.2.142.1" type="entrance" who="#DukeFrederick_AYL #LORDS.FREDERICK_AYL #Orlando_AYL #Charles_AYL #ATTENDANTS_AYL">
+<sound xml:id="snd-0312.1" n="SD 1.2.142.1" type="flourish" ana="flourish">
+<w xml:id="w0053540" n="SD 1.2.142.1">Flourish</w>
+<pc xml:id="p0053550" n="SD 1.2.142.1">.</pc>
+</sound>
+<c xml:id="c0053560" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053570" n="SD 1.2.142.1">Enter</w>
+<c xml:id="c0053580" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053590" n="SD 1.2.142.1">Duke</w>
+<c xml:id="c0053600" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053610" n="SD 1.2.142.1">Frederick</w>
+<pc xml:id="p0053620" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053630" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053640" n="SD 1.2.142.1">Lords</w>
+<pc xml:id="p0053650" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053660" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053670" n="SD 1.2.142.1">Orlando</w>
+<pc xml:id="p0053680" n="SD 1.2.142.1">,</pc>
+<lb xml:id="lb-03122"/>
+<w xml:id="w0053690" n="SD 1.2.142.1">Charles</w>
+<pc xml:id="p0053700" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053710" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053720" n="SD 1.2.142.1">and</w>
+<c xml:id="c0053730" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053740" n="SD 1.2.142.1">Attendants</w>
+<pc xml:id="p0053750" n="SD 1.2.142.1">.</pc>
+</stage>
+467 [[#<Character id: 2074, name: "Duke Frederick", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.911466000 +0000", updated_at: "2026-06-05 15:18:39.911466000 +0000", play_id: 8096, xml_id: "DukeFrederick_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2075, name: "Charles", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.919175000 +0000", updated_at: "2026-06-05 15:18:39.919175000 +0000", play_id: 8096, xml_id: "Charles_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: 1227, name: "Poe Dameron", xml_id: "LORDS.FREDERICK_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.869720000 +0000", updated_at: "2026-06-05 15:18:39.869720000 +0000">, #<CharacterGroup id: 1225, name: "Borvo the Hutt", xml_id: "ATTENDANTS_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.855903000 +0000", updated_at: "2026-06-05 15:18:39.855903000 +0000">]]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0460.1" n="SD 1.2.290.1" type="exit" who="#Orlando_AYL">
+<w xml:id="w0077780" n="SD 1.2.290.1">He</w>
+<c xml:id="c0077790" n="SD 1.2.290.1"> </c>
+<w xml:id="w0077800" n="SD 1.2.290.1">exits</w>
+<pc xml:id="p0077810" n="SD 1.2.290.1">.</pc>
+</stage>
+467 [[#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 4
+338 4
+this is not one of those
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+<stage xml:id="stg-0880.0" n="SD 2.5.1.0" type="delivery">
+    <c xml:id="c0146270" n="SD 2.5.1.0"> </c>
+    <w xml:id="w0146280" n="SD 2.5.1.0">sings</w>
+  </stage>
+467 [[], []]
+2
+333 2
+338 2
+this is not one of those
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+item is stage direction
+<stage xml:id="stg-2862.1" n="SD EPI.22.1" type="exit" who="#Rosalind_AYL">
+<w xml:id="w0469000" n="SD EPI.22.1">She</w>
+<c xml:id="c0469010" n="SD EPI.22.1"> </c>
+<w xml:id="w0469020" n="SD EPI.22.1">exits</w>
+<pc xml:id="p0469030" n="SD EPI.22.1">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 4
+338 4
+building act 
+building ACT 2 at 2026-06-05 15:18:40 UTC
+header is Scene 1
+current scene is 1
+item is stage direction
+<stage xml:id="stg-0605.2" n="SD 2.1.0" type="entrance" who="#DukeSenior_AYL #LORDS.SENIOR.Amiens_AYL #LORDS.SENIOR_AYL">
+<w xml:id="w0101120" n="SD 2.1.0">Enter</w>
+<c xml:id="c0101130" n="SD 2.1.0"> </c>
+<w xml:id="w0101140" n="SD 2.1.0">Duke</w>
+<c xml:id="c0101150" n="SD 2.1.0"> </c>
+<w xml:id="w0101160" n="SD 2.1.0">Senior</w>
+<pc xml:id="p0101170" n="SD 2.1.0">,</pc>
+<c xml:id="c0101180" n="SD 2.1.0"> </c>
+<w xml:id="w0101190" n="SD 2.1.0">Amiens</w>
+<pc xml:id="p0101200" n="SD 2.1.0">,</pc>
+<c xml:id="c0101210" n="SD 2.1.0"> </c>
+<w xml:id="w0101220" n="SD 2.1.0">and</w>
+<c xml:id="c0101230" n="SD 2.1.0"> </c>
+<w xml:id="w0101240" n="SD 2.1.0">two</w>
+<c xml:id="c0101250" n="SD 2.1.0"> </c>
+<w xml:id="w0101260" n="SD 2.1.0">or</w>
+<c xml:id="c0101270" n="SD 2.1.0"> </c>
+<w xml:id="w0101280" n="SD 2.1.0">three</w>
+<c xml:id="c0101290" n="SD 2.1.0"> </c>
+<w xml:id="w0101300" n="SD 2.1.0">Lords</w>
+<pc xml:id="p0101310" n="SD 2.1.0">,</pc>
+<c xml:id="c0101320" n="SD 2.1.0"> </c>
+<w xml:id="w0101330" n="SD 2.1.0">like</w>
+<lb xml:id="lb-06052"/>
+<w xml:id="w0101340" n="SD 2.1.0">foresters</w>
+<pc xml:id="p0101350" n="SD 2.1.0">.</pc>
+</stage>
+467 [[#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: 1226, name: "Darth Maul", xml_id: "LORDS.SENIOR_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.863255000 +0000", updated_at: "2026-06-05 15:18:39.863255000 +0000">]]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Duke Senior
+this is not one of those
+inside build line, character: [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Duke Senior
+this is not one of those
+inside build line, character: [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Duke Senior
+this is not one of those
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-2840.1b" n="SD 5.4.208.1" type="exit" who="#DukeSenior_AYL #Celia_AYL #Orlando_AYL #Oliver_AYL #LORDS.SENIOR.Amiens_AYL">
+<w xml:id="w0464290" n="SD 5.4.208.1">All</w>
+<c xml:id="c0464300" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464310" n="SD 5.4.208.1">but</w>
+<c xml:id="c0464320" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464330" n="SD 5.4.208.1">Rosalind</w>
+<c xml:id="c0464340" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464350" n="SD 5.4.208.1">exit</w>
+<pc xml:id="p0464360" n="SD 5.4.208.1">.</pc>
+</stage>
+467 [[#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2071, name: "Oliver", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.890581000 +0000", updated_at: "2026-06-05 15:18:39.890581000 +0000", play_id: 8096, xml_id: "Oliver_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 8
+338 8
+item is stage direction
+<stage xml:id="stg-2840.1" n="SD 5.4.208.1" type="mixed">
+<stage xml:id="stg-2840.1a" n="SD 5.4.208.1" type="business">
+<w xml:id="w0464260" n="SD 5.4.208.1">Dance</w>
+<pc xml:id="p0464270" n="SD 5.4.208.1">.</pc>
+</stage>
+<c xml:id="c0464280" n="SD 5.4.208.1"> </c>
+<stage xml:id="stg-2840.1b" n="SD 5.4.208.1" type="exit" who="#DukeSenior_AYL #Celia_AYL #Orlando_AYL #Oliver_AYL #LORDS.SENIOR.Amiens_AYL">
+<w xml:id="w0464290" n="SD 5.4.208.1">All</w>
+<c xml:id="c0464300" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464310" n="SD 5.4.208.1">but</w>
+<c xml:id="c0464320" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464330" n="SD 5.4.208.1">Rosalind</w>
+<c xml:id="c0464340" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464350" n="SD 5.4.208.1">exit</w>
+<pc xml:id="p0464360" n="SD 5.4.208.1">.</pc>
+</stage>
+</stage>
+467 [[], []]
+2
+333 2
+338 2
+<stage xml:id="stg-2840.1a" n="SD 5.4.208.1" type="business">
+<w xml:id="w0464260" n="SD 5.4.208.1">Dance</w>
+<pc xml:id="p0464270" n="SD 5.4.208.1">.</pc>
+</stage>
+467 [[], []]
+2
+333 2
+338 2
+<stage xml:id="stg-2840.1b" n="SD 5.4.208.1" type="exit" who="#DukeSenior_AYL #Celia_AYL #Orlando_AYL #Oliver_AYL #LORDS.SENIOR.Amiens_AYL">
+<w xml:id="w0464290" n="SD 5.4.208.1">All</w>
+<c xml:id="c0464300" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464310" n="SD 5.4.208.1">but</w>
+<c xml:id="c0464320" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464330" n="SD 5.4.208.1">Rosalind</w>
+<c xml:id="c0464340" n="SD 5.4.208.1"> </c>
+<w xml:id="w0464350" n="SD 5.4.208.1">exit</w>
+<pc xml:id="p0464360" n="SD 5.4.208.1">.</pc>
+</stage>
+467 [[#<Character id: 2076, name: "Duke Senior", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.925783000 +0000", updated_at: "2026-06-05 15:18:39.925783000 +0000", play_id: 8096, xml_id: "DukeSenior_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2071, name: "Oliver", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.890581000 +0000", updated_at: "2026-06-05 15:18:39.890581000 +0000", play_id: 8096, xml_id: "Oliver_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 8
+338 8
+header is EPILOGUE.
+current scene is 0
+this is not one of those
+building speech
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+this is not one of those
+item is stage direction
+<stage xml:id="stg-2862.1" n="SD EPI.22.1" type="exit" who="#Rosalind_AYL">
+<w xml:id="w0469000" n="SD EPI.22.1">She</w>
+<c xml:id="c0469010" n="SD EPI.22.1"> </c>
+<w xml:id="w0469020" n="SD EPI.22.1">exits</w>
+<pc xml:id="p0469030" n="SD EPI.22.1">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 4
+338 4
+..play is 8096
+<personGrp xml:id="LORDS_AYL"/>
+<personGrp xml:id="LORDS.SENIOR_AYL" corresp="#LORDS_AYL"/>
+<personGrp xml:id="LORDS.FREDERICK_AYL" corresp="#LORDS_AYL"/>
+header is Scene 2
+current scene is 2
+item is stage direction
+<stage xml:id="stg-0170.2" n="SD 1.2.0" type="entrance" who="#Rosalind_AYL #Celia_AYL">
+<w xml:id="w0030500" n="SD 1.2.0">Enter</w>
+<c xml:id="c0030510" n="SD 1.2.0"> </c>
+<w xml:id="w0030520" n="SD 1.2.0">Rosalind</w>
+<c xml:id="c0030530" n="SD 1.2.0"> </c>
+<w xml:id="w0030540" n="SD 1.2.0">and</w>
+<c xml:id="c0030550" n="SD 1.2.0"> </c>
+<w xml:id="w0030560" n="SD 1.2.0">Celia</w>
+<pc xml:id="p0030570" n="SD 1.2.0">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+building speech
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0312.1" n="SD 1.2.142.1" type="entrance" who="#DukeFrederick_AYL #LORDS.FREDERICK_AYL #Orlando_AYL #Charles_AYL #ATTENDANTS_AYL">
+<sound xml:id="snd-0312.1" n="SD 1.2.142.1" type="flourish" ana="flourish">
+<w xml:id="w0053540" n="SD 1.2.142.1">Flourish</w>
+<pc xml:id="p0053550" n="SD 1.2.142.1">.</pc>
+</sound>
+<c xml:id="c0053560" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053570" n="SD 1.2.142.1">Enter</w>
+<c xml:id="c0053580" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053590" n="SD 1.2.142.1">Duke</w>
+<c xml:id="c0053600" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053610" n="SD 1.2.142.1">Frederick</w>
+<pc xml:id="p0053620" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053630" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053640" n="SD 1.2.142.1">Lords</w>
+<pc xml:id="p0053650" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053660" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053670" n="SD 1.2.142.1">Orlando</w>
+<pc xml:id="p0053680" n="SD 1.2.142.1">,</pc>
+<lb xml:id="lb-03122"/>
+<w xml:id="w0053690" n="SD 1.2.142.1">Charles</w>
+<pc xml:id="p0053700" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053710" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053720" n="SD 1.2.142.1">and</w>
+<c xml:id="c0053730" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053740" n="SD 1.2.142.1">Attendants</w>
+<pc xml:id="p0053750" n="SD 1.2.142.1">.</pc>
+</stage>
+467 [[#<Character id: 2074, name: "Duke Frederick", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.911466000 +0000", updated_at: "2026-06-05 15:18:39.911466000 +0000", play_id: 8096, xml_id: "DukeFrederick_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2075, name: "Charles", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.919175000 +0000", updated_at: "2026-06-05 15:18:39.919175000 +0000", play_id: 8096, xml_id: "Charles_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: 1227, name: "Poe Dameron", xml_id: "LORDS.FREDERICK_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.869720000 +0000", updated_at: "2026-06-05 15:18:39.869720000 +0000">, #<CharacterGroup id: 1225, name: "Borvo the Hutt", xml_id: "ATTENDANTS_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.855903000 +0000", updated_at: "2026-06-05 15:18:39.855903000 +0000">]]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0460.1" n="SD 1.2.290.1" type="exit" who="#Orlando_AYL">
+<w xml:id="w0077780" n="SD 1.2.290.1">He</w>
+<c xml:id="c0077790" n="SD 1.2.290.1"> </c>
+<w xml:id="w0077800" n="SD 1.2.290.1">exits</w>
+<pc xml:id="p0077810" n="SD 1.2.290.1">.</pc>
+</stage>
+467 [[#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 7
+338 7
+this is not one of those
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+<stage xml:id="stg-0880.0" n="SD 2.5.1.0" type="delivery">
+    <c xml:id="c0146270" n="SD 2.5.1.0"> </c>
+    <w xml:id="w0146280" n="SD 2.5.1.0">sings</w>
+  </stage>
+467 [[], []]
+2
+333 2
+338 2
+this is not one of those
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+item is stage direction
+<stage xml:id="stg-2862.1" n="SD EPI.22.1" type="exit" who="#Rosalind_AYL">
+<w xml:id="w0469000" n="SD EPI.22.1">She</w>
+<c xml:id="c0469010" n="SD EPI.22.1"> </c>
+<w xml:id="w0469020" n="SD EPI.22.1">exits</w>
+<pc xml:id="p0469030" n="SD EPI.22.1">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 7
+338 7
+..inside build line, character: [#<Character id: 2141, name: "Inigo Montoya", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:41.153371000 +0000", updated_at: "2026-06-05 15:18:41.153371000 +0000", play_id: 8111, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2141, name: "Inigo Montoya", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:41.153371000 +0000", updated_at: "2026-06-05 15:18:41.153371000 +0000", play_id: 8111, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Inigo Montoya
+.inside build line, character: [#<Character id: 2142, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:41.223072000 +0000", updated_at: "2026-06-05 15:18:41.223072000 +0000", play_id: 8119, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2142, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:41.223072000 +0000", updated_at: "2026-06-05 15:18:41.223072000 +0000", play_id: 8119, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Valerie
 
-Finished in 1.06 seconds (files took 2.72 seconds to load)
-4 examples, 0 failures
+..<stage xml:id="stg-0312.1" n="SD 1.2.142.1" type="entrance" who="#DukeFrederick_AYL #LORDS.FREDERICK_AYL #Orlando_AYL #Charles_AYL #ATTENDANTS_AYL">
+<sound xml:id="snd-0312.1" n="SD 1.2.142.1" type="flourish" ana="flourish">
+<w xml:id="w0053540" n="SD 1.2.142.1">Flourish</w>
+<pc xml:id="p0053550" n="SD 1.2.142.1">.</pc>
+</sound>
+<c xml:id="c0053560" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053570" n="SD 1.2.142.1">Enter</w>
+<c xml:id="c0053580" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053590" n="SD 1.2.142.1">Duke</w>
+<c xml:id="c0053600" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053610" n="SD 1.2.142.1">Frederick</w>
+<pc xml:id="p0053620" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053630" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053640" n="SD 1.2.142.1">Lords</w>
+<pc xml:id="p0053650" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053660" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053670" n="SD 1.2.142.1">Orlando</w>
+<pc xml:id="p0053680" n="SD 1.2.142.1">,</pc>
+<lb xml:id="lb-03122"/>
+<w xml:id="w0053690" n="SD 1.2.142.1">Charles</w>
+<pc xml:id="p0053700" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053710" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053720" n="SD 1.2.142.1">and</w>
+<c xml:id="c0053730" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053740" n="SD 1.2.142.1">Attendants</w>
+<pc xml:id="p0053750" n="SD 1.2.142.1">.</pc>
+</stage>
+467 [[#<Character id: 2074, name: "Duke Frederick", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.911466000 +0000", updated_at: "2026-06-05 15:18:39.911466000 +0000", play_id: 8096, xml_id: "DukeFrederick_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2075, name: "Charles", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.919175000 +0000", updated_at: "2026-06-05 15:18:39.919175000 +0000", play_id: 8096, xml_id: "Charles_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: 1227, name: "Poe Dameron", xml_id: "LORDS.FREDERICK_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.869720000 +0000", updated_at: "2026-06-05 15:18:39.869720000 +0000">, #<CharacterGroup id: 1225, name: "Borvo the Hutt", xml_id: "ATTENDANTS_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.855903000 +0000", updated_at: "2026-06-05 15:18:39.855903000 +0000">]]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+Duke Frederick	DukeFrederick_AYL
+Orlando	Orlando_AYL
+Charles	Charles_AYL
+.....header is Scene 2
+current scene is 2
+item is stage direction
+<stage xml:id="stg-0170.2" n="SD 1.2.0" type="entrance" who="#Rosalind_AYL #Celia_AYL">
+<w xml:id="w0030500" n="SD 1.2.0">Enter</w>
+<c xml:id="c0030510" n="SD 1.2.0"> </c>
+<w xml:id="w0030520" n="SD 1.2.0">Rosalind</w>
+<c xml:id="c0030530" n="SD 1.2.0"> </c>
+<w xml:id="w0030540" n="SD 1.2.0">and</w>
+<c xml:id="c0030550" n="SD 1.2.0"> </c>
+<w xml:id="w0030560" n="SD 1.2.0">Celia</w>
+<pc xml:id="p0030570" n="SD 1.2.0">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+building speech
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+inside build line, character: [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Rosalind
+this is not one of those
+this is not one of those
+building speech
+467 [[#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2073, name: "Celia", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.904506000 +0000", updated_at: "2026-06-05 15:18:39.904506000 +0000", play_id: 8096, xml_id: "Celia_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>]
+character Celia
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0312.1" n="SD 1.2.142.1" type="entrance" who="#DukeFrederick_AYL #LORDS.FREDERICK_AYL #Orlando_AYL #Charles_AYL #ATTENDANTS_AYL">
+<sound xml:id="snd-0312.1" n="SD 1.2.142.1" type="flourish" ana="flourish">
+<w xml:id="w0053540" n="SD 1.2.142.1">Flourish</w>
+<pc xml:id="p0053550" n="SD 1.2.142.1">.</pc>
+</sound>
+<c xml:id="c0053560" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053570" n="SD 1.2.142.1">Enter</w>
+<c xml:id="c0053580" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053590" n="SD 1.2.142.1">Duke</w>
+<c xml:id="c0053600" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053610" n="SD 1.2.142.1">Frederick</w>
+<pc xml:id="p0053620" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053630" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053640" n="SD 1.2.142.1">Lords</w>
+<pc xml:id="p0053650" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053660" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053670" n="SD 1.2.142.1">Orlando</w>
+<pc xml:id="p0053680" n="SD 1.2.142.1">,</pc>
+<lb xml:id="lb-03122"/>
+<w xml:id="w0053690" n="SD 1.2.142.1">Charles</w>
+<pc xml:id="p0053700" n="SD 1.2.142.1">,</pc>
+<c xml:id="c0053710" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053720" n="SD 1.2.142.1">and</w>
+<c xml:id="c0053730" n="SD 1.2.142.1"> </c>
+<w xml:id="w0053740" n="SD 1.2.142.1">Attendants</w>
+<pc xml:id="p0053750" n="SD 1.2.142.1">.</pc>
+</stage>
+467 [[#<Character id: 2074, name: "Duke Frederick", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.911466000 +0000", updated_at: "2026-06-05 15:18:39.911466000 +0000", play_id: 8096, xml_id: "DukeFrederick_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>, #<Character id: 2075, name: "Charles", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.919175000 +0000", updated_at: "2026-06-05 15:18:39.919175000 +0000", play_id: 8096, xml_id: "Charles_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], [#<CharacterGroup id: 1227, name: "Poe Dameron", xml_id: "LORDS.FREDERICK_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.869720000 +0000", updated_at: "2026-06-05 15:18:39.869720000 +0000">, #<CharacterGroup id: 1225, name: "Borvo the Hutt", xml_id: "ATTENDANTS_AYL", corresp: "#LORDS_AYL", play_id: 8096, created_at: "2026-06-05 15:18:39.855903000 +0000", updated_at: "2026-06-05 15:18:39.855903000 +0000">]]
+2
+333 2
+333 entrance
+503 2
+335 2
+338 2
+this is not one of those
+item is stage direction
+it's not first or last and it's an entrance or exit, so let's make a french scene
+<stage xml:id="stg-0460.1" n="SD 1.2.290.1" type="exit" who="#Orlando_AYL">
+<w xml:id="w0077780" n="SD 1.2.290.1">He</w>
+<c xml:id="c0077790" n="SD 1.2.290.1"> </c>
+<w xml:id="w0077800" n="SD 1.2.290.1">exits</w>
+<pc xml:id="p0077810" n="SD 1.2.290.1">.</pc>
+</stage>
+467 [[#<Character id: 2070, name: "Orlando", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.883650000 +0000", updated_at: "2026-06-05 15:18:39.883650000 +0000", play_id: 8096, xml_id: "Orlando_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 7
+338 7
+this is not one of those
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+<stage xml:id="stg-0880.0" n="SD 2.5.1.0" type="delivery">
+    <c xml:id="c0146270" n="SD 2.5.1.0"> </c>
+    <w xml:id="w0146280" n="SD 2.5.1.0">sings</w>
+  </stage>
+467 [[], []]
+2
+333 2
+338 2
+this is not one of those
+this is not one of those
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+building speech
+467 [[#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>], []]
+2
+at global: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+this is not one of those
+inside build line, character: [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character array! [#<Character id: 2079, name: "Valerie", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.945238000 +0000", updated_at: "2026-06-05 15:18:39.945238000 +0000", play_id: 8096, xml_id: "LORDS.SENIOR.Amiens_AYL", corresp: "#test", character_group_id: 1226, original_line_count: nil, new_line_count: nil>]
+character Valerie
+this is not one of those
+item is stage direction
+<stage xml:id="stg-2862.1" n="SD EPI.22.1" type="exit" who="#Rosalind_AYL">
+<w xml:id="w0469000" n="SD EPI.22.1">She</w>
+<c xml:id="c0469010" n="SD EPI.22.1"> </c>
+<w xml:id="w0469020" n="SD EPI.22.1">exits</w>
+<pc xml:id="p0469030" n="SD EPI.22.1">.</pc>
+</stage>
+467 [[#<Character id: 2072, name: "Rosalind", age: "adult", gender: "female", description: "short but cute", created_at: "2026-06-05 15:18:39.897816000 +0000", updated_at: "2026-06-05 15:18:39.897816000 +0000", play_id: 8096, xml_id: "Rosalind_AYL", corresp: "#test", character_group_id: nil, original_line_count: nil, new_line_count: nil>], []]
+2
+333 2
+333 exit
+503 2
+335 7
+338 7
+.....
+
+Failures:
+
+  1) Authorization DELETE /api/v1/productions/:id when superadmin returns 204
+     Failure/Error: expect(response).to have_http_status(204)
+       expected the response to have status code 204 but it was 403
+     # ./spec/requests/authorization_spec.rb:72:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  2) Authorization PUT /api/v1/productions/:id when superadmin returns 200
+     Failure/Error: expect(response).to have_http_status(200)
+       expected the response to have status code 200 but it was 403
+     # ./spec/requests/authorization_spec.rb:108:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  3) Authorization PUT /api/v1/theaters/:id when superadmin returns 200
+     Failure/Error: expect(response).to have_http_status(200)
+       expected the response to have status code 200 but it was 403
+     # ./spec/requests/authorization_spec.rb:175:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  4) Authorization DELETE /api/v1/theaters/:id when superadmin returns 204
+     Failure/Error: expect(response).to have_http_status(204)
+       expected the response to have status code 204 but it was 403
+     # ./spec/requests/authorization_spec.rb:207:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  5) Authorization DELETE /api/v1/users/:id when superadmin deletes any user returns 204
+     Failure/Error: expect(response).to have_http_status(204)
+       expected the response to have status code 204 but it was 403
+     # ./spec/requests/authorization_spec.rb:236:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  6) Authorization DELETE /api/v1/plays/:id (canonical) when superadmin returns 204
+     Failure/Error: expect(response).to have_http_status(204)
+       expected the response to have status code 204 but it was 403
+     # ./spec/requests/authorization_spec.rb:259:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+  7) Authorization POST /api/v1/specializations when superadmin returns 201
+     Failure/Error: expect(response).to have_http_status(201)
+       expected the response to have status code 201 but it was 403
+     # ./spec/requests/authorization_spec.rb:281:in `block (4 levels) in <top (required)>'
+     # ./spec/rails_helper.rb:73:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/strategy.rb:30:in `cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:34:in `block (2 levels) in cleaning'
+     # /usr/local/bundle/gems/database_cleaner-core-2.0.1/lib/database_cleaner/cleaners.rb:35:in `cleaning'
+     # ./spec/rails_helper.rb:72:in `block (2 levels) in <top (required)>'
+     # ./spec/spec_helper.rb:20:in `block (3 levels) in <top (required)>'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:296:in `block in timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:38:in `handle_timeout'
+     # /usr/local/bundle/gems/timeout-0.6.1/lib/timeout.rb:306:in `timeout'
+     # ./spec/spec_helper.rb:20:in `block (2 levels) in <top (required)>'
+
+Finished in 3 minutes 39.3 seconds (files took 6.08 seconds to load)
+590 examples, 7 failures
+
+Failed examples:
+
+rspec ./spec/requests/authorization_spec.rb:68 # Authorization DELETE /api/v1/productions/:id when superadmin returns 204
+rspec ./spec/requests/authorization_spec.rb:105 # Authorization PUT /api/v1/productions/:id when superadmin returns 200
+rspec ./spec/requests/authorization_spec.rb:172 # Authorization PUT /api/v1/theaters/:id when superadmin returns 200
+rspec ./spec/requests/authorization_spec.rb:203 # Authorization DELETE /api/v1/theaters/:id when superadmin returns 204
+rspec ./spec/requests/authorization_spec.rb:232 # Authorization DELETE /api/v1/users/:id when superadmin deletes any user returns 204
+rspec ./spec/requests/authorization_spec.rb:256 # Authorization DELETE /api/v1/plays/:id (canonical) when superadmin returns 204
+rspec ./spec/requests/authorization_spec.rb:277 # Authorization POST /api/v1/specializations when superadmin returns 201
 

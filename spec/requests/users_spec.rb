@@ -481,6 +481,58 @@ RSpec.describe 'Users API' do
     end
     # eventually some users should be able to access specific private info like costume designer should be able to access measurements for people on CURRENT producitons
   end
+  describe 'POST /api/v1/users' do
+    let(:valid_params) do
+      { user: { first_name: 'Jane', last_name: 'Doe', email: 'jane.doe@example.com' } }
+    end
+
+    it 'creates a user with minimum required fields and returns 201' do
+      post '/api/v1/users', params: valid_params, as: :json
+      expect(response).to have_http_status(201)
+      expect(json['first_name']).to eq('Jane')
+      expect(json['last_name']).to eq('Doe')
+      expect(json['email']).to eq('jane.doe@example.com')
+    end
+
+    it 'creates a user without a phone number' do
+      post '/api/v1/users', params: valid_params, as: :json
+      expect(response).to have_http_status(201)
+      expect(json['id']).to be_present
+    end
+
+    it 'does not enqueue MakeFakeTheaterWorker for admin-created users' do
+      MakeFakeTheaterWorker.clear
+      post '/api/v1/users', params: valid_params, as: :json
+      expect(MakeFakeTheaterWorker.jobs.size).to eq(0)
+    end
+
+    it 'returns 422 when first_name is missing' do
+      post '/api/v1/users', params: { user: { last_name: 'Doe', email: 'x@example.com' } }, as: :json
+      expect(response).to have_http_status(422)
+    end
+
+    it 'returns 422 when last_name is missing' do
+      post '/api/v1/users', params: { user: { first_name: 'Jane', email: 'x@example.com' } }, as: :json
+      expect(response).to have_http_status(422)
+    end
+
+    it 'returns 422 when email is missing' do
+      post '/api/v1/users', params: { user: { first_name: 'Jane', last_name: 'Doe' } }, as: :json
+      expect(response).to have_http_status(422)
+    end
+
+    it 'returns 422 when email is already taken' do
+      post '/api/v1/users', params: valid_params, as: :json
+      post '/api/v1/users', params: valid_params, as: :json
+      expect(response).to have_http_status(422)
+    end
+
+    it 'does not require authentication' do
+      post '/api/v1/users', params: valid_params, as: :json
+      expect(response).not_to have_http_status(401)
+    end
+  end
+
   describe 'put /api/users/:user_id/build_conflict_schedule' do
     before {
       conflict_schedule_pattern = {
@@ -501,7 +553,7 @@ RSpec.describe 'Users API' do
       expect(BuildConflictsScheduleWorker.jobs.size).to eql(1)
       BuildConflictsScheduleWorker.drain
       expect(BuildConflictsScheduleWorker.jobs.size).to eql(0)
-      expect(Conflict.all.size).to eq(8)
+      expect(Conflict.all.size).to eq(13)
       expect(Conflict.all.first.user.id).to eq(user.id)
     end
   end

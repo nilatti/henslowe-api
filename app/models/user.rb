@@ -3,7 +3,6 @@ class User < ApplicationRecord
 
   validates_uniqueness_of :email, case_sensitive: false
   validates_presence_of :first_name, :last_name, :email
-  validates_presence_of :phone_number, unless: -> { provider.present? }
   has_many :conflicts, dependent: :destroy
   has_many :conflict_patterns, dependent: :destroy
   has_many :entrance_exits
@@ -106,7 +105,7 @@ class User < ApplicationRecord
   end
 
   def make_new_fake_theater
-    if !self.fake
+    if !self.fake && self.provider.present?
       MakeFakeTheaterWorker.perform_async(self.id)
     end
   rescue RedisClient::CannotConnectError, Redis::CannotConnectError => e
