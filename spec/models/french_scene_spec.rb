@@ -14,9 +14,9 @@ RSpec.describe FrenchScene, type: :model do
   describe "ActiveRecord associations" do
     it { expect(french_scene).to belong_to(:scene) }
     it { expect(french_scene).to have_many(:entrance_exits).dependent(:destroy) }
-    it { expect(french_scene).to have_many(:lines).dependent(:destroy) }
-    it { expect(french_scene).to have_many(:on_stages).dependent(:destroy) }
-    it { expect(french_scene).to have_many(:sound_cues).dependent(:destroy) }
+    it { expect(french_scene).to have_many(:lines).dependent(:delete_all) }
+    it { expect(french_scene).to have_many(:on_stages).dependent(:delete_all) }
+    it { expect(french_scene).to have_many(:sound_cues).dependent(:delete_all) }
     it { expect(french_scene).to have_many(:stage_directions).dependent(:destroy) }
     it { expect(french_scene).to have_many(:characters).through(:on_stages) }
     it { expect(french_scene).to have_many(:character_groups).through(:on_stages) }

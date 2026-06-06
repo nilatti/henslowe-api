@@ -15,7 +15,7 @@ RSpec.describe Play, type: :model do
   describe "ActiveRecord associations" do
     it { expect(play).to belong_to(:author) }
     it { expect(play).to belong_to(:production).optional }
-    it { expect(play).to have_many(:words).dependent(:destroy) }
+    it { expect(play).to have_many(:words).dependent(:delete_all) }
     it { expect(play).to have_many(:lines).through(:french_scenes) }
     it { expect(play).to have_many(:french_scenes).through(:scenes) }
     it { expect(play).to have_many(:scenes).through(:acts) }

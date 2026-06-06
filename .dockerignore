@@ -1,0 +1,8 @@
+log/
+tmp/
+data/
+.git/
+test_results.txt
+*.log
+.env
+.env.*

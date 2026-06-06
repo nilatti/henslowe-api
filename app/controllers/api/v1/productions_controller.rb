@@ -125,7 +125,8 @@ class ProductionsController < ApiController
 
   # DELETE /productions/1
   def destroy
-    @production.destroy
+    ProductionDestroyWorker.perform_async(@production.id)
+    head :no_content
   end
 
   def production_names
