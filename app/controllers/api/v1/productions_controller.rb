@@ -63,10 +63,9 @@ class ProductionsController < ApiController
           user_id: current_user.id
         )
       end
-      PlayCopyWorker.perform_async(
-        production_params['play_id'],
-        @production.id
-      )
+      play_id = production_params['play_id']
+      production_id = @production.id
+      Thread.new { CopyPlayForProduction.new(play_id: play_id, production_id: production_id).run }
     else
       render json: @production.errors, status: :unprocessable_entity
     end
@@ -125,7 +124,8 @@ class ProductionsController < ApiController
 
   # DELETE /productions/1
   def destroy
-    ProductionDestroyWorker.perform_async(@production.id)
+    production = @production
+    Thread.new { production.destroy }
     head :no_content
   end
 
