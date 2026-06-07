@@ -9,7 +9,7 @@ module Api
         auth = request.env['omniauth.auth']
 
         unless auth
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=oauth_failed"
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=oauth_failed", allow_other_host: true
           return
         end
 
@@ -26,9 +26,9 @@ module Api
             subscription_status: user.subscription_status
           }.to_query
 
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?token=#{token}&#{user_params}"
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?token=#{token}&#{user_params}", allow_other_host: true
         else
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=user_not_found&details=#{user.errors.full_messages.join(',')}"
+          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=user_not_found&details=#{user.errors.full_messages.join(',')}", allow_other_host: true
         end
       end
 
