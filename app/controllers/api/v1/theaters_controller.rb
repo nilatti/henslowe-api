@@ -59,7 +59,8 @@ class TheatersController < ApiController
 
   # DELETE /theaters/1
   def destroy
-    @theater.destroy
+    theater = @theater
+    Thread.new { theater.destroy }
     head :no_content
   end
 
