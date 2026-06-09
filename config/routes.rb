@@ -42,6 +42,7 @@ Rails.application.routes.draw do
           put :build_rehearsal_schedule
           get :skeleton
           get :full
+          get :user_conflicts
         end
         resources :stage_exits, shallow: true
         collection do

@@ -6,7 +6,9 @@ class ProductionsController < ApiController
     :update,
     :destroy,
     :skeleton,
-    :full
+    :full,
+    :user_conflicts, 
+    :build_rehearsal_schedule
   ]
 
   # GET /productions
@@ -212,7 +214,6 @@ class ProductionsController < ApiController
   end
 
   def build_rehearsal_schedule
-    set_production
     json_response(@production.as_json(include: [:theater]))
     rehearsal_schedule_pattern = params[:production][:rehearsal_schedule_pattern]
     BuildRehearsalScheduleWorker.perform_async(
@@ -226,6 +227,10 @@ class ProductionsController < ApiController
       rehearsal_schedule_pattern[:start_date],
       rehearsal_schedule_pattern[:start_time]
     )
+  end
+  def user_conflicts
+    jobs = Job.where(production: @production).where.not(user: nil).includes(user: :conflicts)
+    json_response(jobs.as_json(include: {user: {include: :conflicts}}))
   end
 
   private
