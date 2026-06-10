@@ -91,7 +91,7 @@ class SpecializationsController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def specialization_params
-      params.require(:specialization).permit(:description, :title)
+      params.require(:specialization).permit(:description, :production_admin, :theater_admin, :title)
     end
 end
   end

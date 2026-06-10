@@ -192,4 +192,21 @@ RSpec.describe 'jobs API', type: :request do
       expect(Specialization.find(json[5]['specialization_id']).title).to eq('Auditioner')
     end
   end
+
+  describe 'GET /jobs includes play id in production' do
+    let!(:production_with_play) { create(:production) }
+    let!(:job_for_production) { create(:job, production: production_with_play) }
+
+    before {
+      get '/api/v1/jobs', as: :json, params: { production_id: production_with_play.id }, headers: authenticated_header(user)
+    }
+
+    it 'returns successfully' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'includes the play id nested inside the production' do
+      expect(json.first['production']['play']['id']).to eq(production_with_play.play.id)
+    end
+  end
 end

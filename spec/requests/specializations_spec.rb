@@ -103,4 +103,63 @@ RSpec.describe 'Specializations API', type: :request do
       expect(response).to have_http_status(204)
     end
   end
+
+  describe 'POST with admin flags' do
+    context 'when production_admin is true' do
+      before {
+        post '/api/v1/specializations',
+             params: { specialization: { title: 'Director', production_admin: true } },
+             as: :json,
+             headers: authenticated_header(user)
+      }
+
+      it 'returns production_admin true in the response' do
+        expect(json['production_admin']).to eq(true)
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when theater_admin is true' do
+      before {
+        post '/api/v1/specializations',
+             params: { specialization: { title: 'Exec Director', theater_admin: true } },
+             as: :json,
+             headers: authenticated_header(user)
+      }
+
+      it 'returns theater_admin true in the response' do
+        expect(json['theater_admin']).to eq(true)
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+  end
+
+  describe 'PUT updates admin flags' do
+    before {
+      put "/api/v1/specializations/#{specialization_id}",
+          params: { specialization: { production_admin: true, theater_admin: true } },
+          as: :json,
+          headers: authenticated_header(user)
+    }
+
+    it 'returns production_admin true in the response' do
+      expect(json['production_admin']).to eq(true)
+    end
+
+    it 'returns theater_admin true in the response' do
+      expect(json['theater_admin']).to eq(true)
+    end
+
+    it 'persists both admin flags on the record' do
+      updated = Specialization.find(specialization_id)
+      expect(updated.production_admin).to eq(true)
+      expect(updated.theater_admin).to eq(true)
+    end
+  end
 end

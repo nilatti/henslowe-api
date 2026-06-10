@@ -175,4 +175,37 @@ RSpec.describe 'Productions API' do
       expect(json).not_to include(other_theater.id)
     end
   end
+
+  describe 'GET /api/productions/:id/user_conflicts' do
+    let!(:production) { productions.first }
+    let!(:cast_user) { create(:user) }
+    let!(:cast_job) { create(:job, production: production, user: cast_user) }
+    let!(:user_conflict) { create(:conflict, user: cast_user) }
+
+    before { get "/api/v1/productions/#{production.id}/user_conflicts", as: :json, headers: authenticated_header(user) }
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'returns an array of jobs with nested users and conflicts' do
+      expect(json).to be_an(Array)
+      result = json.find { |j| j['user']['id'] == cast_user.id }
+      expect(result).not_to be_nil
+      expect(result['user']['conflicts']).to be_an(Array)
+      expect(result['user']['conflicts'].first['id']).to eq(user_conflict.id)
+    end
+
+    it 'excludes jobs with no user' do
+      expect(json.map { |j| j['user'] }).to all(be_present)
+    end
+
+    context 'when the production does not exist' do
+      before { get "/api/v1/productions/0/user_conflicts", as: :json, headers: authenticated_header(user) }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

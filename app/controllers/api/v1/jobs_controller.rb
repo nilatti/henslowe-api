@@ -21,7 +21,7 @@ class JobsController < ApiController
           :theater,
           :character,
           production: {
-            include: {play: { only: [:title]}}
+            include: {play: { only: [:id, :title]}}
           },
           user: {
             include: [:conflicts, :jobs]
@@ -41,7 +41,7 @@ class JobsController < ApiController
           :theater,
           :user,
           production: {
-            include: {play: { only: [:title]}}
+            include: {play: { only: [:id, :title]}}
           }
         ]
       )
@@ -62,7 +62,7 @@ class JobsController < ApiController
           :theater,
           :user,
           production: {
-            include: {play: { only: [:title]}}
+            include: {play: { only: [:id, :title]}}
           }
         ]
       ), status: :created

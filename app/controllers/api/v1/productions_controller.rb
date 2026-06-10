@@ -228,10 +228,11 @@ class ProductionsController < ApiController
       rehearsal_schedule_pattern[:start_time]
     )
   end
-  def user_conflicts
-    jobs = Job.where(production: @production).where.not(user: nil).includes(user: :conflicts)
-    json_response(jobs.as_json(include: {user: {include: :conflicts}}))
+def user_conflicts
+    users = User.joins(:jobs).where(jobs: { production: @production }).includes(:conflicts).distinct
+    render json: users.map { |user| { user: user, conflicts: user.conflicts } }
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -30,6 +30,7 @@ class FrenchScenesController < ApiController
   def create
     @french_scene = FrenchScene.new(french_scene_params)
     if @french_scene.save
+        copy_prior_on_stages
         json_response(@french_scene.as_json(
           methods: :pretty_name,
           include: [
@@ -94,6 +95,20 @@ class FrenchScenesController < ApiController
   end
 
   private
+
+    def copy_prior_on_stages
+      prior = @scene.french_scenes.where.not(id: @french_scene.id).order(:number).last
+      return unless prior
+      prior.on_stages.each do |os|
+        @french_scene.on_stages.create!(
+          character_id: os.character_id,
+          character_group_id: os.character_group_id,
+          user_id: os.user_id,
+          nonspeaking: os.nonspeaking,
+          description: os.description
+        )
+      end
+    end
 
     # def build_on_stages(character_ids: [], french_scene:, character_group_ids: [])
     #   character_ids && character_ids.each do |character_id|

@@ -20,6 +20,7 @@ class CharactersController < ApiController
     @character = Character.new(character_params)
 
     if @character.save
+      create_actor_job_if_production_play
       render json: @character, status: :created
     else
       render json: @character.errors, status: :unprocessable_entity
@@ -50,6 +51,22 @@ class CharactersController < ApiController
 
     def set_character
       @character = Character.find(params[:id])
+    end
+
+    def create_actor_job_if_production_play
+      play = @character.play
+      return unless play.production_id
+      production = play.production
+      specialization = Specialization.find_by(title: 'Actor')
+      return unless specialization
+      Job.create!(
+        character: @character,
+        production: production,
+        specialization: specialization,
+        theater: production.theater,
+        start_date: production.start_date,
+        end_date: production.end_date
+      )
     end
 
     # Only allow a trusted parameter "white list" through.

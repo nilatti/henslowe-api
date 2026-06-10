@@ -72,7 +72,7 @@ class ScenesController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def scene_params
-      params.require(:scene).permit(:act_id, :end_page, :number, :start_page, :summary)
+      params.require(:scene).permit(:act_id, :end_page, :heading, :number, :start_page, :summary)
     end
 end
   end

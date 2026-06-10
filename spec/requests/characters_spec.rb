@@ -116,4 +116,37 @@ RSpec.describe 'Characters API' do
       expect(response).to have_http_status(204)
     end
   end
+
+  describe 'actor job creation on POST' do
+    context 'when the play belongs to a production' do
+      let!(:specialization) { create(:specialization, :actor) }
+      let!(:production) { create(:production) }
+      let!(:production_play) { create(:play, production: production) }
+
+      it 'creates an Actor job for the new character' do
+        expect {
+          post "/api/v1/plays/#{production_play.id}/characters",
+               params: { character: { name: 'Prince Hal', play_id: production_play.id } },
+               as: :json,
+               headers: authenticated_header(user)
+        }.to change(Job, :count).by(1)
+
+        created_job = Job.last
+        expect(created_job.specialization.title).to eq('Actor')
+        expect(created_job.production).to eq(production)
+        expect(created_job.character.name).to eq('Prince Hal')
+      end
+    end
+
+    context 'when the play is canonical (no production)' do
+      it 'does not create a job' do
+        expect {
+          post "/api/v1/plays/#{play.id}/characters",
+               params: { character: { name: 'Falstaff', play_id: play.id } },
+               as: :json,
+               headers: authenticated_header(user)
+        }.not_to change(Job, :count)
+      end
+    end
+  end
 end
