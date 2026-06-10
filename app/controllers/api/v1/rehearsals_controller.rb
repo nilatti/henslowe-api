@@ -6,7 +6,7 @@ class RehearsalsController < ApiController
   # GET /acts
   def index
     @rehearsals = @parent.rehearsals
-    render json: @rehearsals.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}])
+    render json: @rehearsals.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}])
   end
 
   # GET /acts/1
@@ -18,7 +18,7 @@ class RehearsalsController < ApiController
   def create
     @rehearsal = Rehearsal.new(rehearsal_params)
     if @rehearsal.save
-      json_response(@rehearsal.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
+      json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
     else
       render json: @rehearsal.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class RehearsalsController < ApiController
   # PATCH/PUT /acts/1
   def update
     @rehearsal.update(rehearsal_params)
-    json_response(@rehearsal.as_json(include: [:users, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
+    json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
   end
 
   # DELETE /acts/1
