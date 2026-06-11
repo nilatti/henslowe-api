@@ -23,7 +23,7 @@ class FrenchScenesController < ApiController
             include: :characters
           },
           songs: {
-            include: :characters
+            include: [:characters, :character_groups]
           },
         ]
       ))

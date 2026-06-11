@@ -106,7 +106,11 @@ Rails.application.routes.draw do
               resources :lines, shallow: true
               resources :entrance_exits, shallow: true
               resources :on_stages, shallow: true
-              resources :songs, shallow: true
+              resources :songs, shallow: true do
+                member do
+                  patch :move
+                end
+              end
               resources :rehearsals, shallow: true
             end
             resources :rehearsals, shallow: true

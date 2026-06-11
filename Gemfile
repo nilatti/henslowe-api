@@ -50,6 +50,7 @@ gem 'numbers_and_words'
 #manage who can see things
 gem 'cancancan'
 gem 'jwt', '~> 3.0'
+gem 'acts_as_list'
 gem 'stripe'
 
 #configure request timeouts
