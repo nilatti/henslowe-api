@@ -56,6 +56,7 @@ class SpecializationsController < ApiController
   # POST /specializations
   def create
     @specialization = Specialization.new(specialization_params)
+    authorize! :create, @specialization
 
     if @specialization.save
       render json: @specialization, status: :created

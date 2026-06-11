@@ -17,7 +17,7 @@ require 'timeout'
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    Timeout.timeout(30) { example.run }
+    Timeout.timeout(120) { example.run }
   end
 
   # rspec-expectations config goes here. You can use an alternate

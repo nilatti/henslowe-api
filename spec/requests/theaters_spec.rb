@@ -4,9 +4,10 @@ RSpec.describe 'theaters API', type: :request do
   # initialize test data
   let!(:theaters) { create_list(:theater, 10, :has_spaces) }
   let(:theater_id) { theaters.first.id }
-  let!(:user) { create(:user)}
+  let!(:user) { create(:user, role: 'superadmin') }
   # Test suite for GET /theaters
   describe 'GET /theaters' do
+    before(:context) { Theater.destroy_all }
     # make HTTP get request before each example
     before { get '/api/v1/theaters', headers: authenticated_header(user) }
 
@@ -106,6 +107,7 @@ RSpec.describe 'theaters API', type: :request do
 
   # Test suite for theater_names
   describe 'GET /api/theaters/theater_names' do
+    before(:context) { Theater.destroy_all }
     before { get '/api/v1/theaters/theater_names', headers: authenticated_header(user) }
 
     it 'returns theaters ONLY NAMES' do

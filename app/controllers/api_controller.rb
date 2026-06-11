@@ -1,6 +1,7 @@
 class ApiController < ActionController::API
   include ExceptionHandler
   include Response
+  include CanCan::ControllerAdditions
 
   before_action :authenticate_request
 
@@ -24,6 +25,10 @@ class ApiController < ActionController::API
 
   def current_user
     @current_user
+  end
+
+  def current_ability
+    @current_ability ||= Ability.new(current_user)
   end
 
   def json_response(object, status = :ok)

@@ -130,6 +130,23 @@ RSpec.describe 'jobs API', type: :request do
     end
   end
 
+  describe 'character_group_id param' do
+    it 'permits character_group_id when creating a job' do
+      character_group = create(:character_group)
+      test_job = build(:job, :actor_job)
+      post '/api/v1/jobs', params: {
+        job: {
+          character_group_id: character_group.id,
+          user_id: test_job.user.id,
+          production_id: test_job.production.id,
+          specialization_id: test_job.specialization.id,
+        }
+      }, as: :json, headers: authenticated_header(user)
+      expect(response).to have_http_status(201)
+      expect(json['character_group_id']).to eq(character_group.id)
+    end
+  end
+
   # Test suite for DELETE /jobs/:id
   describe 'DELETE /jobs/:id' do
     before { delete "/api/v1/jobs/#{job_id}", as: :json, headers: authenticated_header(user) }

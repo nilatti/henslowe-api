@@ -64,14 +64,17 @@ RSpec.configure do |config|
   config.include DefaultFormat, type: :request
   config.include FactoryBot::Syntax::Methods
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation, except:  %w(ar_internal_metadata))
+    DatabaseCleaner.clean_with(:truncation, except: %w(ar_internal_metadata))
     DatabaseCleaner.strategy = :transaction
   end
 
   config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+    DatabaseCleaner.strategy = example.metadata[:deletion] ? :deletion : :transaction
+    DatabaseCleaner.cleaning { example.run }
+  end
+
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
   end
 
   config.infer_spec_type_from_file_location!

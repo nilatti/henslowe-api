@@ -53,14 +53,15 @@ class TheatersController < ApiController
   end
   # PATCH/PUT /theaters/1
   def update
+    authorize! :update, @theater
     @theater.update(theater_params)
     json_response(@theater.as_json(include: [:spaces, productions: {include: [:play]}]))
   end
 
   # DELETE /theaters/1
   def destroy
-    theater = @theater
-    Thread.new { theater.destroy }
+    authorize! :destroy, @theater
+    TheaterDestroyWorker.perform_async(@theater.id)
     head :no_content
   end
 

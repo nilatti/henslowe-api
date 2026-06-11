@@ -53,6 +53,7 @@ class ProductionsController < ApiController
   # POST /productions
   def create
     @production = Production.new(production_params)
+    authorize! :create, @production
 
     if @production.save
       json_response(@production.as_json(include: [:theater]), :created)
@@ -67,7 +68,7 @@ class ProductionsController < ApiController
       end
       play_id = production_params['play_id']
       production_id = @production.id
-      Thread.new { CopyPlayForProduction.new(play_id: play_id, production_id: production_id).run }
+      PlayCopyWorker.perform_async(play_id, production_id)
     else
       render json: @production.errors, status: :unprocessable_entity
     end
@@ -75,6 +76,7 @@ class ProductionsController < ApiController
 
   # PATCH/PUT /productions/1
   def update
+    authorize! :update, @production
     if @production.update(production_params)
       json_response(@production.as_json(include:
           [
@@ -126,8 +128,8 @@ class ProductionsController < ApiController
 
   # DELETE /productions/1
   def destroy
-    production = @production
-    Thread.new { production.destroy }
+    authorize! :destroy, @production
+    ProductionDestroyWorker.perform_async(@production.id)
     head :no_content
   end
 

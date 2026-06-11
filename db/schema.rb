@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_15_131228) do
-
+ActiveRecord::Schema[7.2].define(version: 2026_06_10_130000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -107,8 +106,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "xml_id"
     t.string "corresp"
     t.bigint "play_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["play_id"], name: "index_character_groups_on_play_id"
   end
 
@@ -146,6 +145,14 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.bigint "entrance_exit_id", null: false
   end
 
+  create_table "characters_songs", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "song_id", null: false
+    t.bigint "character_id", null: false
+    t.index ["character_id"], name: "index_characters_songs_on_character_id"
+    t.index ["song_id", "character_id"], name: "index_characters_songs_on_song_id_and_character_id", unique: true
+    t.index ["song_id"], name: "index_characters_songs_on_song_id"
+  end
+
   create_table "characters_stage_directions", id: false, charset: "latin1", force: :cascade do |t|
     t.bigint "character_id", null: false
     t.bigint "stage_direction_id", null: false
@@ -160,8 +167,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "category"
     t.date "start_date"
     t.date "end_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "days_of_week"
     t.index ["space_id"], name: "index_conflict_patterns_on_space_id"
     t.index ["user_id"], name: "index_conflict_patterns_on_user_id"
@@ -173,8 +180,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.datetime "end_time"
     t.string "category"
     t.bigint "space_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "regular", default: false
     t.bigint "conflict_pattern_id"
     t.index ["conflict_pattern_id"], name: "index_conflicts_on_conflict_pattern_id"
@@ -246,8 +253,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "line_number"
     t.string "content"
     t.bigint "french_scene_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["french_scene_id"], name: "index_labels_on_french_scene_id"
   end
 
@@ -261,8 +268,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "prev"
     t.string "kind"
     t.string "xml_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "character_group_id"
     t.text "original_content", size: :medium
     t.text "new_content", size: :medium
@@ -310,8 +317,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.text "redirect_uri"
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -325,6 +332,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.datetime "updated_at", null: false
     t.boolean "nonspeaking", default: false
     t.bigint "character_group_id"
+    t.boolean "offstage", default: false
     t.index ["character_group_id"], name: "index_on_stages_on_character_group_id"
     t.index ["french_scene_id", "character_group_id"], name: "index_on_stages_on_french_scene_id_and_character_group_id", unique: true
     t.index ["french_scene_id", "character_id"], name: "index_on_stages_on_french_scene_id_and_character_id", unique: true
@@ -367,8 +375,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.text "notes"
     t.string "title"
     t.bigint "production_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "text_unit"
     t.index ["production_id"], name: "index_rehearsals_on_production_id"
     t.index ["space_id"], name: "index_rehearsals_on_space_id"
@@ -398,14 +406,22 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.index ["act_id"], name: "index_scenes_on_act_id"
   end
 
+  create_table "songs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "french_scene_id", null: false
+    t.string "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["french_scene_id"], name: "index_songs_on_french_scene_id"
+  end
+
   create_table "sound_cues", charset: "latin1", force: :cascade do |t|
     t.string "xml_id"
     t.string "line_number"
     t.string "kind"
     t.bigint "french_scene_id", null: false
     t.text "notes"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "original_content"
     t.text "new_content"
     t.index ["french_scene_id"], name: "index_sound_cues_on_french_scene_id"
@@ -450,8 +466,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "kind"
     t.string "xml_id"
     t.text "original_content", size: :medium
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "new_content", size: :medium
     t.index ["french_scene_id"], name: "index_stage_directions_on_french_scene_id"
   end
@@ -527,8 +543,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
     t.string "xml_id"
     t.bigint "line_id"
     t.string "line_number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "play_id", null: false
     t.index ["line_id"], name: "index_words_on_line_id"
     t.index ["play_id"], name: "index_words_on_play_id"
@@ -539,6 +555,8 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
   add_foreign_key "acts", "plays"
   add_foreign_key "character_groups", "plays"
   add_foreign_key "characters", "character_groups"
+  add_foreign_key "characters_songs", "characters"
+  add_foreign_key "characters_songs", "songs"
   add_foreign_key "conflict_patterns", "spaces"
   add_foreign_key "conflict_patterns", "users"
   add_foreign_key "conflicts", "conflict_patterns"
@@ -565,6 +583,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_131228) do
   add_foreign_key "productions", "theaters"
   add_foreign_key "rehearsals", "productions"
   add_foreign_key "rehearsals", "spaces"
+  add_foreign_key "songs", "french_scenes"
   add_foreign_key "sound_cues", "french_scenes"
   add_foreign_key "space_agreements", "spaces"
   add_foreign_key "space_agreements", "theaters"

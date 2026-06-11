@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Specializations API', type: :request do
   # initialize test data
-  let!(:user) { create(:user)}
+  let!(:user) { create(:user, role: 'superadmin') }
   let!(:specializations) { create_list(:specialization, 4) }
   let(:specialization_id) { specializations.first.id }
 

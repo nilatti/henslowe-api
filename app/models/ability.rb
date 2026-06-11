@@ -6,19 +6,16 @@ class Ability
   def initialize(user)
     user ||= User.new
     return unless user.present?
-      cannot :index, User
-      # cannot :show, User
-      can :read, User
-      can :manage, User, { id: user.id } #user can view their own records
-      can :show, User do |target_user|
-        if user.jobs_overlap(target_user) == "theater admin"
-          true
-        end
-      end
 
-    return unless user.superadmin?
-      can :index, User
+    cannot :index, User
+    can :read, User
+    can :manage, User, { id: user.id }
+    can :show, User do |target_user|
+      user.jobs_overlap(target_user) == "theater admin"
+    end
+
     if user.superadmin?
+      can :index, User
       can :manage, :all
 
     elsif user.regular?

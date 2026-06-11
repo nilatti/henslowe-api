@@ -192,8 +192,8 @@ RSpec.describe 'Productions API' do
       expect(json).to be_an(Array)
       result = json.find { |j| j['user']['id'] == cast_user.id }
       expect(result).not_to be_nil
-      expect(result['user']['conflicts']).to be_an(Array)
-      expect(result['user']['conflicts'].first['id']).to eq(user_conflict.id)
+      expect(result['conflicts']).to be_an(Array)
+      expect(result['conflicts'].first['id']).to eq(user_conflict.id)
     end
 
     it 'excludes jobs with no user' do

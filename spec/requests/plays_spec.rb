@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'Plays API' do
   # Initialize the test data
-  let!(:user) { create(:user)}
+  let!(:user) { create(:user, role: 'superadmin') }
   let!(:author) { create(:author) }
   let!(:plays) { create_list(:play, 5, :with_full_structure, author_id: author.id, canonical: true) }
   let!(:other_author_plays) { create_list(:play, 5, :with_full_structure, canonical: true)}

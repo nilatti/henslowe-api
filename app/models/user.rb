@@ -34,7 +34,7 @@ class User < ApplicationRecord
   def castings_for_production(production)
     jobs = production_jobs(production)
     acting_jobs = jobs.select { |job| job.specialization.title == "Actor"}
-    return acting_jobs.map(&:character).sort {|a, b| a.name <=> b.name}
+    return acting_jobs.map(&:character).compact.sort {|a, b| a.name <=> b.name}
   end
 
   def french_scenes_for_production(production)
@@ -52,8 +52,11 @@ class User < ApplicationRecord
         french_scenes[on_stage.french_scene].push(report_string)
       end
     end
-    extras.each do |extra|
-      french_scenes[extra.french_scene].push(extra.name)
+    character_group_jobs = production_jobs(production).select { |job| job.specialization.title == "Actor" && job.character_group_id.present? }
+    character_group_jobs.map(&:character_group).compact.uniq.each do |character_group|
+      character_group.on_stages.each do |on_stage|
+        french_scenes[on_stage.french_scene].push(character_group.name)
+      end
     end
     return french_scenes #this is a hash of french scenes (keys), with an array of characters as the values
   end

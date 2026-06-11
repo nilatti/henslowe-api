@@ -22,6 +22,9 @@ class FrenchScenesController < ApiController
           entrance_exits: {
             include: :characters
           },
+          songs: {
+            include: :characters
+          },
         ]
       ))
   end
@@ -39,6 +42,9 @@ class FrenchScenesController < ApiController
               include: [:character, :character_group],
             },
             entrance_exits: {
+              include: :characters
+            },
+            songs: {
               include: :characters
             },
           ]
@@ -59,6 +65,9 @@ class FrenchScenesController < ApiController
               include: [:character, :character_group],
             },
             entrance_exits: {
+              include: :characters
+            },
+            songs: {
               include: :characters
             },
           ]

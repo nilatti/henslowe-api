@@ -16,6 +16,10 @@ FactoryBot.define do
     program_name { Faker::Name.name }
     role { "regular" }
     state { Faker::Address.state_abbr }
+
+    trait :superadmin do
+      role { "superadmin" }
+    end
     street_address { Faker::Address.street_address }
     timezone { 'EST' }
     website { Faker::Internet.url }

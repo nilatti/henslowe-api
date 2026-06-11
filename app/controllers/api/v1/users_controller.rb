@@ -178,6 +178,7 @@ class UsersController < ApiController
   end
 
   def destroy
+    authorize! :destroy, @user
     @user.destroy
     head :no_content
   end

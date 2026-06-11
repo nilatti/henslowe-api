@@ -100,6 +100,7 @@ class PlaysController < ApiController
 
   # DELETE /plays/1
   def destroy
+    authorize! :destroy, @play
     @play.destroy
     head :no_content
   end
@@ -160,7 +161,7 @@ class PlaysController < ApiController
       production: {only: [:lines_per_minute]},
       characters: {only: [:id, :name, :age, :gender, :description, :original_line_count, :new_line_count, :character_group_id, :play_id]},
       character_groups: {only: [:name, :id]},
-      acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number]}}, only: [:id, :number, :heading, :summary]}}, only: [:id, :number, :summary]},
+      acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number], include: {songs: {only: [:id, :title]}}}}, only: [:id, :number, :heading, :summary]}}, only: [:id, :number, :summary]},
       author: {only: [:first_name, :id, :last_name]}
       },
       only: [:canonical, :id, :production_id, :synopsis, :text_notes, :title]

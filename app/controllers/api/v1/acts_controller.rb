@@ -16,7 +16,7 @@ class ActsController < ApiController
 
   # GET /acts/1
   def show
-    render json: @act.as_json(include: {scenes: { include: :french_scenes } })
+    render json: @act.as_json(include: {scenes: { include: { french_scenes: { include: { songs: { only: [:id, :title] } } } } } })
   end
 
   # POST /acts
@@ -33,7 +33,7 @@ class ActsController < ApiController
   # PATCH/PUT /acts/1
   def update
     if @act.update(act_params)
-      render json: @act.as_json(include: {scenes: { include: :french_scenes } })
+      render json: @act.as_json(include: {scenes: { include: { french_scenes: { include: { songs: { only: [:id, :title] } } } } } })
     else
       render json: @act.errors, status: :unprocessable_entity
     end

@@ -16,5 +16,19 @@ FactoryBot.define do
     trait :admin do
       theater_admin {true}
     end
+
+    trait :theater_admin do
+      theater_admin {true}
+    end
+
+    trait :artistic_director do
+      title { 'Artistic Director' }
+      theater_admin {true}
+    end
+
+    trait :director do
+      title { 'Director' }
+      production_admin {true}
+    end
   end
 end

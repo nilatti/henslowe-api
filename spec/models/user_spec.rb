@@ -48,6 +48,49 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "french_scenes_for_production" do
+    let!(:user) { create(:user) }
+    let!(:production) { create(:production) }
+    let!(:character) { create(:character) }
+    let!(:actor_job) { create(:job, :actor_job, user: user, production: production, character: character) }
+
+    it "appends (offstage) to the report string for offstage on_stages" do
+      on_stage = create(:on_stage, character: character, offstage: true)
+      result = user.french_scenes_for_production(production)
+      expect(result[on_stage.french_scene]).to include("#{character.name}(offstage)")
+    end
+
+    it "does not append (offstage) for onstage on_stages" do
+      on_stage = create(:on_stage, character: character, offstage: false)
+      result = user.french_scenes_for_production(production)
+      expect(result[on_stage.french_scene].first).not_to include("(offstage)")
+    end
+
+    it "appends * for nonspeaking and (offstage) for offstage independently" do
+      on_stage = create(:on_stage, character: character, nonspeaking: true, offstage: true)
+      result = user.french_scenes_for_production(production)
+      expect(result[on_stage.french_scene]).to include("#{character.name}*(offstage)")
+    end
+
+    context "with character group jobs" do
+      let!(:character_group) { create(:character_group) }
+      let!(:group_job) { create(:job, :actor_job, user: user, production: production, character_group: character_group) }
+
+      it "includes character group name for on_stages the user appears in via group" do
+        on_stage = create(:on_stage, character_group: character_group)
+        result = user.french_scenes_for_production(production)
+        expect(result[on_stage.french_scene]).to include(character_group.name)
+      end
+
+      it "does not include character group on_stages from other productions" do
+        other_production = create(:production)
+        create(:on_stage, character_group: character_group)
+        result = user.french_scenes_for_production(other_production)
+        expect(result.values.flatten).not_to include(character_group.name)
+      end
+    end
+  end
+
   it "it sorts users" do
     user2 = create(:user, last_name: "Lebowski", first_name: "Dude", email: "dude@test.com")
     user3 = create(:user, last_name: "Lebowski", first_name: "John", email: "john@test.com")

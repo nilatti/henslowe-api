@@ -55,6 +55,10 @@ RSpec.describe 'French Scenes API' do
       it 'returns on_stages' do
         expect(json['on_stages'].size).to eq(1)
       end
+
+      it 'includes offstage in each on_stage' do
+        expect(json['on_stages'].first).to have_key('offstage')
+      end
     end
 
     context 'when french scene does not exist' do
@@ -67,6 +71,18 @@ RSpec.describe 'French Scenes API' do
       it 'returns a not found message' do
         expect(response.body).to match(/Couldn't find FrenchScene/)
       end
+    end
+  end
+
+  describe 'GET on_stage with character_group' do
+    let!(:cg_on_stage) { create(:on_stage, french_scene: french_scene, character_group: character_group) }
+
+    before { get "/api/v1/french_scenes/#{id}", as: :json, headers: authenticated_header(user) }
+
+    it 'includes character_group data when on_stage has a character_group' do
+      cg_os_json = json['on_stages'].find { |os| os['character_group_id'] == character_group.id }
+      expect(cg_os_json).to have_key('character_group')
+      expect(cg_os_json['character_group']['name']).to eq(character_group.name)
     end
   end
 
@@ -124,6 +140,16 @@ RSpec.describe 'French Scenes API' do
         updated_french_scene = FrenchScene.find(id)
         expect(updated_french_scene.characters).to be_empty
         expect(updated_french_scene.character_groups.size).to eq(1)
+      end
+
+      it 'permits offstage in nested on_stages_attributes' do
+        put "/api/v1/french_scenes/#{id}", params: {
+          french_scene: {
+            on_stages_attributes: [{ id: on_stage.id, offstage: true }]
+          }
+        }, as: :json, headers: authenticated_header(user)
+        expect(response).to have_http_status(200)
+        expect(on_stage.reload.offstage).to be true
       end
     end
 
