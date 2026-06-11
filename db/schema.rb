@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -115,6 +115,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_120000) do
     t.bigint "character_group_id", null: false
     t.bigint "entrance_exit_id", null: false
     t.index ["character_group_id", "entrance_exit_id"], name: "index_character_groups_entrance_exits"
+  end
+
+  create_table "character_groups_songs", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "song_id", null: false
+    t.bigint "character_group_id", null: false
+    t.index ["character_group_id"], name: "index_character_groups_songs_on_character_group_id"
+    t.index ["song_id", "character_group_id"], name: "index_character_groups_songs_on_song_id_and_character_group_id", unique: true
+    t.index ["song_id"], name: "index_character_groups_songs_on_song_id"
   end
 
   create_table "character_groups_stage_directions", id: false, charset: "latin1", force: :cascade do |t|
@@ -555,6 +563,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_120000) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "acts", "plays"
   add_foreign_key "character_groups", "plays"
+  add_foreign_key "character_groups_songs", "character_groups"
+  add_foreign_key "character_groups_songs", "songs"
   add_foreign_key "characters", "character_groups"
   add_foreign_key "characters_songs", "characters"
   add_foreign_key "characters_songs", "songs"
