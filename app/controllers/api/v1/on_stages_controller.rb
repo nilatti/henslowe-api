@@ -61,6 +61,7 @@ class OnStagesController < ApiController
         :description,
         :french_scene_id,
         :nonspeaking,
+        :offstage,
         :user_id,
       )
     end

@@ -46,6 +46,9 @@ class User < ApplicationRecord
         if on_stage.nonspeaking
           report_string += "*"
         end
+        if on_stage.offstage
+          report_string += "(offstage)"
+        end
         french_scenes[on_stage.french_scene].push(report_string)
       end
     end

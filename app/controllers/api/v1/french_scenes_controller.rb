@@ -17,7 +17,7 @@ class FrenchScenesController < ApiController
         include: [
           :characters,
           on_stages: {
-            include: :character,
+            include: [:character, :character_group],
           },
           entrance_exits: {
             include: :characters
@@ -36,7 +36,7 @@ class FrenchScenesController < ApiController
           include: [
             :characters,
             on_stages: {
-              include: :character,
+              include: [:character, :character_group],
             },
             entrance_exits: {
               include: :characters
@@ -56,7 +56,7 @@ class FrenchScenesController < ApiController
           include: [
             :characters,
             on_stages: {
-              include: :character,
+              include: [:character, :character_group],
             },
             entrance_exits: {
               include: :characters
@@ -105,6 +105,7 @@ class FrenchScenesController < ApiController
           character_group_id: os.character_group_id,
           user_id: os.user_id,
           nonspeaking: os.nonspeaking,
+          offstage: os.offstage,
           description: os.description
         )
       end
@@ -162,6 +163,7 @@ class FrenchScenesController < ApiController
           :french_scene_id,
           :id,
           :nonspeaking,
+          :offstage,
           :updated_at,
           :user_id,
           :_destroy

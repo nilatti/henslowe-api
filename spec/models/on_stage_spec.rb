@@ -44,4 +44,16 @@ RSpec.describe OnStage, type: :model do
     it { expect(on_stage).to belong_to(:user).optional }
     it { expect(on_stage).to belong_to(:french_scene).optional }
   end
+
+  describe "offstage attribute" do
+    it "defaults to false" do
+      saved = create(:on_stage)
+      expect(saved.offstage).to be false
+    end
+
+    it "can be set to true" do
+      saved = create(:on_stage, offstage: true)
+      expect(saved.offstage).to be true
+    end
+  end
 end

@@ -110,7 +110,7 @@ class JobsController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def job_params
-      params.require(:job).permit(:character_id, :end_date, :id, :production_id, :specialization_id, :start_date, :theater_id, :user_id)
+      params.require(:job).permit(:character_id, :character_group_id, :end_date, :id, :production_id, :specialization_id, :start_date, :theater_id, :user_id)
     end
 end
   end

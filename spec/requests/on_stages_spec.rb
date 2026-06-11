@@ -107,6 +107,18 @@ RSpec.describe 'OnStages API' do
         updated_on_stage = OnStage.find(id)
         expect(updated_on_stage.character.id).to match(character.id)
       end
+
+      it 'can set offstage to true' do
+        put "/api/v1/on_stages/#{id}", params: { on_stage: { offstage: true } }, as: :json, headers: authenticated_header(user)
+        expect(response).to have_http_status(200)
+        expect(OnStage.find(id).offstage).to be true
+      end
+
+      it 'can clear offstage back to false' do
+        on_stage.update!(offstage: true)
+        put "/api/v1/on_stages/#{id}", params: { on_stage: { offstage: false } }, as: :json, headers: authenticated_header(user)
+        expect(OnStage.find(id).offstage).to be false
+      end
     end
 
     context 'when the entrance exit does not exist' do
