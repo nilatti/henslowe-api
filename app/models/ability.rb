@@ -27,6 +27,12 @@ class Ability
         user.production_admin?(production) || user.theater_admin?(production.theater)
       end
 
+      can :manage, ProductionPhase do |pp|
+        user.production_admin?(pp.production) || user.theater_admin?(pp.production.theater)
+      end
+
+      can :read, Phase
+
       can :manage, Play do |play|
         if play.canonical?
           false

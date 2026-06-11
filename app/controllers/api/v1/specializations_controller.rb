@@ -6,50 +6,24 @@ class SpecializationsController < ApiController
   # GET /specializations
   def index
     @specializations = Specialization.all
-
-    render json: @specializations
+    render json: @specializations.as_json(include: [:default_start_phase, :default_end_phase])
   end
 
   # GET /specializations/1
   def show
     json_response(@specialization.as_json(
-      include:{
+      include: {
+        default_start_phase: {},
+        default_end_phase: {},
         jobs: {
           include: [
-            character: {
-              only: [
-                :name,
-                :xml_id
-              ]
-            },
-            production: {
-              only: [
-                play: {
-                  only: [
-                    :title
-                  ]
-                }
-              ]
-            },
-            theater: {
-              only: [
-                :id,
-                :name
-              ]
-            },
-            user: {
-              only: [
-                :email,
-                :fake,
-                :first_name,
-                :id,
-                :last_name,
-                :preferred_name,
-                :program_name
-              ]
-            }
+            character: { only: [:name, :xml_id] },
+            production: { only: [play: { only: [:title] }] },
+            theater: { only: [:id, :name] },
+            user: { only: [:email, :fake, :first_name, :id, :last_name, :preferred_name, :program_name] }
           ]
-        }}
+        }
+      }
     ))
   end
 
@@ -68,7 +42,7 @@ class SpecializationsController < ApiController
   # PATCH/PUT /specializations/1
   def update
     if @specialization.update(specialization_params)
-      json_response(@specialization.as_json)
+      json_response(@specialization.as_json(include: [:default_start_phase, :default_end_phase]))
     else
       render json: @specialization.errors, status: :unprocessable_entity
     end
@@ -92,7 +66,7 @@ class SpecializationsController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def specialization_params
-      params.require(:specialization).permit(:description, :production_admin, :theater_admin, :title)
+      params.require(:specialization).permit(:default_end_phase_id, :default_start_phase_id, :description, :production_admin, :theater_admin, :title)
     end
 end
   end

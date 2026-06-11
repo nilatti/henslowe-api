@@ -18,6 +18,7 @@ class RehearsalsController < ApiController
   def create
     @rehearsal = Rehearsal.new(rehearsal_params)
     if @rehearsal.save
+      apply_production_defaults(@rehearsal)
       json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
     else
       render json: @rehearsal.errors, status: :unprocessable_entity
@@ -55,6 +56,21 @@ class RehearsalsController < ApiController
 
     def set_rehearsal
       @rehearsal = Rehearsal.includes(:acts, :french_scenes, :scenes).find(params[:id])
+    end
+
+    def apply_production_defaults(rehearsal)
+      production = rehearsal.production
+      return unless production
+
+      if rehearsal.space_id.nil? && production.default_space_id.present?
+        rehearsal.update_column(:space_id, production.default_space_id)
+      end
+
+      default_user_ids = production.default_call_users.pluck(:id)
+      if default_user_ids.any?
+        existing_ids = rehearsal.user_ids
+        rehearsal.user_ids = (existing_ids + default_user_ids).uniq
+      end
     end
 
     # Only allow a trusted parameter "white list" through.

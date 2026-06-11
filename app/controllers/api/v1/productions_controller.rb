@@ -29,6 +29,8 @@ class ProductionsController < ApiController
 
           :theater,
           :stage_exits,
+          :default_space,
+          :default_call_users,
           jobs: {
             include: [
               :specialization,
@@ -82,6 +84,8 @@ class ProductionsController < ApiController
           [
             :theater,
             :stage_exits,
+            :default_space,
+            :default_call_users,
             play: {
               include: [
                 :characters,
@@ -145,7 +149,15 @@ class ProductionsController < ApiController
   end
 
   def skeleton
-    json_response(@production.as_json(include: [{theater: {only: [:id, :name]}}, {play: {only: [:id, :title]}}]))
+    json_response(@production.as_json(
+      include: [
+        {theater: {only: [:id, :name]}},
+        {play: {only: [:id, :title]}},
+        {default_space: {only: [:id, :name]}},
+        {production_phases: {include: :phase}}
+      ],
+      methods: [:default_call_user_ids]
+    ))
   end
 
   def full
@@ -245,6 +257,7 @@ def user_conflicts
     # Only allow a trusted parameter "white list" through.
     def production_params
       params.require(:production).permit(
+        :default_space_id,
         :end_date,
         :id,
         :lines_per_minute,
@@ -260,6 +273,7 @@ def user_conflicts
         :rehearsal_time_between_breaks,
         :theater_id,
         :start_date,
+        default_call_user_ids: [],
       )
     end
 end

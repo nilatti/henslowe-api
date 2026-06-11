@@ -35,9 +35,15 @@ Rails.application.routes.draw do
       end
       resources :jobs
       resources :specializations
+      resources :phases
       resources :productions do
         resources :jobs, shallow: true
         resources :rehearsals, shallow: true
+        resources :production_phases, shallow: true do
+          collection do
+            put :upsert
+          end
+        end
         member do
           put :build_rehearsal_schedule
           get :skeleton
