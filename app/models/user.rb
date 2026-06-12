@@ -79,15 +79,15 @@ class User < ApplicationRecord
     # current production peer can see less than production admin
     # current theater peer can see less than production peer
     # past peers can see limited amount
-    self_user_theaters = self.jobs.map {|job| job.theater.id}.to_set
-    target_user_theaters = target_user.jobs.map {|job| job.theater.id}.to_set
+    self_user_theaters = self.jobs.filter_map {|job| job.theater&.id}.to_set
+    target_user_theaters = target_user.jobs.filter_map {|job| job.theater&.id}.to_set
     theaters_overlap = self_user_theaters & target_user_theaters
     if theaters_overlap.size == 0
       return "none"
     end
     # check for current jobs for both users
-    target_user_current_jobs = target_user.jobs.select {|job| job.end_date < Date.today + 1.month }
-    self_user_current_jobs = self.jobs.select {|job| job.end_date < Date.today + 1.month }
+    target_user_current_jobs = target_user.jobs.select {|job| job.end_date.nil? || job.end_date >= Date.today }
+    self_user_current_jobs = self.jobs.select {|job| job.end_date.nil? || job.end_date >= Date.today }
     if target_user_current_jobs.size == 0 || self_user_current_jobs.size == 0
       return "past peer"
     end
@@ -95,8 +95,8 @@ class User < ApplicationRecord
     if theater_admin.size > 0
       return "theater admin"
     end
-    self_user_productions = self.jobs.map {|job| job.production.id}.to_set
-    target_user_productions = target_user.jobs.map {|job| job.production.id}.to_set
+    self_user_productions = self.jobs.filter_map {|job| job.production&.id}.to_set
+    target_user_productions = target_user.jobs.filter_map {|job| job.production&.id}.to_set
     productions_overlap = self_user_productions & target_user_productions
     if productions_overlap.size > 0
       production_admin = productions_overlap.select {|production_id| self.production_admin?(Production.find(production_id))}

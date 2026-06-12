@@ -6,12 +6,12 @@ class RehearsalsController < ApiController
   # GET /acts
   def index
     @rehearsals = @parent.rehearsals
-    render json: @rehearsals.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}])
+    render json: @rehearsals.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages], include: {scene: {only: [:id, :act_id]}}}, scenes: {methods: [:pretty_name, :find_on_stages]}])
   end
 
   # GET /acts/1
   def show
-    render json: @rehearsal.as_json(include: [:acts, :users, french_scenes: {methods: :pretty_name}, scenes: {methods: :pretty_name}])
+    render json: @rehearsal.as_json(include: [:acts, :users, french_scenes: {methods: :pretty_name, include: {scene: {only: [:id, :act_id]}}}, scenes: {methods: :pretty_name}])
   end
 
   # POST /acts
@@ -20,7 +20,7 @@ class RehearsalsController < ApiController
     if @rehearsal.save
       apply_production_defaults(@rehearsal)
       @rehearsal.sync_conflicts
-      json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
+      json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages], include: {scene: {only: [:id, :act_id]}}}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
     else
       render json: @rehearsal.errors, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class RehearsalsController < ApiController
   def update
     @rehearsal.update(rehearsal_params)
     @rehearsal.sync_conflicts
-    json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
+    json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages], include: {scene: {only: [:id, :act_id]}}}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
   end
 
   # DELETE /acts/1

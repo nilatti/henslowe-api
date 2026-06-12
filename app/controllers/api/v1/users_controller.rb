@@ -150,9 +150,14 @@ class UsersController < ApiController
               include: [
                 :acts,
                 :users,
+                :space,
                 french_scenes: {
-                  methods:
-                  :pretty_name
+                  methods: :pretty_name,
+                  include: {
+                    scene: {
+                      only: [:id, :act_id]
+                    }
+                  }
                 },
                 scenes: {
                   methods:

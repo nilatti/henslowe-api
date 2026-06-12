@@ -228,7 +228,6 @@ class ProductionsController < ApiController
   end
 
   def build_rehearsal_schedule
-    json_response(@production.as_json(include: [:theater]))
     rehearsal_schedule_pattern = params[:production][:rehearsal_schedule_pattern]
     BuildRehearsalScheduleWorker.perform_async(
       rehearsal_schedule_pattern[:break_length],
@@ -241,6 +240,7 @@ class ProductionsController < ApiController
       rehearsal_schedule_pattern[:start_date],
       rehearsal_schedule_pattern[:start_time]
     )
+    json_response(@production.as_json(include: [:theater]))
   end
 def user_conflicts
     users = User.joins(:jobs).where(jobs: { production: @production }).includes(:conflicts).distinct

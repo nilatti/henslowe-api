@@ -2,7 +2,7 @@ class BuildConflictsScheduleWorker
   include Sidekiq::Worker
 
   def perform(category, conflict_pattern_id, days_of_week, end_date, end_time, space_id, start_date, start_time, user_id)
-    days_of_week = days_of_week.split(',')
+    days_of_week = days_of_week.is_a?(Array) ? days_of_week : days_of_week.split(',')
     if space_id
       space_id = space_id.to_i
     else

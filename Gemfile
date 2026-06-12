@@ -34,6 +34,7 @@ gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem 'nio4r'#  , '=2.5.7'
 gem 'sidekiq', '~> 7.0'
+gem 'connection_pool', '~> 2.4'
 gem 'activerecord-import'
 # montrose provides recurrence logic
 gem "montrose"
