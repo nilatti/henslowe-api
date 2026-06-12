@@ -189,4 +189,82 @@ RSpec.describe 'Rehearsals API' do
       expect(response).to have_http_status(204)
     end
   end
+
+  describe 'conflict syncing' do
+    let!(:space) { create(:space) }
+    let!(:called_users) { create_list(:user, 2) }
+    let!(:timed_attributes) do
+      {
+        rehearsal: {
+          production_id: production.id,
+          start_time: Time.now,
+          end_time: Time.now + 1.hour,
+          space_id: space.id,
+          user_ids: called_users.map(&:id)
+        }
+      }
+    end
+
+    describe 'POST creates conflicts for space and called users' do
+      before { post "/api/v1/productions/#{production.id}/rehearsals", params: timed_attributes, as: :json, headers: authenticated_header(user) }
+
+      it 'creates a space conflict' do
+        rehearsal = Rehearsal.last
+        expect(rehearsal.conflicts.where(space: space, user: nil).count).to eq(1)
+      end
+
+      it 'creates a conflict for each called user' do
+        rehearsal = Rehearsal.last
+        expect(rehearsal.conflicts.where(user_id: called_users.map(&:id), space: nil).count).to eq(2)
+      end
+
+      it 'sets category to rehearsal' do
+        expect(Rehearsal.last.conflicts.pluck(:category).uniq).to eq(['rehearsal'])
+      end
+    end
+
+    describe 'PUT updates conflicts when users or space change' do
+      let!(:rehearsal) do
+        r = Rehearsal.create!(production: production, start_time: Time.now, end_time: Time.now + 1.hour, space: space)
+        r.users = called_users
+        r.sync_conflicts
+        r
+      end
+      let!(:new_user) { create(:user) }
+
+      before do
+        put "/api/v1/rehearsals/#{rehearsal.id}",
+            params: { rehearsal: { user_ids: [new_user.id], space_id: nil } },
+            as: :json,
+            headers: authenticated_header(user)
+      end
+
+      it 'removes conflicts for users no longer called' do
+        expect(Conflict.where(rehearsal: rehearsal, user_id: called_users.map(&:id)).count).to eq(0)
+      end
+
+      it 'creates a conflict for the newly added user' do
+        expect(Conflict.where(rehearsal: rehearsal, user: new_user).count).to eq(1)
+      end
+
+      it 'removes the space conflict when space is cleared' do
+        expect(Conflict.where(rehearsal: rehearsal, user_id: nil).count).to eq(0)
+      end
+    end
+
+    describe 'DELETE cascades to conflicts' do
+      let!(:rehearsal) do
+        r = Rehearsal.create!(production: production, start_time: Time.now, end_time: Time.now + 1.hour, space: space)
+        r.users = called_users
+        r.sync_conflicts
+        r
+      end
+
+      before { delete "/api/v1/rehearsals/#{rehearsal.id}", headers: authenticated_header(user) }
+
+      it 'destroys all associated conflicts' do
+        expect(Conflict.where(rehearsal_id: rehearsal.id).count).to eq(0)
+      end
+    end
+  end
 end

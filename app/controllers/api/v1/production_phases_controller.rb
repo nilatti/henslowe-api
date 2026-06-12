@@ -1,7 +1,7 @@
 module Api
   module V1
     class ProductionPhasesController < ApiController
-      before_action :set_production
+      before_action :set_production, only: [:index, :upsert]
       before_action :set_production_phase, only: [:update, :destroy]
 
       def index
@@ -32,7 +32,8 @@ module Api
       end
 
       def set_production_phase
-        @production_phase = @production.production_phases.find(params[:id])
+        @production_phase = ProductionPhase.find(params[:id])
+        @production = @production_phase.production
       end
 
       def production_phase_params

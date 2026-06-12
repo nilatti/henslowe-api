@@ -52,4 +52,19 @@ describe BuildRehearsalScheduleBlocks do
     expect(rehearsal_blocks_array[4].start_time).to eq('2020-04-17 09:30:00.000000000 +0000')
     expect(rehearsal_blocks_array[0].user_ids).to include(@users[0].id)
   end
+  it 'creates user conflicts for default users on each rehearsal' do
+    @service.build_recurring_rehearsals(
+      block_length: 30,
+      break_length: @break_length,
+      days_of_week: @days_of_week,
+      default_users: @users,
+      end_date: @end_date,
+      end_time: @end_time,
+      start_date: @start_date,
+      start_time: @start_time,
+      time_between_breaks: @time_between_breaks
+    )
+    rehearsal = Rehearsal.first
+    expect(rehearsal.conflicts.where(user_id: @users.map(&:id)).count).to eq(@users.size)
+  end
 end

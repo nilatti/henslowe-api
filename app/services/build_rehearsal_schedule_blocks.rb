@@ -60,6 +60,7 @@ class BuildRehearsalScheduleBlocks
           r.save
           r.users = default_users
           r.save
+          r.sync_conflicts
         end
       end
     end

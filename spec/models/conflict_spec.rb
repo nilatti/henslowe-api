@@ -16,6 +16,7 @@ describe Conflict do
   describe "ActiveRecord associations" do
       it { expect(conflict).to belong_to(:user).optional }
       it { expect(conflict).to belong_to(:space).optional }
+      it { expect(conflict).to belong_to(:rehearsal).optional }
   end
 
   describe "instance methods" do

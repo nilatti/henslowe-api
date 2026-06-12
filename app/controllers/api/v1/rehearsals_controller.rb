@@ -19,6 +19,7 @@ class RehearsalsController < ApiController
     @rehearsal = Rehearsal.new(rehearsal_params)
     if @rehearsal.save
       apply_production_defaults(@rehearsal)
+      @rehearsal.sync_conflicts
       json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
     else
       render json: @rehearsal.errors, status: :unprocessable_entity
@@ -28,6 +29,7 @@ class RehearsalsController < ApiController
   # PATCH/PUT /acts/1
   def update
     @rehearsal.update(rehearsal_params)
+    @rehearsal.sync_conflicts
     json_response(@rehearsal.as_json(include: [:users, space: {only: [:id, :name]}, acts: {include: :scenes, methods: [:find_on_stages]},  french_scenes: {methods: [:pretty_name, :find_on_stages]}, scenes: {methods: [:pretty_name, :find_on_stages]}]))
   end
 

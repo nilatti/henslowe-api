@@ -1,5 +1,6 @@
 class Conflict < ApplicationRecord
   belongs_to :conflict_pattern, optional: true
+  belongs_to :rehearsal, optional: true
   belongs_to :user, optional: true
   belongs_to :space, optional: true
   validate :check_for_space_and_user

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_11_180000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -192,7 +192,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.datetime "updated_at", null: false
     t.boolean "regular", default: false
     t.bigint "conflict_pattern_id"
+    t.bigint "rehearsal_id"
     t.index ["conflict_pattern_id"], name: "index_conflicts_on_conflict_pattern_id"
+    t.index ["rehearsal_id"], name: "index_conflicts_on_rehearsal_id"
     t.index ["space_id"], name: "index_conflicts_on_space_id"
     t.index ["user_id"], name: "index_conflicts_on_user_id"
   end
@@ -346,6 +348,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.index ["french_scene_id", "character_id"], name: "index_on_stages_on_french_scene_id_and_character_id", unique: true
   end
 
+  create_table "phases", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "plays", charset: "utf8mb3", force: :cascade do |t|
     t.string "title"
     t.bigint "author_id"
@@ -366,6 +375,24 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.index ["production_id"], name: "index_plays_on_production_id"
   end
 
+  create_table "production_default_calls", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "production_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["production_id", "user_id"], name: "index_production_default_calls_on_production_id_and_user_id", unique: true
+  end
+
+  create_table "production_phases", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "production_id", null: false
+    t.bigint "phase_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phase_id"], name: "index_production_phases_on_phase_id"
+    t.index ["production_id", "phase_id"], name: "index_production_phases_on_production_id_and_phase_id", unique: true
+    t.index ["production_id"], name: "index_production_phases_on_production_id"
+  end
+
   create_table "productions", charset: "utf8mb3", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
@@ -373,6 +400,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "lines_per_minute"
+    t.bigint "default_space_id"
+    t.index ["default_space_id"], name: "index_productions_on_default_space_id"
     t.index ["theater_id"], name: "index_productions_on_theater_id"
   end
 
@@ -467,6 +496,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.datetime "updated_at", null: false
     t.boolean "production_admin", default: false
     t.boolean "theater_admin", default: false
+    t.bigint "default_start_phase_id"
+    t.bigint "default_end_phase_id"
+    t.index ["default_end_phase_id"], name: "index_specializations_on_default_end_phase_id"
+    t.index ["default_start_phase_id"], name: "index_specializations_on_default_start_phase_id"
   end
 
   create_table "stage_directions", charset: "latin1", force: :cascade do |t|
@@ -571,6 +604,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
   add_foreign_key "conflict_patterns", "spaces"
   add_foreign_key "conflict_patterns", "users"
   add_foreign_key "conflicts", "conflict_patterns"
+  add_foreign_key "conflicts", "rehearsals"
   add_foreign_key "conflicts", "spaces"
   add_foreign_key "conflicts", "users"
   add_foreign_key "entrance_exits", "french_scenes"
@@ -591,6 +625,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "on_stages", "character_groups"
   add_foreign_key "plays", "authors"
+  add_foreign_key "production_phases", "phases"
+  add_foreign_key "production_phases", "productions"
+  add_foreign_key "productions", "spaces", column: "default_space_id"
   add_foreign_key "productions", "theaters"
   add_foreign_key "rehearsals", "productions"
   add_foreign_key "rehearsals", "spaces"
@@ -598,6 +635,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
   add_foreign_key "sound_cues", "french_scenes"
   add_foreign_key "space_agreements", "spaces"
   add_foreign_key "space_agreements", "theaters"
+  add_foreign_key "specializations", "phases", column: "default_end_phase_id"
+  add_foreign_key "specializations", "phases", column: "default_start_phase_id"
   add_foreign_key "stage_directions", "french_scenes"
   add_foreign_key "stage_exits", "productions"
   add_foreign_key "words", "lines"

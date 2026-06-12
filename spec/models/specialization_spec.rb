@@ -9,6 +9,18 @@ RSpec.describe Specialization, type: :model do
 
   it { expect(specialization).to validate_presence_of(:title)}
 
+  describe 'phase associations' do
+    it { expect(build(:specialization)).to belong_to(:default_start_phase).class_name('Phase').optional }
+    it { expect(build(:specialization)).to belong_to(:default_end_phase).class_name('Phase').optional }
+
+    it 'accepts phase assignment' do
+      phase = create(:phase)
+      spec = create(:specialization, default_start_phase: phase, default_end_phase: phase)
+      expect(spec.reload.default_start_phase_id).to eq(phase.id)
+      expect(spec.reload.default_end_phase_id).to eq(phase.id)
+    end
+  end
+
   it "scopes function" do
     actor_specialization = create(:specialization, title: 'Actor')
     auditioner_specialization = create(:specialization, title: 'Auditioner')
