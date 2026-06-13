@@ -91,6 +91,112 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#jobs_overlap" do
+    let(:theater) { create(:theater) }
+    let(:production) { create(:production, theater: theater) }
+    let(:actor_spec) { create(:specialization, :actor) }
+    let(:prod_admin_spec) { create(:specialization, :director) }
+    let(:theater_admin_spec) { create(:specialization, :theater_admin) }
+
+    let(:viewer) { create(:user) }
+    let(:target) { create(:user) }
+
+    def active_job(user, **opts)
+      create(:job, user: user, theater: theater, production: production, specialization: actor_spec, end_date: 1.year.from_now, **opts)
+    end
+
+    def expired_job(user, **opts)
+      create(:job, user: user, theater: theater, production: production, specialization: actor_spec, start_date: 2.years.ago, end_date: 1.year.ago, **opts)
+    end
+
+    context "when viewer is a superadmin" do
+      it "returns 'superadmin'" do
+        viewer.update(role: :superadmin)
+        expect(viewer.jobs_overlap(target)).to eq("superadmin")
+      end
+    end
+
+    context "when viewer is the target user" do
+      it "returns 'self'" do
+        expect(viewer.jobs_overlap(viewer)).to eq("self")
+      end
+    end
+
+    context "when users share no theater" do
+      it "returns 'none'" do
+        other_theater = create(:theater)
+        other_production = create(:production, theater: other_theater)
+        active_job(viewer)
+        create(:job, user: target, theater: other_theater, production: other_production, specialization: actor_spec, end_date: 1.year.from_now)
+        expect(viewer.jobs_overlap(target)).to eq("none")
+      end
+    end
+
+    context "nil-safety" do
+      it "does not raise when a job has a nil theater" do
+        create(:job, user: viewer, theater: nil, production: production, specialization: actor_spec, end_date: 1.year.from_now)
+        active_job(target)
+        expect { viewer.jobs_overlap(target) }.not_to raise_error
+      end
+
+      it "does not raise when a job has a nil production" do
+        create(:job, user: viewer, theater: theater, production: nil, specialization: actor_spec, end_date: 1.year.from_now)
+        active_job(target)
+        expect { viewer.jobs_overlap(target) }.not_to raise_error
+      end
+
+      it "does not raise when a job has a nil end_date" do
+        create(:job, user: viewer, theater: theater, production: production, specialization: actor_spec, end_date: nil)
+        active_job(target)
+        expect { viewer.jobs_overlap(target) }.not_to raise_error
+      end
+    end
+
+    context "end_date / current job logic" do
+      before { active_job(target) }
+
+      it "treats a nil end_date job as current (indefinite, e.g. executive director)" do
+        create(:job, user: viewer, theater: theater, production: production, specialization: actor_spec, end_date: nil)
+        expect(viewer.jobs_overlap(target)).not_to eq("past peer")
+      end
+
+      it "treats a job ending today as current" do
+        create(:job, user: viewer, theater: theater, production: production, specialization: actor_spec, end_date: Date.today)
+        expect(viewer.jobs_overlap(target)).not_to eq("past peer")
+      end
+
+      it "treats a job with a past end_date as not current, returning 'past peer'" do
+        expired_job(viewer)
+        expect(viewer.jobs_overlap(target)).to eq("past peer")
+      end
+    end
+
+    context "overlap levels with shared active jobs" do
+      before { active_job(target) }
+
+      it "returns 'theater admin' when viewer is a theater admin in the shared theater" do
+        create(:job, user: viewer, theater: theater, production: production, specialization: theater_admin_spec, end_date: 1.year.from_now)
+        expect(viewer.jobs_overlap(target)).to eq("theater admin")
+      end
+
+      it "returns 'production admin' when viewer is a production admin on the shared production" do
+        create(:job, user: viewer, theater: theater, production: production, specialization: prod_admin_spec, end_date: 1.year.from_now)
+        expect(viewer.jobs_overlap(target)).to eq("production admin")
+      end
+
+      it "returns 'production peer' when viewer shares the production without an admin role" do
+        active_job(viewer)
+        expect(viewer.jobs_overlap(target)).to eq("production peer")
+      end
+
+      it "returns 'theater peer' when viewer shares the theater but is in a different production" do
+        other_production = create(:production, theater: theater)
+        create(:job, user: viewer, theater: theater, production: other_production, specialization: actor_spec, end_date: 1.year.from_now)
+        expect(viewer.jobs_overlap(target)).to eq("theater peer")
+      end
+    end
+  end
+
   it "it sorts users" do
     user2 = create(:user, last_name: "Lebowski", first_name: "Dude", email: "dude@test.com")
     user3 = create(:user, last_name: "Lebowski", first_name: "John", email: "john@test.com")

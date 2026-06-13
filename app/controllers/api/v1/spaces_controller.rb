@@ -45,6 +45,24 @@ class SpacesController < ApiController
     render json: @spaces.as_json(only: %i[id name])
   end
 
+  def rehearsals
+    set_space
+    @rehearsals = @space.rehearsals.order(:start_time)
+    render json: @rehearsals.as_json(
+      only: %i[id production_id start_time end_time title notes],
+      include: {
+        acts: { only: %i[id play_id heading] },
+        scenes: { methods: :pretty_name, only: %i[id act_id] },
+        french_scenes: {
+          methods: :pretty_name,
+          only: %i[id scene_id],
+          include: { scene: { only: %i[id act_id] } }
+        },
+        production: { only: [:id], include: { play: { only: [:id] } } }
+      }
+    )
+  end
+
   def build_conflict_schedule
     set_space
     conflict_schedule_pattern = params[:conflict_schedule_pattern]
