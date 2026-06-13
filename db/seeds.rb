@@ -1,3 +1,20 @@
+phases = [
+  'Preproduction',
+  'Auditions',
+  'Rehearsal',
+  'Technical Rehearsal',
+  'Run',
+  'Postproduction',
+]
+
+phases.each_with_index do |name, i|
+  Phase.find_or_create_by!(name: name) do |p|
+    p.position = i + 1
+  end
+end
+
+puts "Phases seeded: #{Phase.count}"
+
 specializations = [
   'Director',
   'Actor', 

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get 'open_auditions', to: 'open_auditions#index'
       resources :sessions, only: [:destroy]
       resources :charges do
         collection do
@@ -69,6 +70,7 @@ Rails.application.routes.draw do
         resources :conflict_patterns, shallow: true
         member do
           put :build_conflict_schedule
+          get :rehearsals
         end
         collection do
           get :space_names
