@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       resources :specializations
       resources :phases
       resources :productions do
+        resources :auditions, only: [:create]
         resources :jobs, shallow: true
         resources :rehearsals, shallow: true
         resources :production_phases, shallow: true do

@@ -6,6 +6,7 @@ class Job < ApplicationRecord
   belongs_to :specialization, optional: true
   belongs_to :theater, optional: true
   belongs_to :user, optional: true
+  has_one :audition_submission, dependent: :destroy
 
   scope :production, -> (production) { where production: production }
   scope :specialization, -> (specialization) { where specialization: specialization }

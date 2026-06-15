@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_180000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_14_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -87,6 +87,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_180000) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "audition_submissions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "video_url"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_audition_submissions_on_job_id"
   end
 
   create_table "authors", charset: "utf8mb3", force: :cascade do |t|
@@ -595,6 +604,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_180000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "acts", "plays"
+  add_foreign_key "audition_submissions", "jobs"
   add_foreign_key "character_groups", "plays"
   add_foreign_key "character_groups_songs", "character_groups"
   add_foreign_key "character_groups_songs", "songs"

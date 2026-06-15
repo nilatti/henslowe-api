@@ -143,6 +143,9 @@ class UsersController < ApiController
                 },
                 theater: {
                   only: :name
+                },
+                audition_submission: {
+                  only: [:id, :video_url, :notes]
                 }
               ]
             },

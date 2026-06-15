@@ -217,12 +217,13 @@ puts "Fake actors seeded: #{User.where(fake: true).count}"
 
 # Seed the primary dev user so they can log in via Google and manage productions
 # (defined here so conflicts seed below can reference dev_user)
-dev_user = User.find_or_create_by!(email: 'aili.k.huber@gmail.com') do |u|
+dev_user = User.find_or_create_by!(email: 'alisha.huber@gmail.com') do |u|
   u.first_name = 'Aili'
   u.last_name  = 'Huber'
   u.provider   = 'google_oauth2'
-  u.uid        = 'aili.k.huber@gmail.com'
+  u.uid        = 'alisha.huber@gmail.com'
 end
+dev_user.update!(role: 'superadmin') unless dev_user.superadmin?
 
 # Seed a production if none exist
 unless Production.exists?
