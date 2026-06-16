@@ -129,11 +129,11 @@ RSpec.describe 'Users API' do
     context 'when user is theater admin' do
       let!(:local_theater) { create(:theater)}
       let!(:theater_admin_user) { create(:user) }
-      let!(:theater_admin_job) {create(:job, :admin_job, user: theater_admin_user, theater: local_theater)}
+      let!(:theater_admin_job) {create(:job, :admin_job, user: theater_admin_user, theater: local_theater, end_date: nil)}
       it 'returns all user information for user who works at theater' do
         login_user(theater_admin_user)
         user_who_works_at_theater = create(:user)
-        user_at_theater_job = create(:job, user: user_who_works_at_theater, theater: local_theater)
+        user_at_theater_job = create(:job, user: user_who_works_at_theater, theater: local_theater, end_date: nil)
         get "/api/v1/users/#{user_who_works_at_theater.id}/", headers: authenticated_header(theater_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(user_who_works_at_theater.bio)
@@ -223,11 +223,11 @@ RSpec.describe 'Users API' do
       let!(:local_theater) { create(:theater)}
       let!(:local_production) {create(:production)}
       let!(:production_admin_user) { create(:user) }
-      let!(:production_admin_job) {create(:job, :admin_job, user: production_admin_user, theater: local_theater, production: local_production)}
+      let!(:production_admin_job) {create(:job, :admin_job, user: production_admin_user, theater: local_theater, production: local_production, end_date: nil)}
       it 'returns all user information for user in show' do
         login_user(production_admin_user)
         user_who_works_on_production = create(:user)
-        user_on_production_job = create(:job, user: user_who_works_on_production, theater: local_theater, production: local_production)
+        user_on_production_job = create(:job, user: user_who_works_on_production, theater: local_theater, production: local_production, end_date: nil)
         get "/api/v1/users/#{user_who_works_on_production.id}/", headers: authenticated_header(production_admin_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(user_who_works_on_production.bio)
@@ -317,11 +317,11 @@ RSpec.describe 'Users API' do
       let!(:local_theater) { create(:theater)}
       let!(:local_production) {create(:production)}
       let!(:production_user) { create(:user) }
-      let!(:production_job) {create(:job, :actor_job, user: production_user, theater: local_theater, production: local_production)}
+      let!(:production_job) {create(:job, :actor_job, user: production_user, theater: local_theater, production: local_production, end_date: nil)}
       it 'returns all user information for user in show' do
         login_user(production_user)
         production_peer = create(:user)
-        production_peer_job = create(:job, user: production_peer, theater: local_theater, production: local_production)
+        production_peer_job = create(:job, user: production_peer, theater: local_theater, production: local_production, end_date: nil)
         get "/api/v1/users/#{production_peer.id}/", headers: authenticated_header(production_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(production_peer.bio)
@@ -400,11 +400,11 @@ RSpec.describe 'Users API' do
     context 'when user is theater peer' do
       let!(:local_theater) { create(:theater)}
       let!(:theater_user) { create(:user) }
-      let!(:theater_job) {create(:job, user: theater_user, theater: local_theater)}
+      let!(:theater_job) {create(:job, user: theater_user, theater: local_theater, end_date: nil)}
       it 'returns all user information for user in show' do
         login_user(theater_user)
         theater_peer = create(:user)
-        theater_peer_job = create(:job, user: theater_peer, theater: local_theater)
+        theater_peer_job = create(:job, user: theater_peer, theater: local_theater, end_date: nil)
         get "/api/v1/users/#{theater_peer.id}/", headers: authenticated_header(theater_user)
         expect(response).to have_http_status(200)
         expect(json['bio']).to eq(theater_peer.bio)
