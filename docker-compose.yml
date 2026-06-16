@@ -3,7 +3,6 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
@@ -19,8 +18,11 @@ services:
 
   app:
     build: .
+    profiles: [test]
     depends_on:
       db:
+        condition: service_healthy
+      server:
         condition: service_healthy
     environment:
       RAILS_ENV: test
@@ -30,7 +32,7 @@ services:
     volumes:
       - .:/app
     command: >
-      bash -c "until ruby -rmysql2 -e \"Mysql2::Client.new(host:'db',username:'${DB_USER}',password:'${DB_PASSWORD}')\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && bundle exec rails db:drop db:create db:schema:load && bundle exec rspec spec/requests spec/models spec/services 2>&1 | tee /app/test_results.txt"
+      bash -c "bundle exec rails db:drop db:create db:schema:load && bundle exec rspec spec/requests spec/models spec/services 2>&1 | tee /app/test_results.txt"
 
   redis:
     image: redis:7-alpine
@@ -61,6 +63,12 @@ services:
       - "3001:3001"
     command: >
       bash -c "bundle exec rails db:prepare && mkdir -p tmp/pids && bundle exec puma -C config/puma.rb -b tcp://0.0.0.0:3001 -e development"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
 
   worker:
     build: .
