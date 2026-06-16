@@ -1,12 +1,13 @@
 # the problem is in block length -- it's not passing from the form, but it really doesn't have to because it is just rehearsal time + break time
 class BuildRehearsalScheduleBlocks
-  def initialize(break_length:, days_of_week:, default_user_ids:, end_date:, end_time:, production_id:, time_between_breaks:, start_date:, start_time:)
+  def initialize(break_length:, days_of_week:, default_user_ids:, end_date:, end_time:, production_id:, time_between_breaks:, start_date:, start_time:, space_id: nil)
     @break_length = break_length
     @days_of_week = days_of_week
     @default_user_ids = default_user_ids
     @end_date = end_date
     @end_time = end_time
     @production_id = production_id
+    @space_id = space_id&.to_i
     @start_date = start_date
     @start_time = start_time
     @rehearsal_blocks = []
@@ -56,6 +57,7 @@ class BuildRehearsalScheduleBlocks
           r.end_time = Time.zone.parse("#{day.strftime('%F')} #{block[:end_time].strftime('%T')}")
           r.production_id = @production_id
           r.notes = block[:notes]
+          r.space_id = @space_id
           r.start_time = Time.zone.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%T')}")
           r.save
           r.users = default_users
