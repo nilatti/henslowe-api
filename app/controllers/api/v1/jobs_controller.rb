@@ -20,6 +20,7 @@ class JobsController < ApiController
           :specialization,
           :theater,
           :character,
+          :audition_submission,
           production: {
             include: {play: { only: [:id, :title]}}
           },
@@ -39,7 +40,8 @@ class JobsController < ApiController
           :character,
           :specialization,
           :theater,
-          :user,
+          audition_submission: { only: [:id, :video_url, :notes] },
+          user: { only: [:id, :email, :first_name, :middle_name, :last_name, :preferred_name, :phone_number, :timezone, :gender, :bio, :street_address, :city, :state, :zip, :website, :emergency_contact_name, :emergency_contact_number, :fake] },
           production: {
             include: {play: { only: [:id, :title]}}
           }

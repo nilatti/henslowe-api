@@ -142,7 +142,11 @@ class ProductionsController < ApiController
     if current_user.superadmin?
       @productions = Production.all
     else
-      @productions = current_user.productions
+      auditioner_id = Specialization.find_by(title: 'Auditioner')&.id
+      @productions = Production.joins(:jobs)
+        .where(jobs: { user_id: current_user.id })
+        .where.not(jobs: { specialization_id: auditioner_id })
+        .distinct
     end
 
     render json: @productions.as_json(only: [:id, :name], include: [play: { only: [:id, :title]}, theater: { only: [:name, :id]}])
@@ -238,7 +242,8 @@ class ProductionsController < ApiController
       @production.id,
       rehearsal_schedule_pattern[:time_between_breaks],
       rehearsal_schedule_pattern[:start_date],
-      rehearsal_schedule_pattern[:start_time]
+      rehearsal_schedule_pattern[:start_time],
+      rehearsal_schedule_pattern[:space_id]
     )
     json_response(@production.as_json(include: [:theater]))
   end
@@ -257,6 +262,7 @@ def user_conflicts
     # Only allow a trusted parameter "white list" through.
     def production_params
       params.require(:production).permit(
+        :audition_information,
         :default_space_id,
         :end_date,
         :id,
