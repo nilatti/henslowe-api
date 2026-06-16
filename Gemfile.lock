@@ -239,7 +239,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    puma (5.5.1)
+    puma (6.6.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
@@ -428,7 +428,7 @@ DEPENDENCIES
   observer
   omniauth-google-oauth2
   omniauth-rails_csrf_protection (~> 1.0)
-  puma (= 5.5.1)
+  puma (~> 6.0)
   rack-cors
   rails (~> 7.0)
   redis (~> 4.0)
