@@ -53,6 +53,7 @@ gem 'cancancan'
 gem 'jwt', '~> 3.0'
 gem 'acts_as_list'
 gem 'stripe'
+gem 'aws-sdk-s3', '~> 1', require: false
 
 #configure request timeouts
 # gem "rack-timeout"

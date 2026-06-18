@@ -4,7 +4,7 @@ RSpec.describe 'jobs API', type: :request do
   # initialize test data
 
   let!(:user) { create(:user)}
-  let!(:jobs) { create_list(:job, 8) }
+  let!(:jobs) { create_list(:job, 8, user: user) }
   let!(:job_id) { jobs.first.id }
   let!(:production) { create(:production)}
   let!(:theater) {create(:theater)}

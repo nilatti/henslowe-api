@@ -3,7 +3,7 @@ module Api
 class UsersController < ApiController
   # load_and_authorize_resource
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: %i[show update destroy]
+  before_action :set_user, only: %i[show update destroy upload_headshot]
 
   # GET /Users
   def index
@@ -49,7 +49,7 @@ class UsersController < ApiController
             :program_name,
             :state,
             :website
-          ]))
+          ]).merge(headshot_url: headshot_url(@user)))
       elsif overlap == "past peer"
         json_response(@user.as_json(only: [
             :bio,
@@ -66,7 +66,7 @@ class UsersController < ApiController
             :website
           ],
           include: :jobs
-        ))
+        ).merge(headshot_url: headshot_url(@user)))
       elsif overlap == "theater peer"
         json_response(@user.as_json(only: [
             :bio,
@@ -86,7 +86,7 @@ class UsersController < ApiController
             :zip
           ],
           include: [:conflicts, :conflict_patterns, :jobs]
-        ))
+        ).merge(headshot_url: headshot_url(@user)))
       elsif overlap == "production peer"
         json_response(@user.as_json(only: [
             :bio,
@@ -109,7 +109,7 @@ class UsersController < ApiController
             :zip
           ],
           include: [:jobs, :conflicts, :conflict_patterns]
-        ))
+        ).merge(headshot_url: headshot_url(@user)))
       elsif overlap == "superadmin" || overlap == "self" ||overlap == "theater admin" || overlap == "production admin"
         json_response(@user.as_json(include:
           [
@@ -169,7 +169,7 @@ class UsersController < ApiController
               ]
             }
           ]
-        ))
+        ).merge(headshot_url: headshot_url(@user)))
       end
     else
       return head :forbidden
@@ -183,6 +183,43 @@ class UsersController < ApiController
   def update
     @user.update(user_params)
     json_response(@user)
+  end
+
+  HEADSHOT_ALLOWED_TYPES = %w[image/jpeg image/png image/gif image/webp].freeze
+  HEADSHOT_MAX_BYTES = 5.megabytes
+
+  def upload_headshot
+    file = params[:headshot]
+    return json_response({ error: 'No file provided' }, :unprocessable_entity) unless file.present?
+
+    actual_type = Marcel::MimeType.for(
+      Pathname.new(file.path),
+      name: file.original_filename,
+      declared_type: file.content_type
+    )
+    unless HEADSHOT_ALLOWED_TYPES.include?(actual_type)
+      return json_response({ error: 'Only JPEG, PNG, GIF, and WebP images are allowed' }, :unprocessable_entity)
+    end
+
+    if file.size > HEADSHOT_MAX_BYTES
+      return json_response({ error: 'File must be smaller than 5 MB' }, :unprocessable_entity)
+    end
+
+    require 'aws-sdk-s3'
+    ext = File.extname(file.original_filename.to_s).downcase.presence || '.jpg'
+    key = "headshots/#{@user.id}/#{SecureRandom.uuid}#{ext}"
+    region = ENV.fetch('AWS_REGION', 'us-east-1')
+    bucket = ENV['AWS_S3_BUCKET']
+
+    s3 = Aws::S3::Client.new(
+      region: region,
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    )
+    s3.put_object(bucket: bucket, key: key, body: file.read, content_type: actual_type)
+
+    @user.update!(headshot_url: key)
+    json_response({ headshot_url: headshot_url(@user) })
   end
 
   def destroy
@@ -255,6 +292,25 @@ class UsersController < ApiController
       :website,
       :zip
     )
+  end
+
+  def headshot_url(user)
+    return nil unless user.headshot_url.present?
+    require 'aws-sdk-s3'
+    presigner = Aws::S3::Presigner.new(
+      client: Aws::S3::Client.new(
+        region: ENV.fetch('AWS_REGION', 'us-east-1'),
+        access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      )
+    )
+    presigner.presigned_url(:get_object,
+      bucket: ENV['AWS_S3_BUCKET'],
+      key: user.headshot_url,
+      expires_in: 7.days.to_i
+    )
+  rescue
+    nil
   end
 
   # Use callbacks to share common setup or constraints between actions.

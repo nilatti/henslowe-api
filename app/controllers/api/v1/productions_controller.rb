@@ -7,7 +7,8 @@ class ProductionsController < ApiController
     :destroy,
     :skeleton,
     :full,
-    :user_conflicts, 
+    :user_conflicts,
+    :space_conflicts,
     :build_rehearsal_schedule
   ]
 
