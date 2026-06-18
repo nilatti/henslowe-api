@@ -55,6 +55,9 @@ class Ability
       can :manage, User, :id => user.id
       cannot :read, Job
       can :read, Job, :user_id => user.id
+      can :read, Job do |job|
+        user.theater_admin?(job.theater) || user.production_admin?(job.production)
+      end
 
     elsif user.first_name == nil
       cannot :read, :all

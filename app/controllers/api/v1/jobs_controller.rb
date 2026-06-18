@@ -34,6 +34,7 @@ class JobsController < ApiController
 
   # GET /jobs/1
   def show
+    authorize! :read, @job
     json_response(
       @job.as_json(
         include: [

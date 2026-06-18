@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         member do
           post :create_customer
           put :build_conflict_schedule
+          put :upload_headshot
         end
         collection do
           get :fake
@@ -53,6 +54,7 @@ Rails.application.routes.draw do
           get :skeleton
           get :full
           get :user_conflicts
+          get :space_conflicts
         end
         resources :stage_exits, shallow: true
         collection do

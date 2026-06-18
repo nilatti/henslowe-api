@@ -208,4 +208,41 @@ RSpec.describe 'Productions API' do
       end
     end
   end
+
+  describe 'GET /api/productions/:id/space_conflicts' do
+    let!(:production) { productions.first }
+    let!(:space) { create(:space) }
+    let!(:rehearsal) { create(:rehearsal, production: production, space: space) }
+    let!(:space_conflict) { create(:conflict, :space, space: space) }
+
+    before { get "/api/v1/productions/#{production.id}/space_conflicts", as: :json, headers: authenticated_header(user) }
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'returns an array with space and conflicts' do
+      expect(json).to be_an(Array)
+      result = json.find { |r| r['space']['id'] == space.id }
+      expect(result).not_to be_nil
+      expect(result['space']).to include('id', 'name')
+      expect(result['conflicts']).to be_an(Array)
+      expect(result['conflicts'].first['id']).to eq(space_conflict.id)
+    end
+
+    it 'excludes spaces with no rehearsals for this production' do
+      other_space = create(:space)
+      create(:conflict, :space, space: other_space)
+      get "/api/v1/productions/#{production.id}/space_conflicts", as: :json, headers: authenticated_header(user)
+      expect(json.map { |r| r['space']['id'] }).not_to include(other_space.id)
+    end
+
+    context 'when the production does not exist' do
+      before { get "/api/v1/productions/0/space_conflicts", as: :json, headers: authenticated_header(user) }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

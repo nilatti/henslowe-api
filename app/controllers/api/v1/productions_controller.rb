@@ -252,6 +252,11 @@ def user_conflicts
     render json: users.map { |user| { user: user, conflicts: user.conflicts } }
   end
 
+  def space_conflicts
+    spaces = Space.joins(:rehearsals).where(rehearsals: { production: @production }).includes(:conflicts).distinct
+    render json: spaces.map { |space| { space: space, conflicts: space.conflicts } }
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
