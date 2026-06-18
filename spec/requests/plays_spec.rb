@@ -214,6 +214,8 @@ RSpec.describe 'Plays API' do
       expect(json[1]['find_on_stages'].size).to eq(1)
       expect(json[0]['find_on_stages'][0]).to include('character_id')
       expect(json[0]['find_on_stages'][0]).to include('french_scene_id')
+      expect(json[0]).to include('pretty_name')
+      expect(json[0]['pretty_name']).to match(/\AAct \d+\z/)
     end
 
     it 'returns on_stages organized by french_scenes' do

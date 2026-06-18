@@ -107,7 +107,7 @@ class PlaysController < ApiController
 
   def play_act_on_stages
     @acts = Act.play_order(@play.acts)
-    render json: @acts.as_json(methods: :find_on_stages, include: :rehearsals)
+    render json: @acts.as_json(methods: [:pretty_name, :find_on_stages], include: :rehearsals)
   end
 
   def play_french_scene_on_stages
