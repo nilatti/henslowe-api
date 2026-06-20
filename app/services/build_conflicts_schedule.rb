@@ -9,7 +9,8 @@ class BuildConflictsSchedule
     space_id:,
     start_date: Date.today,
     start_time:,
-    user_id:
+    user_id:,
+    utc_offset: nil
     )
     @category = category
     @conflicts = []
@@ -21,6 +22,7 @@ class BuildConflictsSchedule
     @start_date = start_date
     @start_time = start_time
     @user_id = user_id
+    @utc_offset = utc_offset
     end
 
   def run(
@@ -59,14 +61,14 @@ class BuildConflictsSchedule
         if conflict_pattern_id
           c.conflict_pattern = ConflictPattern.find(conflict_pattern_id)
         end
-        c.end_time = Time.zone.parse("#{day.strftime('%F')} #{end_time}")
+        c.end_time = Time.parse("#{day.strftime('%F')} #{end_time}#{@utc_offset}").utc
         if user_id
           c.user = User.find(user_id)
         elsif space_id
           c.space = Space.find(space_id)
         end
         c.regular = true
-        c.start_time = Time.zone.parse("#{day.strftime('%F')} #{start_time}")
+        c.start_time = Time.parse("#{day.strftime('%F')} #{start_time}#{@utc_offset}").utc
         conflicts_array << c
     end
     return conflicts_array

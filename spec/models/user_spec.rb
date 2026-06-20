@@ -197,6 +197,115 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#visible_users" do
+    let(:theater) { create(:theater) }
+    let(:production) { create(:production, theater: theater) }
+    let(:actor_spec) { create(:specialization, :actor) }
+    let(:viewer) { create(:user) }
+
+    context "when viewer is a superadmin" do
+      before { viewer.update(role: :superadmin) }
+
+      it "returns all users" do
+        others = create_list(:user, 3)
+        result = viewer.visible_users
+        expect(result).to include(viewer, *others)
+      end
+    end
+
+    context "when viewer has a theater-level job (production_id nil)" do
+      let!(:theater_job) { create(:job, user: viewer, theater: theater, production: nil, specialization: actor_spec, end_date: nil) }
+
+      it "includes users with theater jobs at the same theater" do
+        peer = create(:user)
+        create(:job, user: peer, theater: theater, production: nil, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).to include(peer)
+      end
+
+      it "includes users with production jobs on that theater's productions" do
+        prod_user = create(:user)
+        create(:job, user: prod_user, production: production, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).to include(prod_user)
+      end
+
+      it "excludes users with theater jobs at a different theater" do
+        other_theater = create(:theater)
+        other_user = create(:user)
+        create(:job, user: other_user, theater: other_theater, production: nil, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).not_to include(other_user)
+      end
+
+      it "excludes users with production jobs on unrelated productions" do
+        other_production = create(:production, theater: create(:theater))
+        other_user = create(:user)
+        create(:job, user: other_user, production: other_production, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).not_to include(other_user)
+      end
+
+      it "always includes self" do
+        expect(viewer.visible_users).to include(viewer)
+      end
+    end
+
+    context "when viewer has a production job" do
+      let!(:production_job) { create(:job, user: viewer, production: production, specialization: actor_spec, end_date: nil) }
+
+      it "includes users with theater jobs at the production's theater" do
+        theater_user = create(:user)
+        create(:job, user: theater_user, theater: theater, production: nil, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).to include(theater_user)
+      end
+
+      it "includes users with production jobs on the same production" do
+        peer = create(:user)
+        create(:job, user: peer, production: production, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).to include(peer)
+      end
+
+      it "excludes users with production jobs on different productions" do
+        other_production = create(:production, theater: theater)
+        other_user = create(:user)
+        create(:job, user: other_user, production: other_production, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).not_to include(other_user)
+      end
+
+      it "excludes users with theater jobs at unrelated theaters" do
+        other_theater = create(:theater)
+        other_user = create(:user)
+        create(:job, user: other_user, theater: other_theater, production: nil, specialization: actor_spec, end_date: nil)
+        expect(viewer.visible_users).not_to include(other_user)
+      end
+
+      it "always includes self" do
+        expect(viewer.visible_users).to include(viewer)
+      end
+    end
+
+    context "when viewer has no jobs" do
+      it "returns only self" do
+        create_list(:user, 3)
+        result = viewer.visible_users
+        expect(result.map(&:id)).to eq([viewer.id])
+      end
+    end
+
+    context "when viewer has both a theater job and a production job" do
+      let(:other_theater) { create(:theater) }
+      let(:other_production) { create(:production, theater: other_theater) }
+      let!(:theater_job) { create(:job, user: viewer, theater: theater, production: nil, specialization: actor_spec, end_date: nil) }
+      let!(:production_job) { create(:job, user: viewer, production: other_production, specialization: actor_spec, end_date: nil) }
+
+      it "combines visibility from both contexts" do
+        theater_peer = create(:user)
+        create(:job, user: theater_peer, theater: theater, production: nil, specialization: actor_spec, end_date: nil)
+        production_peer = create(:user)
+        create(:job, user: production_peer, production: other_production, specialization: actor_spec, end_date: nil)
+        result_ids = viewer.visible_users.map(&:id)
+        expect(result_ids).to include(theater_peer.id, production_peer.id)
+      end
+    end
+  end
+
   it "it sorts users" do
     user2 = create(:user, last_name: "Lebowski", first_name: "Dude", email: "dude@test.com")
     user3 = create(:user, last_name: "Lebowski", first_name: "John", email: "john@test.com")

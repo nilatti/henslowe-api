@@ -49,16 +49,17 @@ class BuildRehearsalScheduleBlocks
   ) #block length should be in minutes
     blocks = build_rehearsal_blocks(block_length: block_length, break_length: break_length, end_time: end_time, start_time: start_time, time_between_breaks: time_between_breaks)
     days = build_rehearsal_days(days_of_week: days_of_week, end_date: end_date, start_date: start_date)
+    tz_offset = start_time.match(/([+-]\d{2}:\d{2}$)/)&.to_s || ''
     rehearsal_blocks_array = []
     days.each do |day|
       blocks.each do |block|
         ActiveRecord::Base.connection_pool.with_connection do
           r = Rehearsal.new
-          r.end_time = Time.zone.parse("#{day.strftime('%F')} #{block[:end_time].strftime('%T')}")
+          r.end_time = Time.parse("#{day.strftime('%F')} #{block[:end_time].strftime('%H:%M')}#{tz_offset}").utc
           r.production_id = @production_id
           r.notes = block[:notes]
           r.space_id = @space_id
-          r.start_time = Time.zone.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%T')}")
+          r.start_time = Time.parse("#{day.strftime('%F')} #{block[:start_time].strftime('%H:%M')}#{tz_offset}").utc
           r.save
           r.users = default_users
           r.save
@@ -70,9 +71,11 @@ class BuildRehearsalScheduleBlocks
 
   def build_rehearsal_blocks(block_length:, break_length:, end_time:, start_time:, time_between_breaks:)
     rehearsal_blocks = []
-    block_start_time = Time.zone.parse(start_time)
+    bare_start = start_time.sub(/[+-]\d{2}:\d{2}$/, '')
+    bare_end = end_time.sub(/[+-]\d{2}:\d{2}$/, '')
+    block_start_time = Time.zone.parse(bare_start)
     next_break = block_start_time + time_between_breaks.minutes
-    end_time = Time.zone.parse(end_time)
+    end_time = Time.zone.parse(bare_end)
     until block_start_time >= end_time
       block = {
         end_time: Time.new,

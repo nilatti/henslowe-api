@@ -67,6 +67,29 @@ class User < ApplicationRecord
     end
   end
 
+  def visible_users
+    return User.all if superadmin?
+
+    my_theater_job_theater_ids = jobs.where.not(theater_id: nil).where(production_id: nil).pluck(:theater_id)
+    my_production_job_production_ids = jobs.where.not(production_id: nil).pluck(:production_id)
+
+    visible_ids = [id]
+
+    if my_theater_job_theater_ids.any?
+      theater_production_ids = Production.where(theater_id: my_theater_job_theater_ids).pluck(:id)
+      visible_ids += User.joins(:jobs).where(jobs: { theater_id: my_theater_job_theater_ids, production_id: nil }).pluck(:id)
+      visible_ids += User.joins(:jobs).where(jobs: { production_id: theater_production_ids }).pluck(:id) if theater_production_ids.any?
+    end
+
+    if my_production_job_production_ids.any?
+      my_production_theater_ids = Production.where(id: my_production_job_production_ids).pluck(:theater_id).compact
+      visible_ids += User.joins(:jobs).where(jobs: { theater_id: my_production_theater_ids, production_id: nil }).pluck(:id) if my_production_theater_ids.any?
+      visible_ids += User.joins(:jobs).where(jobs: { production_id: my_production_job_production_ids }).pluck(:id)
+    end
+
+    User.where(id: visible_ids.uniq)
+  end
+
   def jobs_overlap(target_user)
     if self.superadmin?
       return "superadmin"
