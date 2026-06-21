@@ -1,4 +1,6 @@
 class Specialization < ApplicationRecord
+  enum :context, { theater: 0, production: 1, both: 2 }, default: :both
+
   validates :title, presence: true
   has_many :jobs
   belongs_to :default_start_phase, class_name: 'Phase', optional: true

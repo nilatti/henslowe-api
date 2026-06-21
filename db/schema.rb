@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_16_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_20_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -508,6 +508,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_16_120000) do
     t.boolean "theater_admin", default: false
     t.bigint "default_start_phase_id"
     t.bigint "default_end_phase_id"
+    t.integer "context", default: 2, null: false
     t.index ["default_end_phase_id"], name: "index_specializations_on_default_end_phase_id"
     t.index ["default_start_phase_id"], name: "index_specializations_on_default_start_phase_id"
   end

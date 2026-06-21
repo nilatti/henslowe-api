@@ -16,35 +16,37 @@ end
 puts "Phases seeded: #{Phase.count}"
 
 specializations = [
-  'Director',
-  'Actor', 
-  'Auditioner',
-  'Executive Director',
-  'Artistic Director',
-  'Music Director',
-  'Fight Director',
-  'Costume Designer',
-  'Set Designer',
-  'Lighting Designer',
-  'Sound Designer',
-  'Stage Manager',
-  'Playwright',
-  'Technical Director',
-  'Lighting Board Operator',
-  'Sound Board Operator',
-  'House Manager',
-  'Usher',
-  'Assistant Stage Manager',
-  'Director of Education',
-  'Director of Marketing',
-  'Props Designer',
-  'Producer',
-  'Theater Admin',
-  'Production Admin',
+  { title: 'Director',                context: :production },
+  { title: 'Actor',                   context: :production },
+  { title: 'Auditioner',              context: :production },
+  { title: 'Music Director',          context: :production },
+  { title: 'Fight Director',          context: :production },
+  { title: 'Costume Designer',        context: :production },
+  { title: 'Set Designer',            context: :production },
+  { title: 'Lighting Designer',       context: :production },
+  { title: 'Sound Designer',          context: :production },
+  { title: 'Stage Manager',           context: :production },
+  { title: 'Playwright',              context: :production },
+  { title: 'Technical Director',      context: :production },
+  { title: 'Lighting Board Operator', context: :production },
+  { title: 'Sound Board Operator',    context: :production },
+  { title: 'Assistant Stage Manager', context: :production },
+  { title: 'Props Designer',          context: :production },
+  { title: 'Production Admin',        context: :production },
+  { title: 'Executive Director',      context: :theater },
+  { title: 'Artistic Director',       context: :theater },
+  { title: 'Director of Education',   context: :theater },
+  { title: 'Director of Marketing',   context: :theater },
+  { title: 'House Manager',           context: :theater },
+  { title: 'Usher',                   context: :theater },
+  { title: 'Theater Admin',           context: :theater },
+  { title: 'Producer',                context: :both },
 ]
 
-specializations.each do |title|
-  Specialization.find_or_create_by!(title: title)
+specializations.each do |attrs|
+  Specialization.find_or_create_by!(title: attrs[:title]) do |s|
+    s.context = attrs[:context]
+  end
 end
 
 puts "Specializations seeded: #{Specialization.count}"

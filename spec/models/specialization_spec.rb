@@ -29,4 +29,24 @@ RSpec.describe Specialization, type: :model do
     expect(Specialization.auditioner).to match_array([auditioner_specialization])
     expect(Specialization.actor_or_auditioner).to match_array([actor_specialization].push(auditioner_specialization))
   end
+
+  describe 'context enum' do
+    it 'defaults to both' do
+      expect(build(:specialization).context).to eq('both')
+    end
+
+    it 'accepts theater context' do
+      s = create(:specialization, context: :theater)
+      expect(s.reload.context).to eq('theater')
+    end
+
+    it 'accepts production context' do
+      s = create(:specialization, context: :production)
+      expect(s.reload.context).to eq('production')
+    end
+
+    it 'rejects invalid context values' do
+      expect { build(:specialization, context: :invalid) }.to raise_error(ArgumentError)
+    end
+  end
 end

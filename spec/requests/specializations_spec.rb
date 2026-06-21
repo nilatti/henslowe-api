@@ -162,4 +162,51 @@ RSpec.describe 'Specializations API', type: :request do
       expect(updated.theater_admin).to eq(true)
     end
   end
+
+  describe 'context field' do
+    it 'defaults to both when not specified' do
+      post '/api/v1/specializations',
+           params: { specialization: { title: 'New Role' } },
+           as: :json,
+           headers: authenticated_header(user)
+      expect(json['context']).to eq('both')
+    end
+
+    context 'POST with context' do
+      %w[theater production both].each do |ctx|
+        it "creates with context=#{ctx}" do
+          post '/api/v1/specializations',
+               params: { specialization: { title: "Role #{ctx}", context: ctx } },
+               as: :json,
+               headers: authenticated_header(user)
+          expect(response).to have_http_status(201)
+          expect(json['context']).to eq(ctx)
+        end
+      end
+    end
+
+    context 'PUT updates context' do
+      %w[theater production both].each do |ctx|
+        it "updates context to #{ctx}" do
+          put "/api/v1/specializations/#{specialization_id}",
+              params: { specialization: { context: ctx } },
+              as: :json,
+              headers: authenticated_header(user)
+          expect(response).to have_http_status(200)
+          expect(json['context']).to eq(ctx)
+          expect(Specialization.find(specialization_id).context).to eq(ctx)
+        end
+      end
+    end
+
+    it 'returns context in the index response' do
+      get '/api/v1/specializations', headers: authenticated_header(user)
+      expect(json.first).to have_key('context')
+    end
+
+    it 'returns context in the show response' do
+      get "/api/v1/specializations/#{specialization_id}", headers: authenticated_header(user)
+      expect(json).to have_key('context')
+    end
+  end
 end

@@ -21,14 +21,12 @@ class User < ApplicationRecord
   before_save :update_subscription_status
 
   def self.from_omniauth(auth)
-    user = User.includes(:jobs).find_or_create_by(email: auth['info']['email']) do |user|
-      user.provider = auth['provider']
-      user.uid = auth['uid']
-      user.email = auth['info']['email']
-      user.first_name = auth['info']['first_name']
-      user.last_name = auth['info']['last_name']
+    user = User.includes(:jobs).find_or_create_by(email: auth['info']['email']) do |u|
+      u.first_name = auth['info']['first_name']
+      u.last_name = auth['info']['last_name']
     end
-    return user
+    user.update(provider: auth['provider'], uid: auth['uid'])
+    user
   end
 
   def castings_for_production(production)
