@@ -7,9 +7,9 @@ describe BuildConflictsSchedule do
       @category = "work"
       @days_of_week = ['monday', 'tuesday', 'friday']
       @end_date = '2020-06-23'
-      @end_time = '16:30:00+5.00'
+      @end_time = '16:30:00+05:00'
       @start_date = '2020-04-24'
-      @start_time = '14:30:00+5.00'
+      @start_time = '14:30:00+05:00'
       @service_without_dates = BuildConflictsSchedule.new(
         category: @category,
         days_of_week: @days_of_week,
@@ -60,9 +60,9 @@ describe BuildConflictsSchedule do
       @category = "work"
       @days_of_week = ['monday', 'tuesday', 'friday']
       @end_date = '2020-06-23'
-      @end_time = '16:30:00+5.00'
+      @end_time = '16:30:00+05:00'
       @start_date = '2020-04-24'
-      @start_time = '14:30:00+5.00'
+      @start_time = '14:30:00+05:00'
       @service_without_dates = BuildConflictsSchedule.new(
         category: @category,
         days_of_week: @days_of_week,
