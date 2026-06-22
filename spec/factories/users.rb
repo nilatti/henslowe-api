@@ -20,6 +20,10 @@ FactoryBot.define do
     trait :superadmin do
       role { "superadmin" }
     end
+
+    trait :paid do
+      subscription_status { "active" }
+    end
     street_address { Faker::Address.street_address }
     timezone { 'EST' }
     website { Faker::Internet.url }

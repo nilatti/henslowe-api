@@ -245,4 +245,56 @@ RSpec.describe 'Plays API' do
       expect(response).to have_http_status(204)
     end
   end
+
+  describe 'play_script and play_skeleton — unauthenticated access' do
+    let(:canonical_play)     { create(:play, :with_full_structure, canonical: true) }
+    let(:non_canonical_play) { create(:play, :with_full_structure, canonical: false) }
+
+    describe 'GET /plays/:id/play_script' do
+      context 'when the play is canonical' do
+        it 'allows access without a token' do
+          get "/api/v1/plays/#{canonical_play.id}/play_script", as: :json
+          expect(response).to have_http_status(200)
+        end
+
+        it 'also allows access with a valid token' do
+          get "/api/v1/plays/#{canonical_play.id}/play_script", as: :json, headers: authenticated_header(user)
+          expect(response).to have_http_status(200)
+        end
+      end
+
+      context 'when the play is non-canonical' do
+        it 'requires a token' do
+          get "/api/v1/plays/#{non_canonical_play.id}/play_script", as: :json
+          expect(response).not_to have_http_status(200)
+        end
+
+        it 'allows access with a valid token' do
+          get "/api/v1/plays/#{non_canonical_play.id}/play_script", as: :json, headers: authenticated_header(user)
+          expect(response).to have_http_status(200)
+        end
+      end
+    end
+
+    describe 'GET /plays/:id/play_skeleton' do
+      context 'when the play is canonical' do
+        it 'allows access without a token' do
+          get "/api/v1/plays/#{canonical_play.id}/play_skeleton", as: :json
+          expect(response).to have_http_status(200)
+        end
+      end
+
+      context 'when the play is non-canonical' do
+        it 'requires a token' do
+          get "/api/v1/plays/#{non_canonical_play.id}/play_skeleton", as: :json
+          expect(response).not_to have_http_status(200)
+        end
+
+        it 'allows access with a valid token' do
+          get "/api/v1/plays/#{non_canonical_play.id}/play_skeleton", as: :json, headers: authenticated_header(user)
+          expect(response).to have_http_status(200)
+        end
+      end
+    end
+  end
 end

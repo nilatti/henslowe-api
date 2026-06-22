@@ -29,8 +29,18 @@ class SoundCuesController < ApiController
   end
 
   # PATCH/PUT /sound_cues/1
-  # PATCH/PUT /sound_cues/1.json
   def update
+    play = @sound_cue.french_scene&.scene&.act&.play
+    if play&.canonical?
+      unless @current_user.superadmin?
+        render json: { error: 'Only superadmins can edit canonical play texts.' }, status: :forbidden
+        return
+      end
+    elsif !@current_user.superadmin? && !@current_user.has_active_subscription?
+      render json: { error: 'An active subscription is required to edit production scripts.' }, status: :forbidden
+      return
+    end
+
     if @sound_cue.update(sound_cue_params)
       json_response(@sound_cue.as_json)
     else
@@ -47,7 +57,7 @@ class SoundCuesController < ApiController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sound_cue
-      @sound_cue = SoundCue.find(params[:id])
+      @sound_cue = SoundCue.includes(french_scene: { scene: { act: :play } }).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -157,7 +157,7 @@ class ProductionsController < ApiController
     json_response(@production.as_json(
       include: [
         {theater: {only: [:id, :name]}},
-        {play: {only: [:id, :title]}},
+        {play: {only: [:id, :title], methods: [:has_lines]}},
         {default_space: {only: [:id, :name]}},
         {production_phases: {include: :phase}}
       ],

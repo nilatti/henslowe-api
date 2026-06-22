@@ -1,9 +1,11 @@
 module Api
   module V1
 class PlaysController < ApiController
-  skip_before_action :authenticate_request, only: %i[play_titles]
+  skip_before_action :authenticate_request, only: %i[play_titles play_script play_skeleton]
   before_action :set_author, only: %i[index create]
   before_action :set_play, except: %i[index play_titles create]
+  before_action :authenticate_if_token_present, only: %i[play_script play_skeleton]
+  before_action :require_auth_for_non_canonical_play, only: %i[play_script play_skeleton]
 
   # GET /plays
   def index
@@ -187,6 +189,20 @@ class PlaysController < ApiController
   end
 
   private
+
+  def authenticate_if_token_present
+    token = request.headers['Authorization']&.split(' ')&.last
+    return unless token
+    @decoded = JsonWebToken.decode(token)
+    @current_user = User.find(@decoded[:user_id])
+  rescue
+    nil
+  end
+
+  def require_auth_for_non_canonical_play
+    return if @play.canonical?
+    authenticate_request
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_author

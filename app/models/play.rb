@@ -15,4 +15,8 @@ class Play < ApplicationRecord
   has_many :on_stages, through: :french_scenes
   has_many :lines, through: :french_scenes
   validates :title, presence: true
+
+  def has_lines
+    lines.exists?
+  end
 end

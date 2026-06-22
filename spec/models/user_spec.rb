@@ -316,6 +316,24 @@ RSpec.describe User, type: :model do
     expect(User.all).to match_array(users)
   end
 
+  describe '#has_active_subscription?' do
+    it 'returns true when subscription_status is active' do
+      expect(build(:user, subscription_status: 'active').has_active_subscription?).to be true
+    end
+
+    it 'returns false when subscription_status is never subscribed' do
+      expect(build(:user, subscription_status: 'never subscribed').has_active_subscription?).to be false
+    end
+
+    it 'returns false when subscription_status is canceled' do
+      expect(build(:user, subscription_status: 'canceled').has_active_subscription?).to be false
+    end
+
+    it 'returns false when subscription_status is nil' do
+      expect(build(:user, subscription_status: nil).has_active_subscription?).to be false
+    end
+  end
+
 end
 
 #   default_scope {order(:last_name, :first_name, :email)}

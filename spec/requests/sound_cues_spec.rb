@@ -85,10 +85,63 @@ RSpec.describe 'SoundCues API', type: :request do
     let(:valid_attributes) { { sound_cue: attributes_for(:sound_cue, original_content: "BE LOUDER") } }
 
     context 'when the record exists' do
-      before { put "/api/v1/sound_cues/#{sound_cue_id}", params: valid_attributes, as: :json, headers: authenticated_header(user) }
+      before do
+        paid_user = create(:user, :paid)
+        put "/api/v1/sound_cues/#{sound_cue_id}", params: valid_attributes, as: :json, headers: authenticated_header(paid_user)
+      end
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
+      end
+    end
+  end
+
+  describe 'PUT /sound_cues/:id — subscription gate' do
+    let(:superadmin)  { create(:user, :superadmin) }
+    let(:paid_user)   { create(:user, :paid) }
+    let(:unpaid_user) { create(:user) }
+
+    let(:canonical_play)  { create(:play, :with_full_structure, canonical: true) }
+    let(:canonical_fs)    { canonical_play.acts.first.scenes.first.french_scenes.first }
+    let(:canonical_cue)   { create(:sound_cue, french_scene: canonical_fs) }
+
+    let(:production_play) { create(:play, :with_full_structure, canonical: false) }
+    let(:production_fs)   { production_play.acts.first.scenes.first.french_scenes.first }
+    let(:production_cue)  { create(:sound_cue, french_scene: production_fs) }
+
+    let(:update_params) { { sound_cue: { new_content: 'silence' } } }
+
+    context 'canonical play sound cues' do
+      it 'allows superadmin' do
+        put "/api/v1/sound_cues/#{canonical_cue.id}", params: update_params, as: :json, headers: authenticated_header(superadmin)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'blocks a paid non-superadmin user' do
+        put "/api/v1/sound_cues/#{canonical_cue.id}", params: update_params, as: :json, headers: authenticated_header(paid_user)
+        expect(response).to have_http_status(403)
+      end
+
+      it 'blocks an unpaid user' do
+        put "/api/v1/sound_cues/#{canonical_cue.id}", params: update_params, as: :json, headers: authenticated_header(unpaid_user)
+        expect(response).to have_http_status(403)
+      end
+    end
+
+    context 'non-canonical (production) sound cues' do
+      it 'allows a paid user' do
+        put "/api/v1/sound_cues/#{production_cue.id}", params: update_params, as: :json, headers: authenticated_header(paid_user)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'allows superadmin' do
+        put "/api/v1/sound_cues/#{production_cue.id}", params: update_params, as: :json, headers: authenticated_header(superadmin)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'blocks an unpaid user' do
+        put "/api/v1/sound_cues/#{production_cue.id}", params: update_params, as: :json, headers: authenticated_header(unpaid_user)
+        expect(response).to have_http_status(403)
       end
     end
   end

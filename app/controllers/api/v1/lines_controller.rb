@@ -35,6 +35,17 @@ class LinesController < ApiController
   # PATCH/PUT /lines/1
   # PATCH/PUT /lines/1.json
   def update
+    play = @line.french_scene&.scene&.act&.play
+    if play&.canonical?
+      unless @current_user.superadmin?
+        render json: { error: 'Only superadmins can edit canonical play texts.' }, status: :forbidden
+        return
+      end
+    elsif !@current_user.superadmin? && !@current_user.has_active_subscription?
+      render json: { error: 'An active subscription is required to edit production scripts.' }, status: :forbidden
+      return
+    end
+
     if @line.update(line_params)
       json_response(@line.as_json)
     else
@@ -51,7 +62,7 @@ class LinesController < ApiController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_line
-      @line = Line.find(params[:id])
+      @line = Line.includes(french_scene: { scene: { act: :play } }).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

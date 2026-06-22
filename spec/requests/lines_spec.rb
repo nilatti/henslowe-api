@@ -76,14 +76,61 @@ RSpec.describe 'lines API', type: :request do
 
     context 'when the record exists' do
 
-      it 'returns status code 200' do
-        test_line = build(:line)
-        valid_attributes = {
-          line: {
-              new_content: "new content",
-            } }
-          put "/api/v1/lines/#{line_id}", params: valid_attributes, as: :json, headers: authenticated_header(user)
+      it 'returns status code 200 for a paid user' do
+        paid_user = create(:user, :paid)
+        valid_attributes = { line: { new_content: "new content" } }
+        put "/api/v1/lines/#{line_id}", params: valid_attributes, as: :json, headers: authenticated_header(paid_user)
         expect(response).to have_http_status(200)
+      end
+    end
+  end
+
+  describe 'PUT /lines/:id — subscription gate' do
+    let(:superadmin)  { create(:user, :superadmin) }
+    let(:paid_user)   { create(:user, :paid) }
+    let(:unpaid_user) { create(:user) }
+
+    let(:canonical_play)     { create(:play, :with_full_structure, canonical: true) }
+    let(:canonical_fs)       { canonical_play.acts.first.scenes.first.french_scenes.first }
+    let(:canonical_line)     { create(:line, french_scene: canonical_fs) }
+
+    let(:production_play)    { create(:play, :with_full_structure, canonical: false) }
+    let(:production_fs)      { production_play.acts.first.scenes.first.french_scenes.first }
+    let(:production_line)    { create(:line, french_scene: production_fs) }
+
+    let(:update_params) { { line: { new_content: 'Cut.' } } }
+
+    context 'canonical play lines' do
+      it 'allows superadmin' do
+        put "/api/v1/lines/#{canonical_line.id}", params: update_params, as: :json, headers: authenticated_header(superadmin)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'blocks a paid non-superadmin user' do
+        put "/api/v1/lines/#{canonical_line.id}", params: update_params, as: :json, headers: authenticated_header(paid_user)
+        expect(response).to have_http_status(403)
+      end
+
+      it 'blocks an unpaid user' do
+        put "/api/v1/lines/#{canonical_line.id}", params: update_params, as: :json, headers: authenticated_header(unpaid_user)
+        expect(response).to have_http_status(403)
+      end
+    end
+
+    context 'non-canonical (production) play lines' do
+      it 'allows a paid user' do
+        put "/api/v1/lines/#{production_line.id}", params: update_params, as: :json, headers: authenticated_header(paid_user)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'allows superadmin' do
+        put "/api/v1/lines/#{production_line.id}", params: update_params, as: :json, headers: authenticated_header(superadmin)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'blocks an unpaid user' do
+        put "/api/v1/lines/#{production_line.id}", params: update_params, as: :json, headers: authenticated_header(unpaid_user)
+        expect(response).to have_http_status(403)
       end
     end
   end

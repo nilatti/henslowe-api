@@ -29,8 +29,18 @@ class StageDirectionsController < ApiController
   end
 
   # PATCH/PUT /stage_directions/1
-  # PATCH/PUT /stage_directions/1.json
   def update
+    play = @stage_direction.french_scene&.scene&.act&.play
+    if play&.canonical?
+      unless @current_user.superadmin?
+        render json: { error: 'Only superadmins can edit canonical play texts.' }, status: :forbidden
+        return
+      end
+    elsif !@current_user.superadmin? && !@current_user.has_active_subscription?
+      render json: { error: 'An active subscription is required to edit production scripts.' }, status: :forbidden
+      return
+    end
+
     if @stage_direction.update(stage_direction_params)
       json_response(@stage_direction.as_json)
     else
@@ -47,7 +57,7 @@ class StageDirectionsController < ApiController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_stage_direction
-      @stage_direction = StageDirection.find(params[:id])
+      @stage_direction = StageDirection.includes(french_scene: { scene: { act: :play } }).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

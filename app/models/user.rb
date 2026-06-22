@@ -205,14 +205,22 @@ class User < ApplicationRecord
     self.jobs.select { |job| job.theater_id == theater.id }
   end
 
+  def has_active_subscription?
+    subscription_status == 'active'
+  end
+
   def update_subscription_status
-    if self.stripe_customer_id
-      subscriptions = Stripe::Subscription.list({customer: self.stripe_customer_id}).data
-      if subscriptions.length > 0
-        subscriptions.sort_by(&:current_period_end)
-        self.subscription_status = subscriptions.last.status
-        self.subscription_end_date = DateTime.strptime("#{subscriptions.last.current_period_end}",'%s')
-      end
-    end
+    return unless stripe_customer_id.present? && Stripe.api_key.present?
+
+    subscriptions = Stripe::Subscription.list({ customer: stripe_customer_id }).data
+    return if subscriptions.empty?
+
+    # current_period_end moved to SubscriptionItem in Stripe API 2024-09-30+
+    latest = subscriptions.max_by { |s| s.items.data.first&.current_period_end || 0 }
+    self.subscription_status = latest.status
+    period_end = latest.items.data.first&.current_period_end
+    self.subscription_end_date = DateTime.strptime(period_end.to_s, '%s') if period_end
+  rescue Stripe::StripeError => e
+    Rails.logger.error("Stripe error syncing subscription for user #{id}: #{e.message}")
   end
 end
