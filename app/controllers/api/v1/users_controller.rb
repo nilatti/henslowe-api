@@ -210,6 +210,20 @@ class UsersController < ApiController
     json_response(@users.as_json(include: :jobs))
   end
 
+  def generate_fake
+    gender = params[:gender].presence || 'cis female'
+    count = User.where(fake: true).count + 1
+    user = User.create!(
+      first_name: "Placeholder",
+      last_name: "Actor #{count}",
+      email: "placeholder.actor.#{count}.#{SecureRandom.hex(4)}@fake.example",
+      fake: true,
+      provider: 'fake',
+      gender: gender
+    )
+    json_response(user.as_json(include: :jobs), :created)
+  end
+
   private
 
   # Only allow a trusted parameter "white list" through.

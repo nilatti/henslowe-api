@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         end
         collection do
           get :fake
+          post :generate_fake
         end
         resources :conflicts, shallow: true
         resources :conflict_patterns, shallow: true
