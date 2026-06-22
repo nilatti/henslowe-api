@@ -149,4 +149,74 @@ RSpec.describe 'Acts API' do
       expect(scene['french_scenes'][0]['lines'][0]['character']).not_to be_empty
     end
   end
+
+  # Use a fresh play/act with no lines so the Caracal template doesn't attempt
+  # to look up characters that may not belong to the play's characters collection.
+  describe 'render_cut_script' do
+    let!(:render_play) { create(:play, :with_full_structure, author_id: author.id) }
+    let!(:render_act)  { render_play.acts.first }
+
+    context 'when authenticated' do
+      before do
+        get "/api/v1/acts/#{render_act.id}/render_cut_script",
+            params: { play_id: render_play.id },
+            headers: authenticated_header(user)
+      end
+
+      it 'returns status 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'sets an attachment content-disposition header' do
+        expect(response.headers['Content-Disposition']).to include('attachment')
+      end
+    end
+
+    it 'requires authentication' do
+      get "/api/v1/acts/#{render_act.id}/render_cut_script",
+          params: { play_id: render_play.id }
+      expect(response).to have_http_status(401)
+    end
+
+    it 'returns 404 for a non-existent act' do
+      get "/api/v1/acts/0/render_cut_script",
+          params: { play_id: render_play.id },
+          headers: authenticated_header(user)
+      expect(response).to have_http_status(404)
+    end
+  end
+
+  describe 'render_cuts_marked_script' do
+    let!(:render_play) { create(:play, :with_full_structure, author_id: author.id) }
+    let!(:render_act)  { render_play.acts.first }
+
+    context 'when authenticated' do
+      before do
+        get "/api/v1/acts/#{render_act.id}/render_cuts_marked_script",
+            params: { play_id: render_play.id },
+            headers: authenticated_header(user)
+      end
+
+      it 'returns status 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'sets an attachment content-disposition header' do
+        expect(response.headers['Content-Disposition']).to include('attachment')
+      end
+    end
+
+    it 'requires authentication' do
+      get "/api/v1/acts/#{render_act.id}/render_cuts_marked_script",
+          params: { play_id: render_play.id }
+      expect(response).to have_http_status(401)
+    end
+
+    it 'returns 404 for a non-existent act' do
+      get "/api/v1/acts/0/render_cuts_marked_script",
+          params: { play_id: render_play.id },
+          headers: authenticated_header(user)
+      expect(response).to have_http_status(404)
+    end
+  end
 end
