@@ -150,7 +150,7 @@ class ProductionsController < ApiController
         .distinct
     end
 
-    render json: @productions.as_json(only: [:id, :name], include: [play: { only: [:id, :title]}, theater: { only: [:name, :id]}])
+    render json: @productions.as_json(only: [:id, :end_date], include: [play: { only: [:id, :title]}, theater: { only: [:name, :id]}])
   end
 
   def skeleton

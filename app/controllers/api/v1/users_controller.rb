@@ -128,6 +128,7 @@ class UsersController < ApiController
   HEADSHOT_MAX_BYTES = 5.megabytes
 
   def upload_headshot
+    require 'marcel'
     file = params[:headshot]
     return json_response({ error: 'No file provided' }, :unprocessable_entity) unless file.present?
 
@@ -150,11 +151,7 @@ class UsersController < ApiController
     region = ENV.fetch('AWS_REGION', 'us-east-1')
     bucket = ENV['AWS_S3_BUCKET']
 
-    s3 = Aws::S3::Client.new(
-      region: region,
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    )
+    s3 = Aws::S3::Client.new(region: region)
     s3.put_object(bucket: bucket, key: key, body: file.read, content_type: actual_type)
 
     @user.update!(headshot_url: key)
@@ -268,11 +265,7 @@ class UsersController < ApiController
     return nil unless user.headshot_url.present?
     require 'aws-sdk-s3'
     presigner = Aws::S3::Presigner.new(
-      client: Aws::S3::Client.new(
-        region: ENV.fetch('AWS_REGION', 'us-east-1'),
-        access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-      )
+      client: Aws::S3::Client.new(region: ENV.fetch('AWS_REGION', 'us-east-1'))
     )
     presigner.presigned_url(:get_object,
       bucket: ENV['AWS_S3_BUCKET'],
