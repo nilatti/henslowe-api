@@ -172,8 +172,8 @@ class PlaysController < ApiController
 
   def play_titles
     puts('called play titles')
-    @plays = Play.where(canonical: true)
-    render json: @plays.as_json(only: %i[author_id id title])
+    @plays = Play.includes(:author).where(canonical: true)
+    render json: @plays.as_json(only: %i[author_id id title], include: { author: { only: [:last_name] } })
   end
 
   def production_copy_complete
