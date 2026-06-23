@@ -212,11 +212,22 @@ class UsersController < ApiController
 
   def generate_fake
     gender = params[:gender].presence || 'cis female'
-    count = User.where(fake: true).count + 1
+    female = gender == 'cis female' || gender == 'trans female'
+    male   = gender == 'cis male'   || gender == 'trans male'
+    first_name =
+      if female
+        Faker::Name.feminine_name.split.first
+      elsif male
+        Faker::Name.masculine_name.split.first
+      else
+        Faker::Name.first_name.split.first
+      end
+    last_name = Faker::Name.last_name
+    uid = SecureRandom.hex(4)
     user = User.create!(
-      first_name: "Placeholder",
-      last_name: "Actor #{count}",
-      email: "placeholder.actor.#{count}.#{SecureRandom.hex(4)}@fake.example",
+      first_name: first_name,
+      last_name: last_name,
+      email: "#{first_name.downcase}.#{last_name.downcase}.#{uid}@fake.example",
       fake: true,
       provider: 'fake',
       gender: gender

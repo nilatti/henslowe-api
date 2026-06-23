@@ -644,6 +644,56 @@ RSpec.describe 'Users API' do
     end
   end
 
+  describe 'GET /api/v1/users/fake' do
+    let!(:fake_user) { create(:user, fake: true, provider: 'fake', gender: 'cis female') }
+
+    it 'returns status 200' do
+      get '/api/v1/users/fake', headers: authenticated_header(user)
+      expect(response).to have_http_status(200)
+    end
+
+    it 'returns only fake users' do
+      get '/api/v1/users/fake', headers: authenticated_header(user)
+      ids = json.map { |u| u['id'] }
+      expect(ids).to include(fake_user.id)
+      expect(ids).not_to include(user.id)
+    end
+
+    it 'includes jobs in the response' do
+      get '/api/v1/users/fake', headers: authenticated_header(user)
+      expect(json.first).to have_key('jobs')
+    end
+  end
+
+  describe 'POST /api/v1/users/generate_fake' do
+    it 'returns status 201' do
+      post '/api/v1/users/generate_fake', params: { gender: 'cis female' }, as: :json, headers: authenticated_header(user)
+      expect(response).to have_http_status(201)
+    end
+
+    it 'creates a fake user with the given gender' do
+      post '/api/v1/users/generate_fake', params: { gender: 'cis male' }, as: :json, headers: authenticated_header(user)
+      expect(json['gender']).to eq('cis male')
+      expect(json['fake']).to be true
+    end
+
+    it 'creates a user with a fake.example email' do
+      post '/api/v1/users/generate_fake', params: { gender: 'cis female' }, as: :json, headers: authenticated_header(user)
+      expect(json['email']).to end_with('@fake.example')
+    end
+
+    it 'defaults to cis female when no gender is provided' do
+      post '/api/v1/users/generate_fake', as: :json, headers: authenticated_header(user)
+      expect(json['gender']).to eq('cis female')
+    end
+
+    it 'persists the new fake user in the database' do
+      expect {
+        post '/api/v1/users/generate_fake', params: { gender: 'nonbinary' }, as: :json, headers: authenticated_header(user)
+      }.to change { User.where(fake: true).count }.by(1)
+    end
+  end
+
   describe 'put /api/users/:user_id/build_conflict_schedule' do
     before {
       conflict_schedule_pattern = {

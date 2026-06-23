@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get '/up', to: proc { [200, {}, ['OK']] }
+  post '/stripe/webhook', to: 'stripe_webhooks#create'
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
