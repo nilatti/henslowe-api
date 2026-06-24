@@ -141,10 +141,10 @@ class ProductionsController < ApiController
   def production_names
     @productions = []
     if current_user.superadmin?
-      @productions = Production.all
+      @productions = Production.joins(:play, :theater)
     else
       auditioner_id = Specialization.find_by(title: 'Auditioner')&.id
-      @productions = Production.joins(:jobs)
+      @productions = Production.joins(:play, :theater, :jobs)
         .where(jobs: { user_id: current_user.id })
         .where.not(jobs: { specialization_id: auditioner_id })
         .distinct
