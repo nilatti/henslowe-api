@@ -8,6 +8,9 @@ RSpec.describe 'jobs API', type: :request do
   let!(:job_id) { jobs.first.id }
   let!(:production) { create(:production)}
   let!(:theater) {create(:theater)}
+  let!(:admin_theater) { create(:theater) }
+  let!(:admin_user) { create(:user) }
+  let!(:theater_admin_job) { create(:job, user: admin_user, theater: admin_theater, specialization: create(:specialization, :theater_admin)) }
 
   # Test suite for GET /jobs
   describe 'GET /jobs' do
@@ -65,9 +68,10 @@ RSpec.describe 'jobs API', type: :request do
             end_date: test_job.end_date,
             specialization_id: test_job.specialization.id,
             start_date: test_job.start_date,
+            theater_id: admin_theater.id,
             user_id: test_job.user.id,
           } }
-        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(admin_user)
         expect(json['user_id']).to eq(test_job.user.id)
       end
 
@@ -77,10 +81,11 @@ RSpec.describe 'jobs API', type: :request do
           {
             user_id: test_job.user.id,
             specialization_id: test_job.specialization.id,
-            start_date: test_job.start_date
+            start_date: test_job.start_date,
+            theater_id: admin_theater.id,
           }
         }
-        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(admin_user)
         expect(response).to have_http_status(201)
       end
 
@@ -90,15 +95,42 @@ RSpec.describe 'jobs API', type: :request do
           {
             user_id: test_job.user.id,
             specialization_id: test_job.specialization.id,
+            theater_id: admin_theater.id,
           }
         }
-        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(user)
+        post '/api/v1/jobs', params: valid_attributes, as: :json, headers: authenticated_header(admin_user)
         expect(response).to have_http_status(201)
       end
     end
 
+    context 'when the user is creating an auditioner job for themselves' do
+      it 'returns status 201' do
+        auditioner = create(:specialization, :auditioner)
+        post '/api/v1/jobs', params: {
+          job: { user_id: user.id, specialization_id: auditioner.id }
+        }, as: :json, headers: authenticated_header(user)
+        expect(response).to have_http_status(201)
+      end
+
+      it 'returns 403 when creating an auditioner job for someone else' do
+        other_user = create(:user)
+        auditioner = create(:specialization, :auditioner)
+        post '/api/v1/jobs', params: {
+          job: { user_id: other_user.id, specialization_id: auditioner.id }
+        }, as: :json, headers: authenticated_header(user)
+        expect(response).to have_http_status(403)
+      end
+
+      it 'returns 403 when creating a non-auditioner job for themselves' do
+        post '/api/v1/jobs', params: {
+          job: { user_id: user.id, specialization_id: create(:specialization, :actor).id }
+        }, as: :json, headers: authenticated_header(user)
+        expect(response).to have_http_status(403)
+      end
+    end
+
     context 'when the request is invalid' do
-      before { post '/api/v1/jobs', params: { job: { end_date: '2001-09-01', start_date: '2002-11-01' } }, as: :json, headers: authenticated_header(user) }
+      before { post '/api/v1/jobs', params: { job: { end_date: '2001-09-01', start_date: '2002-11-01', theater_id: admin_theater.id } }, as: :json, headers: authenticated_header(admin_user) }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -138,10 +170,10 @@ RSpec.describe 'jobs API', type: :request do
         job: {
           character_group_id: character_group.id,
           user_id: test_job.user.id,
-          production_id: test_job.production.id,
+          theater_id: admin_theater.id,
           specialization_id: test_job.specialization.id,
         }
-      }, as: :json, headers: authenticated_header(user)
+      }, as: :json, headers: authenticated_header(admin_user)
       expect(response).to have_http_status(201)
       expect(json['character_group_id']).to eq(character_group.id)
     end

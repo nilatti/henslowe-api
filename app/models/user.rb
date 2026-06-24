@@ -146,6 +146,7 @@ class User < ApplicationRecord
     "#{name} (#{production_job_titles(production).join(", ")})"
   end
   def production_admin?(production)
+    return false if production.nil?
     jobs = production_jobs(production)
     admin_jobs = jobs.select { |job| job.specialization.production_admin == true }
     admin_jobs.size > 0 #return true if there are an admin jobs assigned to this user for this production.
@@ -183,6 +184,7 @@ class User < ApplicationRecord
     self.role == "superadmin"
   end
   def theater_admin?(theater)
+    return false if theater.nil?
     jobs = theater_jobs(theater)
     admin_jobs = jobs.select { |job| job.specialization.theater_admin == true }
     admin_jobs.size > 0 #return true if there are admin jobs for this user for this theater.

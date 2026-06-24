@@ -5,7 +5,7 @@ class JobsController < ApiController
 
   # GET /jobs
   def index
-    if current_user.superadmin?
+    if current_user.superadmin? || params[:production_id] || params[:theater_id]
       @jobs = Job.all
     else
       admin_theater_ids = current_user.jobs

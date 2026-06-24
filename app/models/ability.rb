@@ -44,6 +44,10 @@ class Ability
         end
       end
 
+      can :create, Job do |job|
+        job.user_id == user.id && Specialization.auditioner.include?(job.specialization)
+      end
+      can :update, Job, user_id: user.id
       can :manage, Job do |job|
         user.theater_admin?(job.theater) || user.production_admin?(job.production)
       end
