@@ -11,7 +11,7 @@ gem 'rails', '~> 7.0'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5'
 # Use Puma as the app server
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 7.0'
 gem 'thin'
 gem 'foreman'
 gem 'jsonapi-serializer'

@@ -65,11 +65,13 @@ class ActsController < ApiController
   end
 
   def render_cut_script
-    render { headers["Content-Disposition"] = "attachment; filename=\"cut_script.docx\"" }
+    headers["Content-Disposition"] = "attachment; filename=\"cut_script.docx\""
+    render plain: ""
   end
 
   def render_cuts_marked_script
-    render { headers["Content-Disposition"] = "attachment; filename=\"cuts_marked_script.docx\"" }
+    headers["Content-Disposition"] = "attachment; filename=\"cuts_marked_script.docx\""
+    render plain: ""
   end
 
   private
