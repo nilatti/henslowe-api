@@ -5,6 +5,7 @@ class ConflictsController < ApiController
 
   def index
     if (params[:user_id])
+      raise CanCan::AccessDenied unless params[:user_id].to_i == current_user.id || current_user.superadmin?
       @conflicts = Conflict.where(user_id: params[:user_id])
     elsif (params[:space_id])
       @conflicts = Conflict.where(space_id: params[:space_id])
@@ -22,6 +23,8 @@ class ConflictsController < ApiController
   # POST /conflicts
   # POST /conflicts.json
   def create
+    user_id = (conflict_params[:user_id] || params[:user_id])&.to_i
+    raise CanCan::AccessDenied unless user_id == current_user.id || current_user.superadmin?
     @conflict = Conflict.new(conflict_params)
 
     if @conflict.save
@@ -34,6 +37,7 @@ class ConflictsController < ApiController
   # PATCH/PUT /conflicts/1
   # PATCH/PUT /conflicts/1.json
   def update
+    authorize! :update, @conflict
     if @conflict.update(conflict_params)
       render json: @conflict
     else
@@ -44,6 +48,7 @@ class ConflictsController < ApiController
   # DELETE /conflicts/1
   # DELETE /conflicts/1.json
   def destroy
+    authorize! :destroy, @conflict
     @conflict.destroy
   end
 

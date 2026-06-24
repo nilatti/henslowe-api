@@ -19,6 +19,9 @@ class Ability
       can :manage, :all
 
     elsif user.regular?
+      can :manage, Conflict, user_id: user.id
+      can :manage, ConflictPattern, user_id: user.id
+
       can :manage, Theater do |theater|
         user.theater_admin?(theater)
       end

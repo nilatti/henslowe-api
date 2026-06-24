@@ -120,6 +120,7 @@ class UsersController < ApiController
     json_response(@user, :created)
   end
   def update
+    authorize! :update, @user
     @user.update(user_params)
     json_response(@user)
   end
@@ -128,6 +129,7 @@ class UsersController < ApiController
   HEADSHOT_MAX_BYTES = 5.megabytes
 
   def upload_headshot
+    authorize! :update, @user
     require 'marcel'
     file = params[:headshot]
     return json_response({ error: 'No file provided' }, :unprocessable_entity) unless file.present?
@@ -167,6 +169,7 @@ class UsersController < ApiController
   def build_conflict_schedule
     puts "build conflict schedule called"
     set_user
+    authorize! :update, @user
     conflict_schedule_pattern = params[:conflict_schedule_pattern]
     end_date = conflict_schedule_pattern[:end_date] || Date.today + 1.year
     start_date = conflict_schedule_pattern[:start_date] || Date.today
@@ -253,8 +256,6 @@ class UsersController < ApiController
       :program_name,
       :state,
       :street_address,
-      :subscription_end_date,
-      :subscription_status,
       :timezone,
       :website,
       :zip

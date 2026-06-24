@@ -5,7 +5,21 @@ class JobsController < ApiController
 
   # GET /jobs
   def index
-    @jobs = Job.all
+    if current_user.superadmin?
+      @jobs = Job.all
+    else
+      admin_theater_ids = current_user.jobs
+        .joins(:specialization)
+        .where(specializations: { theater_admin: true })
+        .pluck(:theater_id).compact
+      admin_production_ids = current_user.jobs
+        .joins(:specialization)
+        .where(specializations: { production_admin: true })
+        .pluck(:production_id).compact
+      @jobs = Job.where(user_id: current_user.id)
+      @jobs = @jobs.or(Job.where(theater_id: admin_theater_ids)) if admin_theater_ids.any?
+      @jobs = @jobs.or(Job.where(production_id: admin_production_ids)) if admin_production_ids.any?
+    end
     @jobs = @jobs.where(production_id: params[:production_id]) if params[:production_id]
     @jobs = @jobs.where(theater_id: params[:theater_id]) if params[:theater_id]
     @jobs = @jobs.where(user_id: params[:user_id]) if params[:user_id]
@@ -54,6 +68,7 @@ class JobsController < ApiController
   # POST /jobs
   def create
     @job = Job.new(job_params)
+    authorize! :create, @job
     if job_params['character_id'] || job_params['character_group_id']
       UpdateOnStagesWorker.perform_async(job_params['character_id'], job_params['character_group_id'], job_params['user_id'])
     end
@@ -76,6 +91,7 @@ class JobsController < ApiController
 
   # PATCH/PUT /jobs/1
   def update
+    authorize! :update, @job
     if job_params['character_id'] || job_params['character_group_id']
       UpdateOnStagesWorker.perform_async(job_params['character_id'], job_params['character_group_id'], job_params['user_id'])
     end

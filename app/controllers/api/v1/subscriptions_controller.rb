@@ -14,11 +14,10 @@ module Api
       end
 
       def user_subscriptions
-        user = User.find(params[:user_id])
         products = []
-        if user.stripe_customer_id
+        if current_user.stripe_customer_id
           subscriptions = SubscriptionStatus.new
-            .get_subscriptions_for_user(user.stripe_customer_id).data
+            .get_subscriptions_for_user(current_user.stripe_customer_id).data
           subscriptions.each do |subscription|
             api_product = Stripe::Product.retrieve(subscription.plan.product)
             api_product.subscription_id = subscription.id
@@ -36,18 +35,16 @@ module Api
       end
 
       def cancel
-        result = Stripe::Subscription.update(
-          params[:subscription_id],
-          { cancel_at_period_end: true }
-        )
+        subscription = Stripe::Subscription.retrieve(params[:subscription_id])
+        raise CanCan::AccessDenied unless subscription.customer == current_user.stripe_customer_id
+        result = Stripe::Subscription.update(params[:subscription_id], { cancel_at_period_end: true })
         render json: result.to_json
       end
 
       def renew
-        result = Stripe::Subscription.update(
-          params[:subscription_id],
-          { cancel_at_period_end: false }
-        )
+        subscription = Stripe::Subscription.retrieve(params[:subscription_id])
+        raise CanCan::AccessDenied unless subscription.customer == current_user.stripe_customer_id
+        result = Stripe::Subscription.update(params[:subscription_id], { cancel_at_period_end: false })
         render json: result.to_json
       end
     end

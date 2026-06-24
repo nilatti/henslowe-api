@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   post '/stripe/webhook', to: 'stripe_webhooks#create'
 
   require 'sidekiq/web'
+  Sidekiq::Web.use(Rack::Auth::Basic) do |username, password|
+    username == ENV.fetch('SIDEKIQ_USERNAME', '') &&
+      ActiveSupport::SecurityUtils.secure_compare(password, ENV.fetch('SIDEKIQ_PASSWORD', ''))
+  end
   mount Sidekiq::Web => '/sidekiq'
 
   # OmniAuth callback stays at /auth/:provider/callback but routes to namespaced controller
