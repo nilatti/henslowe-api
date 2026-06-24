@@ -3,13 +3,20 @@ module Api
     class SessionsController < ApiController
       skip_before_action :authenticate_request, only: [:create]
 
-      # POST /auth/:provider/callback
-      # This is called by OmniAuth after Google OAuth succeeds
+      COOKIE_OPTIONS = {
+        httponly: true,
+        secure: Rails.env.production?,
+        same_site: Rails.env.production? ? :strict : :lax,
+        domain: Rails.env.production? ? '.henslowescloud.com' : nil,
+        expires: 24.hours.from_now
+      }.freeze
+
+      # GET /auth/:provider/callback — OmniAuth posts here after Google OAuth
       def create
         auth = request.env['omniauth.auth']
 
         unless auth
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=oauth_failed", allow_other_host: true
+          redirect_to "#{frontend_url}/auth/callback?error=oauth_failed", allow_other_host: true
           return
         end
 
@@ -17,25 +24,35 @@ module Api
 
         if user.persisted?
           token = JsonWebToken.encode(user_id: user.id)
-          user_params = {
-            id: user.id,
-            email: user.email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            role: user.role,
-            subscription_status: user.subscription_status
-          }.to_query
-
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?token=#{token}&#{user_params}", allow_other_host: true
+          cookies[:auth_token] = COOKIE_OPTIONS.merge(value: token)
+          redirect_to "#{frontend_url}/auth/callback", allow_other_host: true
         else
-          redirect_to "#{ENV.fetch('FRONTEND_URL', 'http://localhost:5173')}/auth/callback?error=user_not_found&details=#{user.errors.full_messages.join(',')}", allow_other_host: true
+          redirect_to "#{frontend_url}/auth/callback?error=user_not_found", allow_other_host: true
         end
       end
 
-      # DELETE /api/v1/sessions
-      # JWT is stateless — logout is handled client-side by discarding the token
+      # GET /api/v1/sessions/me — returns current user profile; authenticated via cookie
+      def me
+        render json: {
+          id: current_user.id,
+          email: current_user.email,
+          first_name: current_user.first_name,
+          last_name: current_user.last_name,
+          role: current_user.role,
+          subscription_status: current_user.subscription_status
+        }
+      end
+
+      # DELETE /api/v1/sessions — clears the auth cookie
       def destroy
+        cookies.delete(:auth_token, domain: Rails.env.production? ? '.henslowescloud.com' : nil)
         render json: { message: 'Logged out successfully' }, status: :ok
+      end
+
+      private
+
+      def frontend_url
+        ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
       end
     end
   end

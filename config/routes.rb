@@ -16,7 +16,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'open_auditions', to: 'open_auditions#index'
-      resources :sessions, only: [:destroy]
+      get    'sessions/me',  to: 'sessions#me'
+      delete 'sessions',     to: 'sessions#destroy'
       resources :charges do
         collection do
           post :create_checkout_session

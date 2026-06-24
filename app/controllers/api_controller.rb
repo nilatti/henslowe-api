@@ -1,4 +1,5 @@
 class ApiController < ActionController::API
+  include ActionController::Cookies
   include ExceptionHandler
   include Response
   include CanCan::ControllerAdditions
@@ -17,7 +18,7 @@ class ApiController < ActionController::API
   private
 
   def authenticate_request
-    token = request.headers['Authorization']&.split(' ')&.last
+    token = cookies[:auth_token] || request.headers['Authorization']&.split(' ')&.last
     raise ExceptionHandler::MissingToken, 'Missing token' unless token
     @decoded = JsonWebToken.decode(token)
     @current_user = User.find(@decoded[:user_id])
