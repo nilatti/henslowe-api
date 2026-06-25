@@ -34,6 +34,7 @@ class JobsController < ApiController
           :specialization,
           :theater,
           :character,
+          :character_group,
           :audition_submission,
           production: {
             include: {play: { only: [:id, :title]}}
