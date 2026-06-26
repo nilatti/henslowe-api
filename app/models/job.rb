@@ -19,8 +19,29 @@ class Job < ApplicationRecord
   scope :actor_or_auditioner_for_theater, -> (theater) {theater(theater).actor_or_auditioner}
 
   validate :end_date_after_start_date
+  validate :no_real_users_at_dream_theaters, on: :create
+  validate :admin_user_must_be_paid, on: :create
 
 private
+  def no_real_users_at_dream_theaters
+    return unless user.present? && !user.fake?
+    theater = self.theater || self.production&.theater
+    return unless theater&.fake?
+    # The one allowed real-user job at a dream theater is the owner's Theater Admin
+    unless specialization&.theater_admin? && theater_id.present? && production_id.nil?
+      errors.add(:base, "Dream theater productions cannot have real users as cast or staff")
+    end
+  end
+
+  def admin_user_must_be_paid
+    return unless user.present? && !user.fake?
+    return unless specialization&.production_admin? || specialization&.theater_admin?
+    theater = self.theater || self.production&.theater
+    return if theater&.fake?
+    return if user.has_active_subscription?
+    errors.add(:base, "payment_required")
+  end
+
   def end_date_after_start_date
     if end_date
       if start_date > end_date

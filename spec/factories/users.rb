@@ -24,6 +24,15 @@ FactoryBot.define do
     trait :paid do
       subscription_status { "active" }
     end
+
+    trait :paid_override do
+      paid_override { true }
+    end
+
+    trait :fake do
+      fake { true }
+      provider { "fake" }
+    end
     street_address { Faker::Address.street_address }
     timezone { 'EST' }
     website { Faker::Internet.url }

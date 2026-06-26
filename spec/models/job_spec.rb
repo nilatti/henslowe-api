@@ -18,6 +18,95 @@ RSpec.describe Job, type: :model do
     end
   end
 
+  describe "dream theater validation (on create)" do
+    let!(:dream_theater) { create(:theater, :fake) }
+    let!(:real_theater)  { create(:theater) }
+    let!(:real_user)     { create(:user) }
+    let!(:fake_user)     { create(:user, :fake) }
+    let!(:production)    { create(:production, theater: dream_theater) }
+
+    it "allows fake users to be cast in dream theater productions" do
+      job = build(:job, user: fake_user, production: production, theater: nil,
+                        specialization: create(:specialization, :actor))
+      expect(job).to be_valid
+    end
+
+    it "blocks real users from being cast in dream theater productions" do
+      job = build(:job, user: real_user, production: production, theater: nil,
+                        specialization: create(:specialization, :actor))
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("Dream theater productions cannot have real users as cast or staff")
+    end
+
+    it "blocks real users from staff jobs at dream theater productions" do
+      job = build(:job, user: real_user, production: production, theater: nil,
+                        specialization: create(:specialization, :director))
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("Dream theater productions cannot have real users as cast or staff")
+    end
+
+    it "allows the Theater Admin job at theater level (the owner's job)" do
+      job = build(:job, user: real_user, theater: dream_theater, production: nil,
+                        specialization: create(:specialization, :theater_admin))
+      expect(job).to be_valid
+    end
+
+    it "does not fire for real theaters" do
+      job = build(:job, user: real_user, theater: real_theater, production: nil,
+                        specialization: create(:specialization, :actor))
+      expect(job.errors[:base]).not_to include("Dream theater productions cannot have real users as cast or staff")
+    end
+  end
+
+  describe "admin job payment validation (on create)" do
+    let!(:real_theater)  { create(:theater) }
+    let!(:dream_theater) { create(:theater, :fake) }
+    let!(:paid_user)     { create(:user, :paid) }
+    let!(:override_user) { create(:user, :paid_override) }
+    let!(:unpaid_user)   { create(:user) }
+    let!(:fake_user)     { create(:user, :fake) }
+    let!(:production)    { create(:production, theater: real_theater) }
+    let!(:director_spec) { create(:specialization, :director) }
+    let!(:actor_spec)    { create(:specialization, :actor) }
+
+    it "allows a paid user in an admin role" do
+      job = build(:job, user: paid_user, production: production, theater: nil,
+                        specialization: director_spec)
+      expect(job).to be_valid
+    end
+
+    it "allows a user with paid_override in an admin role" do
+      job = build(:job, user: override_user, production: production, theater: nil,
+                        specialization: director_spec)
+      expect(job).to be_valid
+    end
+
+    it "blocks an unpaid user from an admin role at a real theater" do
+      job = build(:job, user: unpaid_user, production: production, theater: nil,
+                        specialization: director_spec)
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("payment_required")
+    end
+
+    it "does not apply to fake users" do
+      job = build(:job, user: fake_user, production: production, theater: nil,
+                        specialization: director_spec)
+      expect(job.errors[:base]).not_to include("payment_required")
+    end
+
+    it "does not apply to non-admin roles" do
+      job = build(:job, user: unpaid_user, theater: real_theater, production: nil,
+                        specialization: actor_spec)
+      expect(job.errors[:base]).not_to include("payment_required")
+    end
+
+    it "does not apply at dream theaters (exempt)" do
+      job = build(:job, user: paid_user, theater: dream_theater, production: nil,
+                        specialization: create(:specialization, :theater_admin))
+      expect(job.errors[:base]).not_to include("payment_required")
+    end
+  end
+
   describe "ActiveRecord associations" do
     it { expect(job).to belong_to(:character).optional }
     it { expect(job).to belong_to(:production).optional }
