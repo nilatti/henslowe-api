@@ -26,6 +26,7 @@ class UsersController < ApiController
       timezone
       subscription_status
       subscription_end_date
+      paid_override
       created_at
       updated_at
     ]))
@@ -239,27 +240,29 @@ class UsersController < ApiController
 
   # Only allow a trusted parameter "white list" through.
   def user_params
-    params.require(:user).permit(
-      :bio,
-      :birthdate,
-      :city,
-      :description,
-      :emergency_contact_name,
-      :emergency_contact_number,
-      :first_name,
-      :gender,
-      :email,
-      :last_name,
-      :middle_name,
-      :phone_number,
-      :preferred_name,
-      :program_name,
-      :state,
-      :street_address,
-      :timezone,
-      :website,
-      :zip
-    )
+    permitted = %i[
+      bio
+      birthdate
+      city
+      description
+      emergency_contact_name
+      emergency_contact_number
+      first_name
+      gender
+      email
+      last_name
+      middle_name
+      phone_number
+      preferred_name
+      program_name
+      state
+      street_address
+      timezone
+      website
+      zip
+    ]
+    permitted << :paid_override if current_user&.superadmin?
+    params.require(:user).permit(*permitted)
   end
 
   def headshot_url(user)

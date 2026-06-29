@@ -156,7 +156,7 @@ class ProductionsController < ApiController
   def skeleton
     json_response(@production.as_json(
       include: [
-        {theater: {only: [:id, :name]}},
+        {theater: {only: [:id, :name, :fake]}},
         {play: {only: [:id, :title], methods: [:has_lines]}},
         {default_space: {only: [:id, :name]}},
         {production_phases: {include: :phase}}

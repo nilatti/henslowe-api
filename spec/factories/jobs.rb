@@ -3,7 +3,7 @@ FactoryBot.define do
     start_date { Faker::Date.between(from: 2.years.ago, to: 1.year.ago) }
     end_date { Faker::Date.between(from: 1.year.ago, to: 3.months.ago) }
     production
-    specialization
+    association :specialization, :actor
     theater
     user
 

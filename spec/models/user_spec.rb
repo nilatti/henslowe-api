@@ -98,7 +98,7 @@ RSpec.describe User, type: :model do
     let(:prod_admin_spec) { create(:specialization, :director) }
     let(:theater_admin_spec) { create(:specialization, :theater_admin) }
 
-    let(:viewer) { create(:user) }
+    let(:viewer) { create(:user, :paid) }
     let(:target) { create(:user) }
 
     def active_job(user, **opts)
@@ -331,6 +331,18 @@ RSpec.describe User, type: :model do
 
     it 'returns false when subscription_status is nil' do
       expect(build(:user, subscription_status: nil).has_active_subscription?).to be false
+    end
+
+    it 'returns true when paid_override is true regardless of subscription_status' do
+      expect(build(:user, paid_override: true, subscription_status: 'never subscribed').has_active_subscription?).to be true
+    end
+
+    it 'returns true when paid_override is true and subscription_status is nil' do
+      expect(build(:user, paid_override: true, subscription_status: nil).has_active_subscription?).to be true
+    end
+
+    it 'returns false when paid_override is false and subscription_status is not active' do
+      expect(build(:user, paid_override: false, subscription_status: 'canceled').has_active_subscription?).to be false
     end
   end
 

@@ -9,7 +9,7 @@ RSpec.describe 'jobs API', type: :request do
   let!(:production) { create(:production)}
   let!(:theater) {create(:theater)}
   let!(:admin_theater) { create(:theater) }
-  let!(:admin_user) { create(:user) }
+  let!(:admin_user) { create(:user, :paid) }
   let!(:theater_admin_job) { create(:job, user: admin_user, theater: admin_theater, specialization: create(:specialization, :theater_admin)) }
 
   # Test suite for GET /jobs

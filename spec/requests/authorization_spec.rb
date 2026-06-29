@@ -6,8 +6,8 @@ RSpec.describe 'Authorization' do
   let!(:theater)          { create(:theater) }
   let!(:production)       { create(:production, theater: theater) }
   let!(:superadmin)       { create(:user, :superadmin) }
-  let!(:theater_admin)    { create(:user) }
-  let!(:production_admin) { create(:user) }
+  let!(:theater_admin)    { create(:user, :paid) }
+  let!(:production_admin) { create(:user, :paid) }
   let!(:member)           { create(:user) }
   let!(:visitor)          { create(:user) }
 

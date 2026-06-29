@@ -208,7 +208,7 @@ class User < ApplicationRecord
   end
 
   def has_active_subscription?
-    subscription_status == 'active'
+    paid_override? || subscription_status == 'active'
   end
 
   def update_subscription_status
