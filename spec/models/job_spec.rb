@@ -130,24 +130,28 @@ RSpec.describe Job, type: :model do
     it { expect(job).to belong_to(:user).optional }
   end
   it "scopes function (basic)" do
-    production = build(:production)
-    specialization = build(:specialization)
-    actor_specialization = build(:specialization, title: 'Actor')
+    production             = build(:production)
+    specialization         = build(:specialization)
+    actor_specialization   = build(:specialization, title: 'Actor')
     auditioner_specialization = build(:specialization, title: 'Auditioner')
-    theater = build(:theater)
-    user = create(:user, :paid)
-    actor_jobs = create_list(:job, 3, specialization: actor_specialization )
-    auditioner_jobs = create_list(:job, 3, specialization: auditioner_specialization )
+    # Non-free spec used by scope-filler jobs so they don't pollute Job.actor.
+    non_free_spec          = create(:specialization, title: 'Stage Manager')
+    theater                = build(:theater)
+    paid                   = create(:user, :paid)   # shared paid user for non-free scope jobs
+    user                   = create(:user, :paid)   # dedicated user for the user-scope assertion
+
+    actor_jobs             = create_list(:job, 3, specialization: actor_specialization)
+    auditioner_jobs        = create_list(:job, 3, specialization: auditioner_specialization)
     actor_and_auditioner_jobs = actor_jobs + auditioner_jobs
-    production_jobs = create_list(:job, 3, production: production )
-    specialization_jobs = create_list(:job, 3, specialization: specialization )
-    theater_jobs = create_list(:job, 3, theater: theater )
-    user_jobs = create_list(:job, 3, user: user )
+    production_jobs        = create_list(:job, 3, production: production, specialization: non_free_spec, user: paid)
+    specialization_jobs    = create_list(:job, 3, specialization: specialization, user: paid)
+    theater_jobs           = create_list(:job, 3, theater: theater, specialization: non_free_spec, user: paid)
+    user_jobs              = create_list(:job, 3, user: user, specialization: non_free_spec)
+
     expect(Job.specialization(specialization.id)).to match_array(specialization_jobs)
     expect(Job.theater(theater.id)).to match_array(theater_jobs)
     expect(Job.user(user.id)).to match_array(user_jobs)
     expect(Job.production(production.id)).to match_array(production_jobs)
-    expect(Job.specialization(specialization.id)).to match_array(specialization_jobs)
     expect(Job.actor).to match_array(actor_jobs)
     expect(Job.actor_or_auditioner).to match_array(actor_and_auditioner_jobs)
   end

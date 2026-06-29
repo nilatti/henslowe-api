@@ -8,7 +8,7 @@ RSpec.describe 'ProductionPhases API', type: :request do
 
   # production admin: user with a production_admin specialization job on this production
   let!(:prod_admin_specialization) { create(:specialization, production_admin: true) }
-  let!(:prod_admin_user) { create(:user) }
+  let!(:prod_admin_user) { create(:user, :paid) }
   let!(:prod_admin_job) do
     create(:job,
            user: prod_admin_user,

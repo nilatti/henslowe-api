@@ -194,7 +194,7 @@ RSpec.describe 'Users API' do
 
     context 'when user is theater admin' do
       let!(:local_theater) { create(:theater) }
-      let!(:theater_admin_user) { create(:user) }
+      let!(:theater_admin_user) { create(:user, :paid) }
       let!(:theater_admin_job) { create(:job, :admin_job, user: theater_admin_user, theater: local_theater, end_date: nil) }
 
       it 'returns full data for a user who works at the theater' do
@@ -302,7 +302,7 @@ RSpec.describe 'Users API' do
     context 'when user is production admin' do
       let!(:local_theater) { create(:theater) }
       let!(:local_production) { create(:production) }
-      let!(:production_admin_user) { create(:user) }
+      let!(:production_admin_user) { create(:user, :paid) }
       let!(:director_spec) { create(:specialization, :director) }
       let!(:production_admin_job) { create(:job, user: production_admin_user, theater: local_theater, production: local_production, specialization: director_spec, end_date: nil) }
 
