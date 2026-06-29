@@ -60,19 +60,18 @@ RSpec.describe 'jobs API', type: :request do
 
       before { get "/api/v1/jobs/#{auditioner_job.id}", as: :json, headers: authenticated_header(user) }
 
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
       end
     end
 
-    context "reading another user's non-auditioner job" do
-      let(:other_user) { create(:user) }
-      let(:other_job) { create(:job, user: other_user) }
+    context "reading own auditioner job" do
+      let(:auditioner_job) { create(:job, :auditioner_job, user: user) }
 
-      before { get "/api/v1/jobs/#{other_job.id}", as: :json, headers: authenticated_header(user) }
+      before { get "/api/v1/jobs/#{auditioner_job.id}", as: :json, headers: authenticated_header(user) }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
   end
