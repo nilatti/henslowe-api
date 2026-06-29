@@ -98,7 +98,7 @@ RSpec.describe User, type: :model do
     let(:prod_admin_spec) { create(:specialization, :director) }
     let(:theater_admin_spec) { create(:specialization, :theater_admin) }
 
-    let(:viewer) { create(:user) }
+    let(:viewer) { create(:user, :paid) }
     let(:target) { create(:user) }
 
     def active_job(user, **opts)

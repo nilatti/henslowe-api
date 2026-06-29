@@ -5,7 +5,7 @@ FactoryBot.define do
     production
     specialization
     theater
-    user
+    association :user, :paid
 
     trait :actor_job do
       association :specialization, :actor

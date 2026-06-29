@@ -58,45 +58,60 @@ RSpec.describe Job, type: :model do
     end
   end
 
-  describe "admin job payment validation (on create)" do
-    let!(:real_theater)  { create(:theater) }
-    let!(:dream_theater) { create(:theater, :fake) }
-    let!(:paid_user)     { create(:user, :paid) }
-    let!(:override_user) { create(:user, :paid_override) }
-    let!(:unpaid_user)   { create(:user) }
-    let!(:fake_user)     { create(:user, :fake) }
-    let!(:production)    { create(:production, theater: real_theater) }
-    let!(:director_spec) { create(:specialization, :director) }
-    let!(:actor_spec)    { create(:specialization, :actor) }
+  describe "payment validation (on create) — all roles except actor/auditioner" do
+    let!(:real_theater)      { create(:theater) }
+    let!(:dream_theater)     { create(:theater, :fake) }
+    let!(:paid_user)         { create(:user, :paid) }
+    let!(:override_user)     { create(:user, :paid_override) }
+    let!(:unpaid_user)       { create(:user) }
+    let!(:fake_user)         { create(:user, :fake) }
+    let!(:production)        { create(:production, theater: real_theater) }
+    let!(:director_spec)     { create(:specialization, :director) }
+    let!(:actor_spec)        { create(:specialization, :actor) }
+    let!(:auditioner_spec)   { create(:specialization, :auditioner) }
+    let!(:stage_mgr_spec)    { create(:specialization, title: 'Stage Manager', production_admin: false) }
 
-    it "allows a paid user in an admin role" do
+    it "allows a paid user in any paid role" do
       job = build(:job, user: paid_user, production: production, theater: nil,
                         specialization: director_spec)
       expect(job).to be_valid
     end
 
-    it "allows a user with paid_override in an admin role" do
+    it "allows a user with paid_override in any paid role" do
       job = build(:job, user: override_user, production: production, theater: nil,
                         specialization: director_spec)
       expect(job).to be_valid
     end
 
-    it "blocks an unpaid user from an admin role at a real theater" do
+    it "blocks an unpaid user from an admin role" do
       job = build(:job, user: unpaid_user, production: production, theater: nil,
                         specialization: director_spec)
       expect(job).not_to be_valid
       expect(job.errors[:base]).to include("payment_required")
     end
 
-    it "does not apply to fake users" do
-      job = build(:job, user: fake_user, production: production, theater: nil,
-                        specialization: director_spec)
+    it "blocks an unpaid user from a non-admin, non-free role (e.g. Stage Manager)" do
+      job = build(:job, user: unpaid_user, production: production, theater: nil,
+                        specialization: stage_mgr_spec)
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("payment_required")
+    end
+
+    it "does not apply to actor roles" do
+      job = build(:job, user: unpaid_user, production: production, theater: nil,
+                        specialization: actor_spec)
       expect(job.errors[:base]).not_to include("payment_required")
     end
 
-    it "does not apply to non-admin roles" do
-      job = build(:job, user: unpaid_user, theater: real_theater, production: nil,
-                        specialization: actor_spec)
+    it "does not apply to auditioner roles" do
+      job = build(:job, user: unpaid_user, production: production, theater: nil,
+                        specialization: auditioner_spec)
+      expect(job.errors[:base]).not_to include("payment_required")
+    end
+
+    it "does not apply to fake users" do
+      job = build(:job, user: fake_user, production: production, theater: nil,
+                        specialization: director_spec)
       expect(job.errors[:base]).not_to include("payment_required")
     end
 
@@ -120,7 +135,7 @@ RSpec.describe Job, type: :model do
     actor_specialization = build(:specialization, title: 'Actor')
     auditioner_specialization = build(:specialization, title: 'Auditioner')
     theater = build(:theater)
-    user = build(:user)
+    user = create(:user, :paid)
     actor_jobs = create_list(:job, 3, specialization: actor_specialization )
     auditioner_jobs = create_list(:job, 3, specialization: auditioner_specialization )
     actor_and_auditioner_jobs = actor_jobs + auditioner_jobs

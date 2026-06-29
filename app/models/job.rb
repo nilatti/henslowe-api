@@ -20,7 +20,7 @@ class Job < ApplicationRecord
 
   validate :end_date_after_start_date
   validate :no_real_users_at_dream_theaters, on: :create
-  validate :admin_user_must_be_paid, on: :create
+  validate :user_must_be_subscribed_for_paid_role, on: :create
 
 private
   def no_real_users_at_dream_theaters
@@ -33,9 +33,9 @@ private
     end
   end
 
-  def admin_user_must_be_paid
+  def user_must_be_subscribed_for_paid_role
     return unless user.present? && !user.fake?
-    return unless specialization&.production_admin? || specialization&.theater_admin?
+    return if specialization.nil? || %w[Actor Auditioner].include?(specialization.title)
     theater = self.theater || self.production&.theater
     return if theater&.fake?
     return if user.has_active_subscription?
