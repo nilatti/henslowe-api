@@ -5,7 +5,7 @@ class ConflictPatternsController < ApiController
 
   def index
     if (params[:user_id])
-      raise CanCan::AccessDenied unless params[:user_id].to_i == current_user.id || current_user.superadmin?
+      raise CanCan::AccessDenied unless can_view_user_conflicts?(params[:user_id].to_i)
       @conflict_patterns = ConflictPattern.where(user_id: params[:user_id])
     elsif (params[:space_id])
       @conflict_patterns = ConflictPattern.where(space_id: params[:space_id])

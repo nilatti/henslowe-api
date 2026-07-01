@@ -50,4 +50,15 @@ class ApiController < ActionController::API
       data
     end
   end
+
+  # Allow the user themselves, superadmins, and any production/theater admin
+  # who shares a production with the target user to read that user's conflicts.
+  def can_view_user_conflicts?(target_user_id)
+    return true if current_user.id == target_user_id
+    return true if current_user.superadmin?
+
+    Production.joins(:jobs).where(jobs: { user_id: target_user_id }).distinct.any? do |production|
+      current_user.production_admin?(production) || current_user.theater_admin?(production.theater)
+    end
+  end
 end

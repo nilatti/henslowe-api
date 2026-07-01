@@ -5,7 +5,7 @@ class ConflictsController < ApiController
 
   def index
     if (params[:user_id])
-      raise CanCan::AccessDenied unless params[:user_id].to_i == current_user.id || current_user.superadmin?
+      raise CanCan::AccessDenied unless can_view_user_conflicts?(params[:user_id].to_i)
       @conflicts = Conflict.where(user_id: params[:user_id])
     elsif (params[:space_id])
       @conflicts = Conflict.where(space_id: params[:space_id])
