@@ -1,0 +1,36 @@
+<p>A new audition has been submitted for <strong><%= @production.play&.title || "your production" %></strong><% if @production.theater %> at <%= @production.theater.name %><% end %>.</p>
+
+<table style="margin: 16px 0; border-collapse: collapse;">
+  <% if @auditioner.first_name.present? %>
+  <tr>
+    <td style="padding: 4px 16px 4px 0; color: #6b7280; white-space: nowrap;">Name</td>
+    <td style="padding: 4px 0;"><%= [@auditioner.first_name, @auditioner.last_name].compact.join(' ') %></td>
+  </tr>
+  <% end %>
+  <tr>
+    <td style="padding: 4px 16px 4px 0; color: #6b7280; white-space: nowrap;">Email</td>
+    <td style="padding: 4px 0;"><%= @auditioner.email %></td>
+  </tr>
+  <% if @auditioner.phone_number.present? %>
+  <tr>
+    <td style="padding: 4px 16px 4px 0; color: #6b7280; white-space: nowrap;">Phone</td>
+    <td style="padding: 4px 0;"><%= @auditioner.phone_number %></td>
+  </tr>
+  <% end %>
+  <% if @job.audition_submission&.video_url.present? %>
+  <tr>
+    <td style="padding: 4px 16px 4px 0; color: #6b7280; white-space: nowrap;">Video</td>
+    <td style="padding: 4px 0;"><a href="<%= @job.audition_submission.video_url %>"><%= @job.audition_submission.video_url %></a></td>
+  </tr>
+  <% end %>
+  <% if @job.audition_submission&.notes.present? %>
+  <tr>
+    <td style="padding: 4px 16px 4px 0; color: #6b7280; white-space: nowrap; vertical-align: top;">Notes</td>
+    <td style="padding: 4px 0;"><%= @job.audition_submission.notes %></td>
+  </tr>
+  <% end %>
+</table>
+
+<p style="margin-top: 16px;">
+  <a href="<%= ENV.fetch('APP_HOST', 'https://henslowescloud.com') %>/auditions/<%= @job.id %>">View full submission →</a>
+</p>

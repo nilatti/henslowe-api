@@ -31,6 +31,11 @@ FactoryBot.define do
       context { :theater }
     end
 
+    trait :production_admin do
+      production_admin { true }
+      context { :production }
+    end
+
     trait :director do
       title { 'Director' }
       production_admin { true }

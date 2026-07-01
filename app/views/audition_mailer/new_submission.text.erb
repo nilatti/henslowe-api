@@ -1,0 +1,11 @@
+New audition submission — <%= @production.play&.title || "your production" %><% if @production.theater %> at <%= @production.theater.name %><% end %>
+
+<% if @auditioner.first_name.present? %>Name:  <%= [@auditioner.first_name, @auditioner.last_name].compact.join(' ') %>
+<% end %>Email: <%= @auditioner.email %>
+<% if @auditioner.phone_number.present? %>Phone: <%= @auditioner.phone_number %>
+<% end %><% if @job.audition_submission&.video_url.present? %>Video: <%= @job.audition_submission.video_url %>
+<% end %><% if @job.audition_submission&.notes.present? %>
+Notes:
+<%= @job.audition_submission.notes %>
+<% end %>
+View full submission: <%= ENV.fetch('APP_HOST', 'https://henslowescloud.com') %>/auditions/<%= @job.id %>

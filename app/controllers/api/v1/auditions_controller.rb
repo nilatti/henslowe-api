@@ -16,6 +16,8 @@ module Api
           submission.update!(submission_params)
         end
 
+        AuditionMailer.new_submission(job.id).deliver_later
+
         render json: job.as_json(include: [:specialization, audition_submission: { only: [:id, :video_url, :notes] }]), status: :created
       rescue ActiveRecord::RecordNotFound => e
         render json: { error: e.message }, status: :not_found

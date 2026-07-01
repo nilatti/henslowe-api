@@ -75,6 +75,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Sidekiq::Worker.clear_all
+    ActiveJob::Base.queue_adapter = :test
   end
 
   config.infer_spec_type_from_file_location!
