@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           post :create_customer
           put :build_conflict_schedule
           put :upload_headshot
+          put :upload_resume
         end
         collection do
           get :fake

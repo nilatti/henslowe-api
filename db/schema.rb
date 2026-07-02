@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_26_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -587,6 +587,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_120000) do
     t.string "stripe_subscription_id"
     t.string "headshot_url"
     t.boolean "paid_override", default: false, null: false
+    t.string "resume_url"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, length: 255
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -605,7 +606,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_26_120000) do
     t.index ["play_id"], name: "index_words_on_play_id"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "acts", "plays"
   add_foreign_key "audition_submissions", "jobs"

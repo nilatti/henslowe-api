@@ -22,8 +22,8 @@ module Api
             api_product = Stripe::Product.retrieve(subscription.plan.product)
             api_product.subscription_id = subscription.id
             api_product.amount = subscription.plan.amount
-            api_product.current_period_end = subscription.current_period_end
-            api_product.current_period_start = subscription.current_period_start
+            api_product.current_period_end = subscription.items.data[0].current_period_end
+            api_product.current_period_start = subscription.items.data[0].current_period_start
             api_product.status = subscription.status
             api_product.cancel_at_period_end = subscription.cancel_at_period_end
             api_product.interval = subscription.plan.interval

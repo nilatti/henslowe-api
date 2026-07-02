@@ -1,5 +1,8 @@
 # spec/requests/users_spec.rb
 require 'rails_helper'
+require 'base64'
+require 'stringio'
+require 'aws-sdk-s3'
 
 RSpec.describe 'Users API' do
   let!(:user) { create(:user) }
@@ -8,6 +11,18 @@ RSpec.describe 'Users API' do
   let!(:users) { create_list(:user, 10) }
   let!(:id) { user.id }
   let!(:space) { create(:space) }
+
+  def valid_png_bytes
+    Base64.decode64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=')
+  end
+
+  def valid_pdf_bytes
+    "%PDF-1.4\n%%EOF"
+  end
+
+  def uploaded_file(content, content_type:, filename:)
+    Rack::Test::UploadedFile.new(StringIO.new(content), content_type, original_filename: filename)
+  end
 
   describe 'GET api/users' do
     it 'returns status code 200' do
@@ -589,6 +604,220 @@ RSpec.describe 'Users API' do
         expect(json['zip']).to be_nil
         expect(json['overlap']).to eq('none')
       end
+    end
+  end
+
+  describe 'headshot_url and resume_url visibility' do
+    let(:fake_presigner) { instance_double(Aws::S3::Presigner, presigned_url: 'https://s3.example.com/fake-signed-url') }
+
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(instance_double(Aws::S3::Client))
+      allow(Aws::S3::Presigner).to receive(:new).and_return(fake_presigner)
+      user.update!(headshot_url: 'headshots/1/abc.png', resume_url: 'resumes/1/abc.pdf')
+    end
+
+    shared_examples 'exposes headshot and resume' do
+      it 'includes headshot_url' do
+        expect(json['headshot_url']).to eq('https://s3.example.com/fake-signed-url')
+      end
+
+      it 'includes resume_url' do
+        expect(json['resume_url']).to eq('https://s3.example.com/fake-signed-url')
+      end
+    end
+
+    shared_examples 'exposes headshot but not resume' do
+      it 'includes headshot_url' do
+        expect(json['headshot_url']).to eq('https://s3.example.com/fake-signed-url')
+      end
+
+      it 'omits resume_url' do
+        expect(json['resume_url']).to be_nil
+      end
+    end
+
+    context 'when viewer is self' do
+      before { get "/api/v1/users/#{user.id}/", headers: authenticated_header(user) }
+      include_examples 'exposes headshot and resume'
+    end
+
+    context 'when viewer is a superadmin' do
+      let!(:super_user) { create(:user, role: 'superadmin') }
+      before { get "/api/v1/users/#{user.id}/", headers: authenticated_header(super_user) }
+      include_examples 'exposes headshot and resume'
+    end
+
+    context 'when viewer is a theater admin over the user' do
+      let!(:local_theater) { create(:theater) }
+      let!(:admin_user) { create(:user, :paid) }
+
+      before do
+        create(:job, :admin_job, user: admin_user, theater: local_theater, end_date: nil)
+        create(:job, user: user, theater: local_theater, end_date: nil)
+        get "/api/v1/users/#{user.id}/", headers: authenticated_header(admin_user)
+      end
+
+      include_examples 'exposes headshot and resume'
+    end
+
+    context 'when viewer is a production admin over the user' do
+      let!(:local_theater) { create(:theater) }
+      let!(:local_production) { create(:production, theater: local_theater) }
+      let!(:director_spec) { create(:specialization, :director) }
+      let!(:admin_user) { create(:user, :paid) }
+
+      before do
+        create(:job, user: admin_user, theater: local_theater, production: local_production, specialization: director_spec, end_date: nil)
+        create(:job, user: user, theater: local_theater, production: local_production, end_date: nil)
+        get "/api/v1/users/#{user.id}/", headers: authenticated_header(admin_user)
+      end
+
+      include_examples 'exposes headshot and resume'
+    end
+
+    context 'when viewer is a production peer (non-admin)' do
+      let!(:local_theater) { create(:theater) }
+      let!(:local_production) { create(:production, theater: local_theater) }
+      let!(:peer) { create(:user) }
+
+      before do
+        create(:job, :actor_job, user: peer, theater: local_theater, production: local_production, end_date: nil)
+        create(:job, user: user, theater: local_theater, production: local_production, end_date: nil)
+        get "/api/v1/users/#{user.id}/", headers: authenticated_header(peer)
+      end
+
+      include_examples 'exposes headshot but not resume'
+    end
+
+    context 'when viewer is a theater peer (non-admin)' do
+      let!(:local_theater) { create(:theater) }
+      let!(:peer) { create(:user) }
+
+      before do
+        create(:job, user: peer, theater: local_theater, end_date: nil)
+        create(:job, user: user, theater: local_theater, end_date: nil)
+        get "/api/v1/users/#{user.id}/", headers: authenticated_header(peer)
+      end
+
+      include_examples 'exposes headshot but not resume'
+    end
+
+    context 'when viewer has no relationship to the user' do
+      let!(:stranger) { create(:user) }
+      before { get "/api/v1/users/#{user.id}/", headers: authenticated_header(stranger) }
+      include_examples 'exposes headshot but not resume'
+    end
+  end
+
+  describe 'PUT /api/v1/users/:user_id/upload_headshot' do
+    let(:fake_s3_client) { instance_double(Aws::S3::Client, put_object: true) }
+    let(:fake_presigner) { instance_double(Aws::S3::Presigner, presigned_url: 'https://s3.example.com/fake-signed-url') }
+
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(fake_s3_client)
+      allow(Aws::S3::Presigner).to receive(:new).and_return(fake_presigner)
+    end
+
+    def png_upload(filename: 'headshot.png')
+      uploaded_file(valid_png_bytes, content_type: 'image/png', filename: filename)
+    end
+
+    it 'uploads a valid image and stores the S3 key on the user' do
+      put "/api/v1/users/#{user.id}/upload_headshot", params: { headshot: png_upload }, headers: authenticated_header(user)
+      expect(response).to have_http_status(200)
+      expect(json['headshot_url']).to eq('https://s3.example.com/fake-signed-url')
+      expect(user.reload.headshot_url).to match(%r{\Aheadshots/#{user.id}/.+\.png\z})
+    end
+
+    it 'sends the file contents to S3 with the detected content type' do
+      expect(fake_s3_client).to receive(:put_object).with(hash_including(content_type: 'image/png'))
+      put "/api/v1/users/#{user.id}/upload_headshot", params: { headshot: png_upload }, headers: authenticated_header(user)
+    end
+
+    it 'rejects a file that is not an allowed image type' do
+      file = uploaded_file(valid_pdf_bytes, content_type: 'image/png', filename: 'fake.png')
+      put "/api/v1/users/#{user.id}/upload_headshot", params: { headshot: file }, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to match(/JPEG, PNG, GIF, and WebP/)
+      expect(user.reload.headshot_url).to be_nil
+    end
+
+    it 'rejects a file over 5MB' do
+      oversized = valid_png_bytes + ('0' * 6.megabytes)
+      file = uploaded_file(oversized, content_type: 'image/png', filename: 'big.png')
+      put "/api/v1/users/#{user.id}/upload_headshot", params: { headshot: file }, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to match(/smaller than 5 MB/)
+      expect(user.reload.headshot_url).to be_nil
+    end
+
+    it 'requires a file' do
+      put "/api/v1/users/#{user.id}/upload_headshot", params: {}, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to eq('No file provided')
+    end
+
+    it 'does not allow uploading a headshot for another user' do
+      other_user = create(:user)
+      put "/api/v1/users/#{other_user.id}/upload_headshot", params: { headshot: png_upload }, headers: authenticated_header(user)
+      expect(response).to have_http_status(403)
+      expect(other_user.reload.headshot_url).to be_nil
+    end
+  end
+
+  describe 'PUT /api/v1/users/:user_id/upload_resume' do
+    let(:fake_s3_client) { instance_double(Aws::S3::Client, put_object: true) }
+    let(:fake_presigner) { instance_double(Aws::S3::Presigner, presigned_url: 'https://s3.example.com/fake-signed-url') }
+
+    before do
+      allow(Aws::S3::Client).to receive(:new).and_return(fake_s3_client)
+      allow(Aws::S3::Presigner).to receive(:new).and_return(fake_presigner)
+    end
+
+    def pdf_upload(filename: 'resume.pdf')
+      uploaded_file(valid_pdf_bytes, content_type: 'application/pdf', filename: filename)
+    end
+
+    it 'uploads a valid resume and stores the S3 key on the user' do
+      put "/api/v1/users/#{user.id}/upload_resume", params: { resume: pdf_upload }, headers: authenticated_header(user)
+      expect(response).to have_http_status(200)
+      expect(json['resume_url']).to eq('https://s3.example.com/fake-signed-url')
+      expect(user.reload.resume_url).to match(%r{\Aresumes/#{user.id}/.+\.pdf\z})
+    end
+
+    it 'sends the file contents to S3 with the detected content type' do
+      expect(fake_s3_client).to receive(:put_object).with(hash_including(content_type: 'application/pdf'))
+      put "/api/v1/users/#{user.id}/upload_resume", params: { resume: pdf_upload }, headers: authenticated_header(user)
+    end
+
+    it 'rejects a file that is not an allowed resume type' do
+      file = uploaded_file(valid_png_bytes, content_type: 'application/pdf', filename: 'fake.pdf')
+      put "/api/v1/users/#{user.id}/upload_resume", params: { resume: file }, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to match(/PDF, DOC, and DOCX/)
+      expect(user.reload.resume_url).to be_nil
+    end
+
+    it 'rejects a file over 5MB' do
+      oversized = valid_pdf_bytes + ('0' * 6.megabytes)
+      file = uploaded_file(oversized, content_type: 'application/pdf', filename: 'big.pdf')
+      put "/api/v1/users/#{user.id}/upload_resume", params: { resume: file }, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to match(/smaller than 5 MB/)
+      expect(user.reload.resume_url).to be_nil
+    end
+
+    it 'requires a file' do
+      put "/api/v1/users/#{user.id}/upload_resume", params: {}, headers: authenticated_header(user)
+      expect(response).to have_http_status(422)
+      expect(json['error']).to eq('No file provided')
+    end
+
+    it 'does not allow uploading a resume for another user' do
+      other_user = create(:user)
+      put "/api/v1/users/#{other_user.id}/upload_resume", params: { resume: pdf_upload }, headers: authenticated_header(user)
+      expect(response).to have_http_status(403)
+      expect(other_user.reload.resume_url).to be_nil
     end
   end
 

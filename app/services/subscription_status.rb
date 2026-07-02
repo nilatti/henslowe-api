@@ -18,7 +18,7 @@ class SubscriptionStatus
     user = User.find_by(stripe_customer_id: stripe_customer_id)
     subscriptions = Stripe::Subscription.list({customer: stripe_customer_id})
     active = subscriptions.data.select{|subscription| subscription.status == 'active'}
-    active.sort_by(&:current_period_end)
+    active = active.sort_by{|subscription| subscription.items.data[0].current_period_end}
     if active.size >0
       user.stripe_subscription_id = active[-1].id
       user.save

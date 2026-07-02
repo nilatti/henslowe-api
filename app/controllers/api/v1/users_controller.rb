@@ -3,7 +3,7 @@ module Api
 class UsersController < ApiController
   # load_and_authorize_resource
   skip_before_action :authenticate_request, only: [:create]
-  before_action :set_user, only: %i[show update destroy upload_headshot]
+  before_action :set_user, only: %i[show update destroy upload_headshot upload_resume]
 
   # GET /Users
   def index
@@ -95,7 +95,7 @@ class UsersController < ApiController
               ]
             }
           ]
-        ).merge(headshot_url: headshot_url(@user), overlap: overlap))
+        ).merge(headshot_url: headshot_url(@user), resume_url: resume_url(@user), overlap: overlap))
       else
         json_response(@user.as_json(only: [
           :id,
@@ -159,6 +159,41 @@ class UsersController < ApiController
 
     @user.update!(headshot_url: key)
     json_response({ headshot_url: headshot_url(@user) })
+  end
+
+  RESUME_ALLOWED_TYPES = %w[application/pdf application/msword application/vnd.openxmlformats-officedocument.wordprocessingml.document].freeze
+  RESUME_MAX_BYTES = 5.megabytes
+
+  def upload_resume
+    authorize! :update, @user
+    require 'marcel'
+    file = params[:resume]
+    return json_response({ error: 'No file provided' }, :unprocessable_entity) unless file.present?
+
+    actual_type = Marcel::MimeType.for(
+      Pathname.new(file.path),
+      name: file.original_filename,
+      declared_type: file.content_type
+    )
+    unless RESUME_ALLOWED_TYPES.include?(actual_type)
+      return json_response({ error: 'Only PDF, DOC, and DOCX files are allowed' }, :unprocessable_entity)
+    end
+
+    if file.size > RESUME_MAX_BYTES
+      return json_response({ error: 'File must be smaller than 5 MB' }, :unprocessable_entity)
+    end
+
+    require 'aws-sdk-s3'
+    ext = File.extname(file.original_filename.to_s).downcase.presence || '.pdf'
+    key = "resumes/#{@user.id}/#{SecureRandom.uuid}#{ext}"
+    region = ENV.fetch('AWS_REGION', 'us-east-1')
+    bucket = ENV['AWS_S3_BUCKET']
+
+    s3 = Aws::S3::Client.new(region: region)
+    s3.put_object(bucket: bucket, key: key, body: file.read, content_type: actual_type)
+
+    @user.update!(resume_url: key)
+    json_response({ resume_url: resume_url(@user) })
   end
 
   def destroy
@@ -274,6 +309,21 @@ class UsersController < ApiController
     presigner.presigned_url(:get_object,
       bucket: ENV['AWS_S3_BUCKET'],
       key: user.headshot_url,
+      expires_in: 7.days.to_i
+    )
+  rescue
+    nil
+  end
+
+  def resume_url(user)
+    return nil unless user.resume_url.present?
+    require 'aws-sdk-s3'
+    presigner = Aws::S3::Presigner.new(
+      client: Aws::S3::Client.new(region: ENV.fetch('AWS_REGION', 'us-east-1'))
+    )
+    presigner.presigned_url(:get_object,
+      bucket: ENV['AWS_S3_BUCKET'],
+      key: user.resume_url,
       expires_in: 7.days.to_i
     )
   rescue

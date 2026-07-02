@@ -34,4 +34,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Rotate logs to prevent unbounded disk growth (keeps 3 old files, 20MB each).
+  config.logger = ActiveSupport::Logger.new(config.paths['log'].first, 3, 20.megabytes)
 end
