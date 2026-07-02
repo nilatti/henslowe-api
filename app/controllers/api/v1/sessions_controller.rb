@@ -7,8 +7,7 @@ module Api
         httponly: true,
         secure: Rails.env.production?,
         same_site: Rails.env.production? ? :strict : :lax,
-        domain: Rails.env.production? ? '.henslowescloud.com' : nil,
-        expires: 24.hours.from_now
+        domain: Rails.env.production? ? '.henslowescloud.com' : nil
       }.freeze
 
       # GET /auth/:provider/callback — OmniAuth posts here after Google OAuth
@@ -24,7 +23,7 @@ module Api
 
         if user.persisted?
           token = JsonWebToken.encode(user_id: user.id)
-          cookies[:auth_token] = COOKIE_OPTIONS.merge(value: token)
+          cookies[:auth_token] = COOKIE_OPTIONS.merge(value: token, expires: 24.hours.from_now)
           redirect_to "#{frontend_url}/auth/callback", allow_other_host: true
         else
           redirect_to "#{frontend_url}/auth/callback?error=user_not_found", allow_other_host: true
