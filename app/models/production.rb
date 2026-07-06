@@ -21,8 +21,9 @@ class Production < ApplicationRecord
   default_scope {order(:start_date)}
 private
   def end_date_after_start_date
-   if start_date > end_date
-     errors.add(:end_date, "can't be before start date")
-   end
- end
+    return unless start_date && end_date
+    if start_date > end_date
+      errors.add(:end_date, "can't be before start date")
+    end
+  end
 end
