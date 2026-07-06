@@ -167,7 +167,7 @@ class PlaysController < ApiController
       author: {only: [:first_name, :id, :last_name]}
       },
       only: [:canonical, :id, :production_id, :synopsis, :text_notes, :title]
-    )
+    ).merge(productions: canonical_productions_json)
   end
 
   def play_titles
@@ -189,6 +189,18 @@ class PlaysController < ApiController
   end
 
   private
+
+  # Real (non-dream-theater) productions of this canonical play, keyed off the
+  # production copy's original_play_id — dream theater copies are excluded so
+  # personal experiments don't show up as productions of the canonical text.
+  def canonical_productions_json
+    Production
+      .joins(:play, :theater)
+      .where(plays: { original_play_id: @play.id })
+      .where(theaters: { fake: false })
+      .order(start_date: :desc)
+      .as_json(only: [:id, :start_date, :end_date], include: { theater: { only: [:id, :name] } })
+  end
 
   def authenticate_if_token_present
     token = request.headers['Authorization']&.split(' ')&.last

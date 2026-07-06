@@ -178,6 +178,31 @@ RSpec.describe 'Plays API' do
     end
   end
 
+  describe 'play_skeleton — productions of a canonical play' do
+    let!(:canonical_play) { create(:play, canonical: true, author: author) }
+    let!(:real_theater) { create(:theater) }
+    let!(:dream_theater) { create(:theater, :fake) }
+    let!(:real_production) { create(:production, theater: real_theater, start_date: 1.year.ago, end_date: 1.year.ago) }
+    let!(:dream_production) { create(:production, theater: dream_theater) }
+
+    before do
+      create(:play, canonical: false, author: author, original_play_id: canonical_play.id, production: real_production)
+      create(:play, canonical: false, author: author, original_play_id: canonical_play.id, production: dream_production)
+      get "/api/v1/plays/#{canonical_play.id}/play_skeleton", as: :json, headers: authenticated_header(user)
+    end
+
+    it 'lists real productions of the canonical play with their theater' do
+      expect(json['productions'].size).to eq(1)
+      expect(json['productions'][0]['id']).to eq(real_production.id)
+      expect(json['productions'][0]['theater']['id']).to eq(real_theater.id)
+    end
+
+    it 'excludes productions at dream/fake theaters' do
+      theater_ids = json['productions'].map { |p| p['theater']['id'] }
+      expect(theater_ids).not_to include(dream_theater.id)
+    end
+  end
+
   describe 'get play titles' do
     before { get "/api/v1/plays/play_titles", as: :json, headers: authenticated_header(user) }
     it 'returns play titles' do
