@@ -61,3 +61,47 @@ describe CopyPlayForProduction do
     expect(@production.jobs[0].character.name).not_to be('')
   end
 end
+
+describe 'CopyPlayForProduction — legacy characters/character_groups with no name' do
+  # Some TEI-imported rows predate the presence validation on `name` and only
+  # have update_column to bypass the validation, matching how that legacy
+  # data actually got into this state.
+  it 'falls back to a name derived from xml_id so the copy does not fail' do
+    production = create(:production)
+    original_play = create(:play, :with_full_structure, canonical: true)
+    nameless_character = create(:character, play: original_play, xml_id: 'ATTENDANTS.OLIVIA_TN')
+    nameless_character.update_column(:name, nil)
+    nameless_group = create(:character_group, play: original_play, xml_id: 'OFFICERS_TN')
+    nameless_group.update_column(:name, nil)
+
+    copier = CopyPlayForProduction.new(play_id: original_play.id, production_id: production.id)
+    expect { copier.run }.not_to raise_error
+
+    expect(copier.new_play.characters.pluck(:name)).to include('Attendants Olivia')
+    expect(copier.new_play.character_groups.pluck(:name)).to include('Officers')
+  end
+
+  it 'falls back to "Unnamed" when there is no xml_id either' do
+    production = create(:production)
+    original_play = create(:play, :with_full_structure, canonical: true)
+    nameless_character = create(:character, play: original_play, xml_id: nil)
+    nameless_character.update_column(:name, nil)
+
+    copier = CopyPlayForProduction.new(play_id: original_play.id, production_id: production.id)
+    copier.run
+
+    expect(copier.new_play.characters.pluck(:name)).to include('Unnamed')
+  end
+end
+
+describe 'CopyPlayForProduction — atomicity' do
+  it 'leaves no orphaned partial play copy when the copy fails partway through' do
+    production = create(:production)
+    original_play = create(:play, :with_full_structure, canonical: true)
+    copier = CopyPlayForProduction.new(play_id: original_play.id, production_id: production.id)
+    allow(copier).to receive(:create_copies_of_each_act).and_raise(StandardError, 'boom')
+
+    expect { copier.run }.to raise_error(StandardError, 'boom')
+    expect(Play.where(original_play_id: original_play.id)).to be_empty
+  end
+end

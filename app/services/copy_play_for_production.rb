@@ -15,11 +15,13 @@ class CopyPlayForProduction
   end
 
   def run
-    create_play_copy(play: @original_play)
-    CreateCastingForProduction.new(play_id: @new_play.id, production_id: production_id).create_castings
-    @new_play.production_copy_complete = true
-    @new_play.copy_status = "Copying script complete"
-    @new_play.save
+    ActiveRecord::Base.transaction(requires_new: true) do
+      create_play_copy(play: @original_play)
+      CreateCastingForProduction.new(play_id: @new_play.id, production_id: production_id).create_castings
+      @new_play.production_copy_complete = true
+      @new_play.copy_status = "Copying script complete"
+      @new_play.save!
+    end
   end
 
   def create_play_copy(play:)
@@ -49,6 +51,7 @@ class CopyPlayForProduction
     original_play_characters.each do |original_character|
       new_character = original_character.dup
       new_character.play = new_play
+      new_character.name = fallback_name(original_character.name, original_character.xml_id)
       new_character.save!
       @character_map[original_character.id] = new_character
     end
@@ -58,9 +61,19 @@ class CopyPlayForProduction
     original_play_character_groups.each do |original_character_group|
       new_character_group = original_character_group.dup
       new_character_group.play = new_play
+      new_character_group.name = fallback_name(original_character_group.name, original_character_group.xml_id)
       new_character_group.save!
       @character_group_map[original_character_group.id] = new_character_group
     end
+  end
+
+  # Some legacy TEI-imported characters/character_groups have no name, only an
+  # xml_id (e.g. "ATTENDANTS.OLIVIA_TN") — derive a readable name so the copy's
+  # presence validation doesn't block the whole script copy on old data.
+  def fallback_name(name, xml_id)
+    return name if name.present?
+    return "Unnamed" if xml_id.blank?
+    xml_id.sub(/_[A-Za-z0-9]+\z/, '').tr('.', ' ').split(/[\s_]+/).map(&:capitalize).join(' ')
   end
 
   def create_copies_of_each_scene(original_act:, new_act:)
