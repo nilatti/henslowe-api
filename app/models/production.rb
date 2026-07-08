@@ -3,6 +3,7 @@ class Production < ApplicationRecord
   belongs_to :theater
   belongs_to :default_space, class_name: 'Space', optional: true
   has_many :jobs, dependent: :destroy
+  has_many :invitations, dependent: :destroy
   has_many :users, through: :jobs
   has_and_belongs_to_many :default_call_users,
     class_name: 'User',

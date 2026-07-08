@@ -1,0 +1,5 @@
+<%= @invitation.invited_by.name %> has invited you to join <%= @org_name %> on Henslowe as <%= @invitation.specialization.title %>.
+
+Accept invitation: <%= @accept_url %>
+
+This invitation expires on <%= @invitation.expires_at.strftime('%B %-d, %Y') %>.

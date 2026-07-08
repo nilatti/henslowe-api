@@ -1,5 +1,6 @@
 class Theater < ApplicationRecord
   has_many :jobs, dependent: :destroy
+  has_many :invitations, dependent: :destroy
   has_many :productions, dependent: :destroy
   has_many :space_agreements, dependent: :destroy
   has_many :spaces, through: :space_agreements

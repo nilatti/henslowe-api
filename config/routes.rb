@@ -46,11 +46,17 @@ Rails.application.routes.draw do
         resources :conflict_patterns, shallow: true
       end
       resources :jobs
+      resources :invitations, param: :token, only: [:index, :show, :destroy] do
+        member do
+          post :accept
+        end
+      end
       resources :specializations
       resources :phases
       resources :productions do
         resources :auditions, only: [:create]
         resources :jobs, shallow: true
+        resources :invitations, only: [:create]
         resources :rehearsals, shallow: true
         resources :production_phases, shallow: true do
           collection do
@@ -71,6 +77,7 @@ Rails.application.routes.draw do
       end
       resources :theaters do
         resources :jobs
+        resources :invitations, only: [:create]
         member do
           get :theater_skeleton
         end

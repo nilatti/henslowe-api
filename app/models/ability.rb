@@ -52,6 +52,13 @@ class Ability
         user.theater_admin?(job.theater) || user.production_admin?(job.production)
       end
 
+      can :manage, Invitation do |invitation|
+        user.theater_admin?(invitation.theater) || user.production_admin?(invitation.production)
+      end
+      can :accept, Invitation do |invitation|
+        invitation.email == user.email.to_s.strip.downcase
+      end
+
       can :read, Theater, jobs: { :user_id => user.id }
       can :read, Production, jobs: { :user_id => user.id }
       can :read, [Act, Scene, FrenchScene, Character]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_08_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -240,6 +240,29 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
   create_table "french_scenes_rehearsals", id: false, charset: "latin1", force: :cascade do |t|
     t.bigint "french_scene_id", null: false
     t.bigint "rehearsal_id", null: false
+  end
+
+  create_table "invitations", charset: "utf8mb3", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "token", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "payment_responsibility", null: false
+    t.bigint "theater_id"
+    t.bigint "production_id"
+    t.bigint "specialization_id"
+    t.bigint "invited_by_id"
+    t.bigint "accepted_user_id"
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accepted_user_id"], name: "index_invitations_on_accepted_user_id"
+    t.index ["email"], name: "index_invitations_on_email"
+    t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["production_id"], name: "index_invitations_on_production_id"
+    t.index ["specialization_id"], name: "index_invitations_on_specialization_id"
+    t.index ["theater_id"], name: "index_invitations_on_theater_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
   end
 
   create_table "jobs", charset: "utf8mb3", force: :cascade do |t|

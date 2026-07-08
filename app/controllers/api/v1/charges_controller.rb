@@ -11,11 +11,12 @@ class ChargesController < ApiController
       user.stripe_customer_id = customer['id']
       user.save
     end
+    return_to = safe_return_path(params[:return_to])
     session = Stripe::Checkout::Session.create({
       allow_promotion_codes: true,
-      cancel_url: "#{ENV['BASE_URL_FRONT']}/checkout",
+      cancel_url: "#{ENV['BASE_URL_FRONT']}#{return_to || '/checkout'}",
       customer: user.stripe_customer_id,
-      success_url: "#{ENV['BASE_URL_FRONT']}/success",
+      success_url: "#{ENV['BASE_URL_FRONT']}#{return_to || '/success'}",
       mode: 'subscription',
       line_items: [{
         quantity: 1,
@@ -41,6 +42,17 @@ class ChargesController < ApiController
       cancel_url: "#{ENV['BASE_URL_FRONT']}/account",
       })
       render json: {stripeUrl: session.url}
+  end
+
+  private
+
+  # Only allow same-origin relative paths (e.g. "/invitations/abc123") to prevent
+  # this param from being used as an open redirect to an arbitrary external host.
+  def safe_return_path(return_to)
+    return nil unless return_to.is_a?(String)
+    return nil unless return_to.match?(%r{\A/(?!/)})
+
+    return_to
   end
 end
   end
