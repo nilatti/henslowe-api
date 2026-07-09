@@ -19,9 +19,15 @@ RSpec.describe InvitationMailer, type: :mailer do
       expect(mail.subject).to include('Silkmoth Stage')
     end
 
-    it 'builds an absolute accept URL from FRONTEND_URL, not the unset BASE_URL_FRONT' do
-      allow(ENV).to receive(:[]).and_call_original
-      allow(ENV).to receive(:[]).with('FRONTEND_URL').and_return('https://henslowescloud.com')
+    it 'builds an absolute accept URL from FRONTEND_URL when set' do
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('FRONTEND_URL', anything).and_return('https://staging.henslowescloud.com')
+      expect(mail.html_part.body.encoded).to include("https://staging.henslowescloud.com/invitations/#{invitation.token}")
+    end
+
+    it 'falls back to the production URL when FRONTEND_URL is unset (e.g. missing on the sidekiq container)' do
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('FRONTEND_URL', anything) { |_key, default| default }
       expect(mail.html_part.body.encoded).to include("https://henslowescloud.com/invitations/#{invitation.token}")
     end
 
