@@ -3,7 +3,7 @@ module Api
 class TheatersController < ApiController
   Stripe.api_key = ENV['STRIPE_SECRET_KEY']
   # skip_before_action :doorkeeper_authorize!, only: %i[index show theater_names]
-  before_action :set_theater, only: %i[show update destroy theater_skeleton create_seat_subscription_checkout_session]
+  before_action :set_theater, only: %i[show update destroy theater_skeleton create_seat_subscription_checkout_session update_reserved_seats]
 
   # GET /theaters
   def index
@@ -74,6 +74,10 @@ class TheatersController < ApiController
   # POST /theaters/:id/create_seat_subscription_checkout_session
   def create_seat_subscription_checkout_session
     authorize! :manage, @theater
+    quantity = [params[:quantity].to_i, 1].max
+    unless @theater.update(reserved_seats: quantity)
+      return render json: @theater.errors, status: :unprocessable_entity
+    end
     if @theater.stripe_customer_id.blank?
       customer = Stripe::Customer.create(name: @theater.name)
       @theater.update!(stripe_customer_id: customer['id'])
@@ -84,11 +88,22 @@ class TheatersController < ApiController
       cancel_url: "#{ENV.fetch('FRONTEND_URL', 'https://henslowescloud.com')}/theaters/#{@theater.id}/billing",
       mode: 'subscription',
       line_items: [{
-        quantity: 1,
+        quantity: quantity,
         price: params[:price]
       }]
     })
     render json: { stripeUrl: session.url }
+  end
+
+  # PATCH /theaters/:id/update_reserved_seats
+  def update_reserved_seats
+    authorize! :manage, @theater
+    if @theater.update(reserved_seats: params[:reserved_seats])
+      @theater.sync_seat_quantity!
+      json_response(@theater.as_json(only: %i[id reserved_seats]))
+    else
+      render json: @theater.errors, status: :unprocessable_entity
+    end
   end
 
   def theater_skeleton
@@ -97,7 +112,7 @@ class TheatersController < ApiController
       only: %i[
         id name street_address city state zip
         phone_number mission_statement website
-        calendar_url logo fake subscription_status
+        calendar_url logo fake subscription_status reserved_seats
       ],
       include: {
         spaces: {
@@ -119,7 +134,8 @@ class TheatersController < ApiController
           specialization: { only: %i[id title] },
           user: { only: %i[id first_name last_name email] }
         }
-      )
+      ),
+      'sponsored_seats_count' => @theater.sponsored_jobs.count
     )
   end
 

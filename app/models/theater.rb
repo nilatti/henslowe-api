@@ -6,6 +6,7 @@ class Theater < ApplicationRecord
   has_many :spaces, through: :space_agreements
   has_many :users, through: :jobs
   validates_presence_of :name
+  validates :reserved_seats, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   default_scope { order('name ASC') }
   # after_create :make_new_fake_theater
 
@@ -29,8 +30,11 @@ class Theater < ApplicationRecord
        .where('end_date IS NULL OR end_date >= ?', Date.current)
   end
 
-  # Keeps quantity at a minimum of 1 once billing is turned on, rather than
-  # letting it drop to 0 when nothing is currently sponsored.
+  # Keeps quantity at a minimum of `reserved_seats` (defaults to 1) once billing
+  # is turned on, rather than letting it drop as low as 0 when nothing is
+  # currently sponsored. reserved_seats lets an admin pre-purchase seats ahead
+  # of sending invitations, instead of the count only ever growing reactively
+  # as each invitation gets accepted one at a time.
   def sync_seat_quantity!
     return if stripe_customer_id.blank?
 
@@ -40,7 +44,7 @@ class Theater < ApplicationRecord
     item = subscription.items.data.first
     return unless item
 
-    quantity = [sponsored_jobs.count, 1].max
+    quantity = [sponsored_jobs.count, reserved_seats].max
     return if item.quantity == quantity
 
     Stripe::SubscriptionItem.update(item.id, quantity: quantity, proration_behavior: 'always_invoice')

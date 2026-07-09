@@ -144,6 +144,74 @@ RSpec.describe 'theaters API', type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
+
+    context 'with a quantity param, for a bulk seat pre-purchase' do
+      before do
+        allow(Stripe::Customer).to receive(:create).and_return({ 'id' => 'cus_new' })
+        allow(Stripe::Checkout::Session).to receive(:create).and_return(fake_session)
+        post "/api/v1/theaters/#{theater.id}/create_seat_subscription_checkout_session",
+             params: { price: 'price_123', quantity: 5 }, as: :json, headers: authenticated_header(admin_user)
+      end
+
+      it 'persists reserved_seats and requests that quantity from Stripe' do
+        expect(theater.reload.reserved_seats).to eq(5)
+        expect(Stripe::Checkout::Session).to have_received(:create).with(
+          hash_including(line_items: [{ quantity: 5, price: 'price_123' }])
+        )
+      end
+    end
+
+    context 'with a quantity param of 0 or less' do
+      before do
+        allow(Stripe::Customer).to receive(:create).and_return({ 'id' => 'cus_new' })
+        allow(Stripe::Checkout::Session).to receive(:create).and_return(fake_session)
+      end
+
+      it 'floors it at 1 rather than rejecting the request' do
+        post "/api/v1/theaters/#{theater.id}/create_seat_subscription_checkout_session",
+             params: { price: 'price_123', quantity: 0 }, as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:ok)
+        expect(theater.reload.reserved_seats).to eq(1)
+      end
+    end
+  end
+
+  # Test suite for update_reserved_seats
+  describe 'PATCH /theaters/:id/update_reserved_seats' do
+    let!(:theater) { create(:theater, stripe_customer_id: 'cus_123', subscription_status: 'active') }
+    let!(:admin_user) { create(:user, :paid) }
+    let!(:theater_admin_job) do
+      create(:job, user: admin_user, theater: theater, production: nil,
+                   specialization: create(:specialization, :theater_admin))
+    end
+    let!(:regular_user) { create(:user) }
+    let(:subscription_item) { double(id: 'si_123', quantity: 1) }
+    let(:subscription) { double(items: double(data: [subscription_item])) }
+
+    before do
+      allow(Stripe::Subscription).to receive(:list).with(customer: 'cus_123').and_return(double(data: [subscription]))
+      allow(Stripe::SubscriptionItem).to receive(:update)
+    end
+
+    it 'updates reserved_seats and immediately syncs the Stripe subscription quantity' do
+      patch "/api/v1/theaters/#{theater.id}/update_reserved_seats",
+            params: { reserved_seats: 4 }, as: :json, headers: authenticated_header(admin_user)
+      expect(response).to have_http_status(:ok)
+      expect(theater.reload.reserved_seats).to eq(4)
+      expect(Stripe::SubscriptionItem).to have_received(:update).with('si_123', quantity: 4, proration_behavior: 'always_invoice')
+    end
+
+    it 'rejects a value below 1' do
+      patch "/api/v1/theaters/#{theater.id}/update_reserved_seats",
+            params: { reserved_seats: 0 }, as: :json, headers: authenticated_header(admin_user)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'is forbidden for a non-admin' do
+      patch "/api/v1/theaters/#{theater.id}/update_reserved_seats",
+            params: { reserved_seats: 4 }, as: :json, headers: authenticated_header(regular_user)
+      expect(response).to have_http_status(:forbidden)
+    end
   end
 
   # Test suite for theater_names

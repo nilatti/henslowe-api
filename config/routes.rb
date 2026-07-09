@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         member do
           get :theater_skeleton
           post :create_seat_subscription_checkout_session
+          patch :update_reserved_seats
         end
         collection do
           get :theater_names

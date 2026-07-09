@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_09_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -574,6 +574,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_120000) do
     t.string "stripe_customer_id"
     t.string "subscription_status"
     t.datetime "subscription_end_date"
+    t.integer "reserved_seats", default: 1, null: false
   end
 
   create_table "users", charset: "utf8mb3", force: :cascade do |t|

@@ -12,6 +12,7 @@ RSpec.describe Theater, type: :model do
     it { expect(theater).to have_many(:spaces).through(:space_agreements) }
   end
   it { expect(theater).to validate_presence_of(:name)}
+  it { expect(theater).to validate_numericality_of(:reserved_seats).only_integer.is_greater_than_or_equal_to(1) }
   it "orders by name" do
     theater1 = create(:theater, name: "Drury Lane")
     theater3 = create(:theater, name: "Roy Rogers")
@@ -67,7 +68,7 @@ RSpec.describe Theater, type: :model do
 
   describe "#sync_seat_quantity!" do
     let(:theater) { create(:theater, stripe_customer_id: 'cus_123') }
-    let(:subscription_item) { double(id: 'si_123', quantity: 5) }
+    let(:subscription_item) { double(id: 'si_123', quantity: 99) }
     let(:subscription) { double(items: double(data: [subscription_item])) }
 
     before do
@@ -88,6 +89,20 @@ RSpec.describe Theater, type: :model do
     it "sets quantity to the current sponsored count when higher than 1" do
       allow(theater).to receive(:sponsored_jobs).and_return(double(count: 3))
       expect(Stripe::SubscriptionItem).to receive(:update).with('si_123', quantity: 3, proration_behavior: 'always_invoice')
+      theater.sync_seat_quantity!
+    end
+
+    it "keeps quantity at reserved_seats when it's higher than the current sponsored count" do
+      theater.update!(reserved_seats: 5)
+      allow(theater).to receive(:sponsored_jobs).and_return(double(count: 2))
+      expect(Stripe::SubscriptionItem).to receive(:update).with('si_123', quantity: 5, proration_behavior: 'always_invoice')
+      theater.sync_seat_quantity!
+    end
+
+    it "uses the sponsored count when it exceeds reserved_seats" do
+      theater.update!(reserved_seats: 2)
+      allow(theater).to receive(:sponsored_jobs).and_return(double(count: 5))
+      expect(Stripe::SubscriptionItem).to receive(:update).with('si_123', quantity: 5, proration_behavior: 'always_invoice')
       theater.sync_seat_quantity!
     end
 
