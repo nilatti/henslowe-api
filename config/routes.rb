@@ -81,6 +81,7 @@ Rails.application.routes.draw do
         resources :invitations, only: [:create]
         member do
           get :theater_skeleton
+          post :create_seat_subscription_checkout_session
         end
         collection do
           get :theater_names

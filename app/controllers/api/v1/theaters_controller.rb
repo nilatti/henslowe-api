@@ -1,8 +1,9 @@
 module Api
   module V1
 class TheatersController < ApiController
+  Stripe.api_key = ENV['STRIPE_SECRET_KEY']
   # skip_before_action :doorkeeper_authorize!, only: %i[index show theater_names]
-  before_action :set_theater, only: %i[show update destroy theater_skeleton]
+  before_action :set_theater, only: %i[show update destroy theater_skeleton create_seat_subscription_checkout_session]
 
   # GET /theaters
   def index
@@ -70,13 +71,33 @@ class TheatersController < ApiController
     render json: @theaters.as_json(only: %i[id fake name])
   end
 
+  # POST /theaters/:id/create_seat_subscription_checkout_session
+  def create_seat_subscription_checkout_session
+    authorize! :manage, @theater
+    if @theater.stripe_customer_id.blank?
+      customer = Stripe::Customer.create(name: @theater.name)
+      @theater.update!(stripe_customer_id: customer['id'])
+    end
+    session = Stripe::Checkout::Session.create({
+      customer: @theater.stripe_customer_id,
+      success_url: "#{ENV.fetch('FRONTEND_URL', 'https://henslowescloud.com')}/theaters/#{@theater.id}/billing",
+      cancel_url: "#{ENV.fetch('FRONTEND_URL', 'https://henslowescloud.com')}/theaters/#{@theater.id}/billing",
+      mode: 'subscription',
+      line_items: [{
+        quantity: 1,
+        price: params[:price]
+      }]
+    })
+    render json: { stripeUrl: session.url }
+  end
+
   def theater_skeleton
     theater_staff = @theater.jobs.where(production_id: nil, user_id: User.select(:id))
     render json: @theater.as_json(
       only: %i[
         id name street_address city state zip
         phone_number mission_statement website
-        calendar_url logo fake
+        calendar_url logo fake subscription_status
       ],
       include: {
         spaces: {

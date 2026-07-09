@@ -105,6 +105,47 @@ RSpec.describe 'theaters API', type: :request do
     end
   end
 
+  # Test suite for create_seat_subscription_checkout_session
+  describe 'POST /theaters/:id/create_seat_subscription_checkout_session' do
+    let!(:theater) { create(:theater) }
+    let!(:admin_user) { create(:user, :paid) }
+    let!(:theater_admin_job) do
+      create(:job, user: admin_user, theater: theater, production: nil,
+                   specialization: create(:specialization, :theater_admin))
+    end
+    let!(:regular_user) { create(:user) }
+    let(:fake_session) { double(url: 'https://checkout.stripe.com/session/xyz') }
+
+    context 'as a theater admin, with no existing stripe_customer_id' do
+      before do
+        allow(Stripe::Customer).to receive(:create).and_return({ 'id' => 'cus_new' })
+        allow(Stripe::Checkout::Session).to receive(:create).and_return(fake_session)
+        post "/api/v1/theaters/#{theater.id}/create_seat_subscription_checkout_session",
+             params: { price: 'price_123' }, as: :json, headers: authenticated_header(admin_user)
+      end
+
+      it 'creates a Stripe customer for the theater and returns the checkout url' do
+        expect(response).to have_http_status(:ok)
+        expect(json['stripeUrl']).to eq('https://checkout.stripe.com/session/xyz')
+        expect(theater.reload.stripe_customer_id).to eq('cus_new')
+      end
+
+      it 'requests a subscription-mode session with quantity 1' do
+        expect(Stripe::Checkout::Session).to have_received(:create).with(
+          hash_including(mode: 'subscription', customer: 'cus_new', line_items: [{ quantity: 1, price: 'price_123' }])
+        )
+      end
+    end
+
+    context 'as a non-admin' do
+      it 'is forbidden' do
+        post "/api/v1/theaters/#{theater.id}/create_seat_subscription_checkout_session",
+             params: { price: 'price_123' }, as: :json, headers: authenticated_header(regular_user)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
   # Test suite for theater_names
   describe 'GET /api/theaters/theater_names' do
     before(:context) { Theater.destroy_all }

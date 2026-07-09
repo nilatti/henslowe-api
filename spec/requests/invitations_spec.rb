@@ -188,6 +188,42 @@ RSpec.describe 'invitations API', type: :request do
         expect(invitation.reload.status).to eq('expired')
       end
     end
+
+    context 'when payment_responsibility is theater_pays' do
+      let!(:invitation) do
+        create(:invitation, :theater_sponsored, theater: theater, specialization: director_spec, invited_by: admin_user,
+                             email: matching_user.email)
+      end
+      let(:matching_user) { create(:user) } # deliberately unsubscribed — sponsorship should cover them
+
+      context 'and the theater has no active subscription' do
+        before { post "/api/v1/invitations/#{invitation.token}/accept", as: :json, headers: authenticated_header(matching_user) }
+
+        it 'surfaces theater_billing_not_configured and leaves the invitation pending' do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json['base']).to include('theater_billing_not_configured')
+          expect(invitation.reload.status).to eq('pending')
+        end
+      end
+
+      context 'and the theater has an active subscription' do
+        before do
+          theater.update!(subscription_status: 'active')
+          post "/api/v1/invitations/#{invitation.token}/accept", as: :json, headers: authenticated_header(matching_user)
+        end
+
+        it 'creates a theater_sponsored Job for the unsubscribed user' do
+          expect(response).to have_http_status(:created)
+          job = Job.find_by(user: matching_user, theater: theater, specialization: director_spec)
+          expect(job).to be_present
+          expect(job.theater_sponsored).to be true
+        end
+
+        it 'marks the invitation accepted' do
+          expect(invitation.reload.status).to eq('accepted')
+        end
+      end
+    end
   end
 
   describe 'POST /invitations/:token/resend' do

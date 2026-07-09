@@ -65,11 +65,19 @@ class InvitationsController < ApiController
     end
     return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity unless @invitation.pending?
 
+    if @invitation.theater_pays?
+      sponsoring_theater = @invitation.theater || @invitation.production&.theater
+      unless sponsoring_theater&.has_active_subscription?
+        return render json: { base: ["theater_billing_not_configured"] }, status: :unprocessable_entity
+      end
+    end
+
     @job = Job.new(
       user_id: current_user.id,
       specialization_id: @invitation.specialization_id,
       theater_id: @invitation.theater_id,
-      production_id: @invitation.production_id
+      production_id: @invitation.production_id,
+      theater_sponsored: @invitation.theater_pays?
     )
 
     if @job.save

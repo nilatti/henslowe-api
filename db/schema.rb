@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_08_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_09_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -276,6 +276,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_08_120000) do
     t.datetime "updated_at", null: false
     t.bigint "character_id"
     t.bigint "character_group_id"
+    t.boolean "theater_sponsored", default: false, null: false
     t.index ["character_group_id"], name: "index_jobs_on_character_group_id"
     t.index ["character_id"], name: "index_jobs_on_character_id"
     t.index ["production_id"], name: "index_jobs_on_production_id"
@@ -570,6 +571,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_08_120000) do
     t.datetime "updated_at", null: false
     t.string "logo"
     t.boolean "fake", default: false
+    t.string "stripe_customer_id"
+    t.string "subscription_status"
+    t.datetime "subscription_end_date"
   end
 
   create_table "users", charset: "utf8mb3", force: :cascade do |t|

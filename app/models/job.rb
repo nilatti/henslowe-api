@@ -22,7 +22,13 @@ class Job < ApplicationRecord
   validate :no_real_users_at_dream_theaters, on: :create
   validate :user_must_be_subscribed_for_paid_role, on: :create
 
+  after_commit :sync_theater_seat_quantity, if: :theater_sponsored?
+
 private
+  def sync_theater_seat_quantity
+    (theater || production&.theater)&.sync_seat_quantity!
+  end
+
   def no_real_users_at_dream_theaters
     return unless user.present? && !user.fake?
     theater = self.theater || self.production&.theater
@@ -38,6 +44,7 @@ private
     return if specialization.nil? || %w[Actor Auditioner].include?(specialization.title)
     theater = self.theater || self.production&.theater
     return if theater&.fake?
+    return if theater_sponsored? && theater&.has_active_subscription?
     return if user.has_active_subscription?
     errors.add(:base, "payment_required")
   end

@@ -21,10 +21,11 @@ class StripeWebhooksController < ActionController::API
   private
 
   def sync_subscription(subscription)
-    user = User.find_by(stripe_customer_id: subscription.customer)
-    return unless user
+    record = User.find_by(stripe_customer_id: subscription.customer) ||
+             Theater.find_by(stripe_customer_id: subscription.customer)
+    return unless record
 
-    user.update(
+    record.update(
       subscription_status: subscription.status,
       subscription_end_date: Time.at(subscription.current_period_end).to_date
     )
