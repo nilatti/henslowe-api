@@ -50,6 +50,51 @@ RSpec.describe 'invitations API', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'when the request body also carries a production_id (as StaffJobsList/InviteForm send for production-context invites)' do
+      let(:params) do
+        { invitation: { email: 'someone@example.com', specialization_id: director_spec.id, payment_responsibility: 'self_pays', production_id: 9999 } }
+      end
+
+      before { post "/api/v1/theaters/#{theater.id}/invitations", params: params, as: :json, headers: authenticated_header(admin_user) }
+
+      it 'ignores the body production_id and stays scoped to the theater' do
+        expect(response).to have_http_status(:created)
+        expect(Invitation.last.theater_id).to eq(theater.id)
+        expect(Invitation.last.production_id).to be_nil
+      end
+    end
+  end
+
+  describe 'POST /productions/:production_id/invitations' do
+    let!(:production) { create(:production, theater: theater) }
+    let!(:production_admin_job) do
+      create(:job, user: admin_user, theater: nil, production: production,
+                   specialization: create(:specialization, :production_admin))
+    end
+    let(:params) do
+      { invitation: { email: 'someone@example.com', specialization_id: director_spec.id, payment_responsibility: 'self_pays' } }
+    end
+
+    it 'creates an invitation scoped to the production' do
+      post "/api/v1/productions/#{production.id}/invitations", params: params, as: :json, headers: authenticated_header(admin_user)
+      expect(response).to have_http_status(:created)
+      expect(Invitation.last.production_id).to eq(production.id)
+      expect(Invitation.last.theater_id).to be_nil
+    end
+
+    context 'when the request body also carries the parent theater_id (as the frontend sends today)' do
+      let(:params) do
+        { invitation: { email: 'someone@example.com', specialization_id: director_spec.id, payment_responsibility: 'self_pays', theater_id: theater.id } }
+      end
+
+      it 'ignores the body theater_id and stays scoped to the production' do
+        post "/api/v1/productions/#{production.id}/invitations", params: params, as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:created)
+        expect(Invitation.last.production_id).to eq(production.id)
+        expect(Invitation.last.theater_id).to be_nil
+      end
+    end
   end
 
   describe 'GET /invitations/:token' do

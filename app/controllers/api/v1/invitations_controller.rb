@@ -35,8 +35,11 @@ class InvitationsController < ApiController
   def create
     @invitation = Invitation.new(invitation_params)
     @invitation.invited_by_id = current_user.id
-    @invitation.theater_id ||= params[:theater_id]
-    @invitation.production_id ||= params[:production_id]
+    # theater_id/production_id come from the nested route only — never trust the body for
+    # these, since a production's Job payloads (see JobForm) routinely carry both ids and
+    # we don't want the caller able to pick a different theater/production than the URL.
+    @invitation.theater_id = params[:theater_id]
+    @invitation.production_id = params[:production_id]
     authorize! :create, @invitation
     if @invitation.save
       InvitationMailer.invite(@invitation.id).deliver_later
@@ -84,7 +87,7 @@ class InvitationsController < ApiController
   end
 
   def invitation_params
-    params.require(:invitation).permit(:email, :specialization_id, :theater_id, :production_id, :payment_responsibility)
+    params.require(:invitation).permit(:email, :specialization_id, :payment_responsibility)
   end
 end
   end
