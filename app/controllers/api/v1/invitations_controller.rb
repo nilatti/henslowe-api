@@ -2,7 +2,7 @@ module Api
   module V1
 class InvitationsController < ApiController
   skip_before_action :authenticate_request, only: [:show]
-  before_action :set_invitation_by_token, only: [:show, :accept, :destroy]
+  before_action :set_invitation_by_token, only: [:show, :accept, :destroy, :resend]
 
   # GET /invitations?theater_id=&production_id=
   def index
@@ -53,7 +53,7 @@ class InvitationsController < ApiController
   def accept
     authorize! :accept, @invitation
 
-    if @invitation.expired?
+    if @invitation.stale?
       @invitation.update(status: :expired)
     end
     return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity unless @invitation.pending?
@@ -78,6 +78,18 @@ class InvitationsController < ApiController
     authorize! :manage, @invitation
     @invitation.update(status: :revoked)
     head :no_content
+  end
+
+  # POST /invitations/:token/resend
+  def resend
+    authorize! :manage, @invitation
+    return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity if @invitation.accepted? || @invitation.revoked?
+
+    if @invitation.expired? || @invitation.stale?
+      @invitation.update!(status: :pending, expires_at: 14.days.from_now)
+    end
+    InvitationMailer.invite(@invitation.id).deliver_later
+    json_response(@invitation.as_json(include: [:specialization, :theater, :production]))
   end
 
   private

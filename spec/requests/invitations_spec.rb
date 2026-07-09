@@ -151,7 +151,7 @@ RSpec.describe 'invitations API', type: :request do
 
     context 'when the invitation has expired' do
       let!(:invitation) do
-        create(:invitation, :expired, theater: theater, specialization: director_spec, invited_by: admin_user,
+        create(:invitation, :stale, theater: theater, specialization: director_spec, invited_by: admin_user,
                              email: matching_user.email, payment_responsibility: 'self_pays')
       end
 
@@ -160,6 +160,63 @@ RSpec.describe 'invitations API', type: :request do
       it 'is rejected and marks the invitation expired' do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(invitation.reload.status).to eq('expired')
+      end
+    end
+  end
+
+  describe 'POST /invitations/:token/resend' do
+    context 'for a pending invitation' do
+      let!(:invitation) { create(:invitation, theater: theater, specialization: director_spec, invited_by: admin_user) }
+
+      it 'redelivers the invitation email as a theater admin' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:ok)
+        expect(InvitationMailer).to have_received(:invite).with(invitation.id).once
+      end
+
+      it 'is forbidden for a non-admin' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(regular_user)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'for a stale-but-still-pending invitation' do
+      let!(:invitation) { create(:invitation, :stale, theater: theater, specialization: director_spec, invited_by: admin_user) }
+
+      it 'revives it with a fresh expiry and resends' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:ok)
+        expect(invitation.reload.status).to eq('pending')
+        expect(invitation.expires_at).to be_within(1.minute).of(14.days.from_now)
+      end
+    end
+
+    context 'for an invitation already marked expired' do
+      let!(:invitation) { create(:invitation, :expired_status, theater: theater, specialization: director_spec, invited_by: admin_user) }
+
+      it 'revives it back to pending with a fresh expiry' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:ok)
+        expect(invitation.reload.status).to eq('pending')
+        expect(invitation.expires_at).to be_within(1.minute).of(14.days.from_now)
+      end
+    end
+
+    context 'for an accepted invitation' do
+      let!(:invitation) { create(:invitation, :accepted, theater: theater, specialization: director_spec, invited_by: admin_user) }
+
+      it 'is rejected' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context 'for a revoked invitation' do
+      let!(:invitation) { create(:invitation, :revoked, theater: theater, specialization: director_spec, invited_by: admin_user) }
+
+      it 'is rejected' do
+        post "/api/v1/invitations/#{invitation.token}/resend", as: :json, headers: authenticated_header(admin_user)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

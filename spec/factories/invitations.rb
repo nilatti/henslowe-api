@@ -15,7 +15,12 @@ FactoryBot.define do
       payment_responsibility { :theater_pays }
     end
 
-    trait :expired do
+    trait :stale do
+      expires_at { 1.day.ago }
+    end
+
+    trait :expired_status do
+      status { :expired }
       expires_at { 1.day.ago }
     end
 

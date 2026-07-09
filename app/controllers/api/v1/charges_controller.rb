@@ -14,9 +14,9 @@ class ChargesController < ApiController
     return_to = safe_return_path(params[:return_to])
     session = Stripe::Checkout::Session.create({
       allow_promotion_codes: true,
-      cancel_url: "#{ENV['BASE_URL_FRONT']}#{return_to || '/checkout'}",
+      cancel_url: "#{ENV['FRONTEND_URL']}#{return_to || '/checkout'}",
       customer: user.stripe_customer_id,
-      success_url: "#{ENV['BASE_URL_FRONT']}#{return_to || '/success'}",
+      success_url: "#{ENV['FRONTEND_URL']}#{return_to || '/success'}",
       mode: 'subscription',
       line_items: [{
         quantity: 1,
@@ -38,8 +38,8 @@ class ChargesController < ApiController
           subscription_id: user.stripe_subscription_id,
         },
       },
-      success_url: "#{ENV['BASE_URL_FRONT']}/account",
-      cancel_url: "#{ENV['BASE_URL_FRONT']}/account",
+      success_url: "#{ENV['FRONTEND_URL']}/account",
+      cancel_url: "#{ENV['FRONTEND_URL']}/account",
       })
       render json: {stripeUrl: session.url}
   end

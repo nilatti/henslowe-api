@@ -20,7 +20,10 @@ class Invitation < ApplicationRecord
 
   scope :active, -> { pending.where('expires_at > ?', Time.current) }
 
-  def expired?
+  # Distinct from the `expired?` the status enum generates (status == "expired"):
+  # this is true the moment a still-pending invitation's window has lapsed, before
+  # anything has actually transitioned its status.
+  def stale?
     pending? && expires_at <= Time.current
   end
 

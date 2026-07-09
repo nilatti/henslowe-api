@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       resources :invitations, param: :token, only: [:index, :show, :destroy] do
         member do
           post :accept
+          post :resend
         end
       end
       resources :specializations

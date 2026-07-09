@@ -60,20 +60,26 @@ RSpec.describe Invitation, type: :model do
     end
   end
 
-  describe "#expired?" do
+  describe "#stale?" do
     it "is true once expires_at has passed and status is still pending" do
-      invitation = create(:invitation, :expired)
-      expect(invitation.expired?).to be true
+      invitation = create(:invitation, :stale)
+      expect(invitation.stale?).to be true
     end
 
     it "is false for a pending invitation within its window" do
       invitation = create(:invitation)
-      expect(invitation.expired?).to be false
+      expect(invitation.stale?).to be false
     end
 
     it "is false once accepted, even if expires_at has passed" do
-      invitation = create(:invitation, :expired, :accepted)
-      expect(invitation.expired?).to be false
+      invitation = create(:invitation, :stale, :accepted)
+      expect(invitation.stale?).to be false
+    end
+
+    it "is false once the status has already transitioned to expired (distinct from the enum's own #expired?)" do
+      invitation = create(:invitation, :expired_status)
+      expect(invitation.stale?).to be false
+      expect(invitation.expired?).to be true
     end
   end
 end
