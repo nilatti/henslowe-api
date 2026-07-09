@@ -6,9 +6,16 @@ class InvitationsController < ApiController
 
   # GET /invitations?theater_id=&production_id=
   def index
-    @invitations = Invitation.all
-    @invitations = @invitations.where(theater_id: params[:theater_id]) if params[:theater_id]
-    @invitations = @invitations.where(production_id: params[:production_id]) if params[:production_id]
+    # production_id takes priority: a production page's requests also carry the
+    # parent theater's id (see StaffJobsList), but an invitation only ever belongs
+    # to one of the two, so ANDing both would always exclude production-scoped rows.
+    @invitations = if params[:production_id]
+      Invitation.where(production_id: params[:production_id])
+    elsif params[:theater_id]
+      Invitation.where(theater_id: params[:theater_id])
+    else
+      Invitation.all
+    end
     @invitations = @invitations.select { |invitation| current_ability.can?(:manage, invitation) }
     json_response(
       @invitations.as_json(include: [:specialization, :theater, :production, :invited_by])

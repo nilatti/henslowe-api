@@ -97,6 +97,32 @@ RSpec.describe 'invitations API', type: :request do
     end
   end
 
+  describe 'GET /invitations?theater_id=&production_id=' do
+    let!(:production) { create(:production, theater: theater) }
+    let!(:production_admin_job) do
+      create(:job, user: admin_user, theater: nil, production: production,
+                   specialization: create(:specialization, :production_admin))
+    end
+    let!(:production_invitation) do
+      create(:invitation, :for_production, production: production, specialization: director_spec, invited_by: admin_user)
+    end
+    let!(:theater_invitation) do
+      create(:invitation, theater: theater, specialization: director_spec, invited_by: admin_user)
+    end
+
+    it 'finds the production-scoped invitation when the request also carries the parent theater_id (as StaffJobsList sends)' do
+      get '/api/v1/invitations', params: { theater_id: theater.id, production_id: production.id }, as: :json, headers: authenticated_header(admin_user)
+      expect(response).to have_http_status(:ok)
+      expect(json.map { |i| i['id'] }).to eq([production_invitation.id])
+    end
+
+    it 'finds the theater-scoped invitation when only theater_id is given' do
+      get '/api/v1/invitations', params: { theater_id: theater.id }, as: :json, headers: authenticated_header(admin_user)
+      expect(response).to have_http_status(:ok)
+      expect(json.map { |i| i['id'] }).to eq([theater_invitation.id])
+    end
+  end
+
   describe 'GET /invitations/:token' do
     let!(:invitation) { create(:invitation, theater: theater, specialization: director_spec, invited_by: admin_user) }
 
