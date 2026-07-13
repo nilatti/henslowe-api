@@ -9,7 +9,8 @@ class ProductionsController < ApiController
     :full,
     :user_conflicts,
     :space_conflicts,
-    :build_rehearsal_schedule
+    :build_rehearsal_schedule,
+    :publish_rehearsal_calendar
   ]
 
   # GET /productions
@@ -248,6 +249,13 @@ class ProductionsController < ApiController
     )
     json_response(@production.as_json(include: [:theater]))
   end
+
+  def publish_rehearsal_calendar
+    authorize! :update, @production
+    PublishRehearsalCalendarWorker.perform_async(@production.id)
+    head :accepted
+  end
+
 def user_conflicts
     users = User.joins(:jobs).where(jobs: { production: @production }).includes(:conflicts).distinct
     render json: users.map { |user| { user: user, conflicts: user.conflicts } }

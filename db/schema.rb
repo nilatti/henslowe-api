@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_13_120001) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -439,6 +439,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
     t.index ["theater_id"], name: "index_productions_on_theater_id"
   end
 
+  create_table "rehearsal_invites", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "rehearsal_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "sent_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rehearsal_id", "user_id"], name: "index_rehearsal_invites_on_rehearsal_id_and_user_id", unique: true
+    t.index ["rehearsal_id"], name: "index_rehearsal_invites_on_rehearsal_id"
+    t.index ["user_id"], name: "index_rehearsal_invites_on_user_id"
+  end
+
   create_table "rehearsals", charset: "latin1", force: :cascade do |t|
     t.datetime "start_time"
     t.datetime "end_time"
@@ -449,6 +460,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "text_unit"
+    t.datetime "published_at"
+    t.integer "ics_sequence", default: 0, null: false
     t.index ["production_id"], name: "index_rehearsals_on_production_id"
     t.index ["space_id"], name: "index_rehearsals_on_space_id"
   end
@@ -634,6 +647,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
     t.index ["play_id"], name: "index_words_on_play_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "acts", "plays"
   add_foreign_key "audition_submissions", "jobs"

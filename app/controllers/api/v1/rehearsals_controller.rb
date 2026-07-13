@@ -35,6 +35,7 @@ class RehearsalsController < ApiController
 
   # DELETE /acts/1
   def destroy
+    send_deletion_cancellations(@rehearsal)
     @rehearsal.destroy
   end
 
@@ -58,6 +59,27 @@ class RehearsalsController < ApiController
 
     def set_rehearsal
       @rehearsal = Rehearsal.includes(:acts, :french_scenes, :scenes).find(params[:id])
+    end
+
+    # The rehearsal_invites rows (and the rehearsal itself) are gone by the time a
+    # deliver_later job runs, so the cancellation ICS is built from a plain snapshot
+    # hash rather than re-fetching the rehearsal by id.
+    def send_deletion_cancellations(rehearsal)
+      invited_user_ids = rehearsal.rehearsal_invites.pluck(:user_id)
+      return if invited_user_ids.empty?
+
+      snapshot = {
+        uid: "rehearsal-#{rehearsal.id}@henslowescloud.com",
+        sequence: rehearsal.ics_sequence + 1,
+        summary: rehearsal.title.presence || "Rehearsal",
+        description: rehearsal.notes,
+        location: rehearsal.space&.name,
+        start_time: rehearsal.start_time,
+        end_time: rehearsal.end_time,
+      }
+      invited_user_ids.each do |user_id|
+        RehearsalCalendarMailer.cancel_deleted(snapshot, user_id).deliver_later
+      end
     end
 
     def apply_production_defaults(rehearsal)

@@ -1,0 +1,10 @@
+You've been added to the call list for <%= @summary %>.
+
+<%= @start_time.strftime('%A, %B %-d, %Y') %>
+<%= @start_time.strftime('%-I:%M %p') %> – <%= @end_time.strftime('%-I:%M %p') %><% if @location.present? %> · <%= @location %><% end %>
+
+<% if @description.present? -%>
+<%= @description %>
+
+<% end -%>
+A calendar invite is attached to this email.

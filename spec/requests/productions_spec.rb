@@ -145,6 +145,19 @@ RSpec.describe 'Productions API' do
     end
   end
 
+  describe 'post /api/productions/:production_id/publish_rehearsal_calendar' do
+    before { post "/api/v1/productions/#{id}/publish_rehearsal_calendar", headers: authenticated_header(user) }
+
+    it 'returns 202' do
+      expect(response).to have_http_status(202)
+    end
+
+    it 'enqueues the publish worker for this production' do
+      expect(PublishRehearsalCalendarWorker.jobs.size).to eql(1)
+      expect(PublishRehearsalCalendarWorker.jobs.first['args']).to eq([id])
+    end
+  end
+
   describe 'get /api/productions/production_names' do
     before { get "/api/v1/productions/production_names", headers: authenticated_header(user)}
     it "returns 200" do

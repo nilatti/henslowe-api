@@ -38,6 +38,8 @@ gem 'connection_pool', '~> 2.4'
 gem 'activerecord-import'
 # montrose provides recurrence logic
 gem "montrose"
+# build .ics calendar invites
+gem "icalendar"
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
