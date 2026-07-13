@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_09_130000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -242,6 +242,29 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
     t.bigint "rehearsal_id", null: false
   end
 
+  create_table "invitations", charset: "utf8mb3", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "token", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "payment_responsibility", null: false
+    t.bigint "theater_id"
+    t.bigint "production_id"
+    t.bigint "specialization_id"
+    t.bigint "invited_by_id"
+    t.bigint "accepted_user_id"
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accepted_user_id"], name: "index_invitations_on_accepted_user_id"
+    t.index ["email"], name: "index_invitations_on_email"
+    t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["production_id"], name: "index_invitations_on_production_id"
+    t.index ["specialization_id"], name: "index_invitations_on_specialization_id"
+    t.index ["theater_id"], name: "index_invitations_on_theater_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
+  end
+
   create_table "jobs", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "production_id"
     t.bigint "specialization_id"
@@ -253,6 +276,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
     t.datetime "updated_at", null: false
     t.bigint "character_id"
     t.bigint "character_group_id"
+    t.boolean "theater_sponsored", default: false, null: false
     t.index ["character_group_id"], name: "index_jobs_on_character_group_id"
     t.index ["character_id"], name: "index_jobs_on_character_id"
     t.index ["production_id"], name: "index_jobs_on_production_id"
@@ -547,6 +571,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_30_120000) do
     t.datetime "updated_at", null: false
     t.string "logo"
     t.boolean "fake", default: false
+    t.string "stripe_customer_id"
+    t.string "subscription_status"
+    t.datetime "subscription_end_date"
+    t.integer "reserved_seats", default: 1, null: false
   end
 
   create_table "users", charset: "utf8mb3", force: :cascade do |t|

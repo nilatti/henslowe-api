@@ -1,0 +1,121 @@
+module Api
+  module V1
+class InvitationsController < ApiController
+  skip_before_action :authenticate_request, only: [:show]
+  before_action :set_invitation_by_token, only: [:show, :accept, :destroy, :resend]
+
+  # GET /invitations?theater_id=&production_id=
+  def index
+    # production_id takes priority: a production page's requests also carry the
+    # parent theater's id (see StaffJobsList), but an invitation only ever belongs
+    # to one of the two, so ANDing both would always exclude production-scoped rows.
+    @invitations = if params[:production_id]
+      Invitation.where(production_id: params[:production_id])
+    elsif params[:theater_id]
+      Invitation.where(theater_id: params[:theater_id])
+    else
+      Invitation.all
+    end
+    @invitations = @invitations.select { |invitation| current_ability.can?(:manage, invitation) }
+    json_response(
+      @invitations.as_json(include: [:specialization, :theater, :production, :invited_by])
+    )
+  end
+
+  # GET /invitations/:token
+  def show
+    json_response(
+      @invitation.as_json(
+        only: [:email, :status, :payment_responsibility, :expires_at],
+        include: {
+          specialization: { only: [:id, :title] },
+          theater: { only: [:id, :name] },
+          production: { only: [:id, :start_date, :end_date] },
+          invited_by: { only: [:id, :first_name, :last_name] }
+        }
+      )
+    )
+  end
+
+  # POST /theaters/:theater_id/invitations
+  # POST /productions/:production_id/invitations
+  def create
+    @invitation = Invitation.new(invitation_params)
+    @invitation.invited_by_id = current_user.id
+    # theater_id/production_id come from the nested route only — never trust the body for
+    # these, since a production's Job payloads (see JobForm) routinely carry both ids and
+    # we don't want the caller able to pick a different theater/production than the URL.
+    @invitation.theater_id = params[:theater_id]
+    @invitation.production_id = params[:production_id]
+    authorize! :create, @invitation
+    if @invitation.save
+      InvitationMailer.invite(@invitation.id).deliver_later
+      render json: @invitation.as_json(include: [:specialization, :theater, :production]), status: :created
+    else
+      render json: @invitation.errors, status: :unprocessable_entity
+    end
+  end
+
+  # POST /invitations/:token/accept
+  def accept
+    authorize! :accept, @invitation
+
+    if @invitation.stale?
+      @invitation.update(status: :expired)
+    end
+    return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity unless @invitation.pending?
+
+    if @invitation.theater_pays?
+      sponsoring_theater = @invitation.theater || @invitation.production&.theater
+      unless sponsoring_theater&.has_active_subscription?
+        return render json: { base: ["theater_billing_not_configured"] }, status: :unprocessable_entity
+      end
+    end
+
+    @job = Job.new(
+      user_id: current_user.id,
+      specialization_id: @invitation.specialization_id,
+      theater_id: @invitation.theater_id,
+      production_id: @invitation.production_id,
+      theater_sponsored: @invitation.theater_pays?
+    )
+
+    if @job.save
+      @invitation.update!(status: :accepted, accepted_at: Time.current, accepted_user_id: current_user.id)
+      render json: @job.as_json(include: [:specialization, :theater, :production]), status: :created
+    else
+      render json: @job.errors, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE /invitations/:token
+  def destroy
+    authorize! :manage, @invitation
+    @invitation.update(status: :revoked)
+    head :no_content
+  end
+
+  # POST /invitations/:token/resend
+  def resend
+    authorize! :manage, @invitation
+    return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity if @invitation.accepted? || @invitation.revoked?
+
+    if @invitation.expired? || @invitation.stale?
+      @invitation.update!(status: :pending, expires_at: 14.days.from_now)
+    end
+    InvitationMailer.invite(@invitation.id).deliver_later
+    json_response(@invitation.as_json(include: [:specialization, :theater, :production]))
+  end
+
+  private
+
+  def set_invitation_by_token
+    @invitation = Invitation.find_by!(token: params[:token])
+  end
+
+  def invitation_params
+    params.require(:invitation).permit(:email, :specialization_id, :payment_responsibility)
+  end
+end
+  end
+end

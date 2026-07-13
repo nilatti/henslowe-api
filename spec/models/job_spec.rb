@@ -122,6 +122,40 @@ RSpec.describe Job, type: :model do
     end
   end
 
+  describe "theater-sponsored bypass (on create)" do
+    let!(:sponsoring_theater) { create(:theater, subscription_status: 'active') }
+    let!(:unsponsored_theater) { create(:theater) }
+    let!(:unpaid_user) { create(:user) }
+    let!(:director_spec) { create(:specialization, :director) }
+
+    it "allows an unpaid user when theater_sponsored and the theater has an active subscription" do
+      job = build(:job, user: unpaid_user, theater: sponsoring_theater, production: nil,
+                        specialization: director_spec, theater_sponsored: true)
+      expect(job).to be_valid
+    end
+
+    it "still blocks an unpaid user when theater_sponsored but the theater isn't subscribed" do
+      job = build(:job, user: unpaid_user, theater: unsponsored_theater, production: nil,
+                        specialization: director_spec, theater_sponsored: true)
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("payment_required")
+    end
+
+    it "still blocks an unpaid user at a subscribed theater when the job isn't marked theater_sponsored" do
+      job = build(:job, user: unpaid_user, theater: sponsoring_theater, production: nil,
+                        specialization: director_spec, theater_sponsored: false)
+      expect(job).not_to be_valid
+      expect(job.errors[:base]).to include("payment_required")
+    end
+
+    it "resolves sponsorship via the production's theater for production-scoped jobs" do
+      production = create(:production, theater: sponsoring_theater)
+      job = build(:job, user: unpaid_user, theater: nil, production: production,
+                        specialization: director_spec, theater_sponsored: true)
+      expect(job).to be_valid
+    end
+  end
+
   describe "ActiveRecord associations" do
     it { expect(job).to belong_to(:character).optional }
     it { expect(job).to belong_to(:production).optional }

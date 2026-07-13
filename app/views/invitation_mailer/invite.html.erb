@@ -1,0 +1,10 @@
+<p>
+  <%= @invitation.invited_by.name %> has invited you to join
+  <strong><%= @org_name %></strong> on Henslowe as <strong><%= @invitation.specialization.title %></strong>.
+</p>
+
+<p style="margin-top: 16px;">
+  <a href="<%= @accept_url %>">Accept invitation →</a>
+</p>
+
+<p style="margin-top: 16px; color: #6b7280;">This invitation expires on <%= @invitation.expires_at.strftime('%B %-d, %Y') %>.</p>
