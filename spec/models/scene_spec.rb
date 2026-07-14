@@ -28,7 +28,7 @@ RSpec.describe Scene, type: :model do
    it "has a pretty name" do
      act = build(:act)
      scene = build(:scene, act: act)
-     expect(scene.pretty_name).to eq("#{act.number}.#{scene.number}")
+     expect(scene.pretty_name).to eq("%02d.%02d" % [act.number, scene.number])
    end
    it "sorts in play order" do
      play = build(:play)
@@ -40,6 +40,13 @@ RSpec.describe Scene, type: :model do
      scenes = [scene1, scene2, scene3]
      expect(Scene.play_order(scenes).first).to be(scene1)
      expect(Scene.play_order(scenes).last).to be(scene3)
+   end
+
+   it "sorts numerically past 9 scenes, not alphabetically" do
+     act = build(:act, number: 1)
+     scenes = (1..11).to_a.shuffle.map { |n| build(:scene, number: n, act: act) }
+     ordered = Scene.play_order(scenes)
+     expect(ordered.map(&:number)).to eq((1..11).to_a)
    end
 
    it "finds onstages for play (but only one per character or group)" do

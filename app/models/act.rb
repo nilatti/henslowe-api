@@ -11,7 +11,7 @@ class Act < ApplicationRecord
   validates :number, presence: true
 
   def pretty_name
-    "Act #{self.number}"
+    "Act %02d" % self.number
   end
 
   def self.play_order(acts)

@@ -34,7 +34,7 @@ RSpec.describe FrenchScene, type: :model do
     act = build(:act)
     scene = build(:scene, act: act)
     french_scene = build(:french_scene, scene: scene)
-    expect(french_scene.pretty_name).to eq("#{act.number}.#{scene.number}.#{french_scene.number}")
+    expect(french_scene.pretty_name).to eq("#{'%02d' % act.number}.#{'%02d' % scene.number}.#{french_scene.number}")
   end
   it "sorts in play order" do
     play = build(:play)

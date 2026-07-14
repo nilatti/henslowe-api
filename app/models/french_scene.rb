@@ -24,6 +24,6 @@ class FrenchScene < ApplicationRecord
   end
 
   def pretty_name
-    "#{self.scene.act.number}.#{self.scene.number}.#{self.number}"
+    "#{'%02d' % self.scene.act.number}.#{'%02d' % self.scene.number}.#{self.number}"
   end
 end
