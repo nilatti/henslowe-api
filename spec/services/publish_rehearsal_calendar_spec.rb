@@ -126,6 +126,54 @@ RSpec.describe PublishRehearsalCalendar do
     end
   end
 
+  describe 'a user who has opted out of calendar invites, on the call list from the start' do
+    let(:opted_out_user) { create(:user, receive_rehearsal_calendar_invites: false) }
+    let!(:rehearsal) do
+      r = create(:rehearsal, production: production, start_time: 1.day.from_now, end_time: 1.day.from_now + 2.hours)
+      r.user_ids = [user1.id, opted_out_user.id]
+      r
+    end
+
+    it 'still invites the opted-in person' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).with(rehearsal.id, user1.id, 0)
+    end
+
+    it 'never invites the opted-out person' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).exactly(1).times
+    end
+
+    it 'does not create a rehearsal_invite row for the opted-out person' do
+      run
+      expect(rehearsal.rehearsal_invites.pluck(:user_id)).to contain_exactly(user1.id)
+    end
+  end
+
+  describe 'a user who opts out after already being invited' do
+    let!(:rehearsal) do
+      r = create(:rehearsal, production: production, start_time: 1.day.from_now, end_time: 1.day.from_now + 2.hours)
+      r.user_ids = [user1.id, user2.id]
+      r
+    end
+
+    before do
+      run
+      user2.update!(receive_rehearsal_calendar_invites: false)
+    end
+
+    it 'sends a cancellation to the person who opted out' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :cancel).with(rehearsal.id, user2.id, 0)
+    end
+
+    it 'destroys their rehearsal_invite row' do
+      run
+      expect(rehearsal.rehearsal_invites.pluck(:user_id)).to contain_exactly(user1.id)
+    end
+
+    it 'does not resend to the still-opted-in person just because someone else changed' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).exactly(0).times
+    end
+  end
+
   describe 'a rehearsal in the past' do
     let!(:rehearsal) do
       r = create(:rehearsal, production: production, start_time: 1.day.ago, end_time: 1.day.ago + 2.hours)

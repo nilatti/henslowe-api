@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_13_150000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_14_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -631,6 +631,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_13_150000) do
     t.string "headshot_url"
     t.boolean "paid_override", default: false, null: false
     t.string "resume_url"
+    t.boolean "receive_rehearsal_calendar_invites", default: true, null: false
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, length: 255
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

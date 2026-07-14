@@ -290,6 +290,7 @@ class UsersController < ApiController
       phone_number
       preferred_name
       program_name
+      receive_rehearsal_calendar_invites
       state
       street_address
       timezone
