@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_13_120001) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_13_150000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -435,6 +435,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_13_120001) do
     t.integer "lines_per_minute"
     t.bigint "default_space_id"
     t.text "audition_information"
+    t.integer "default_rehearsal_block_length"
+    t.integer "default_rehearsal_break_length"
     t.index ["default_space_id"], name: "index_productions_on_default_space_id"
     t.index ["theater_id"], name: "index_productions_on_theater_id"
   end
