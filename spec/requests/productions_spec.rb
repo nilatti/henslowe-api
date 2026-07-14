@@ -122,6 +122,26 @@ RSpec.describe 'Productions API' do
     end
   end
 
+  describe 'PUT /api/productions/:id with default rehearsal lengths' do
+    let(:params) do
+      { production: { default_rehearsal_block_length: 90, default_rehearsal_break_length: 15 } }
+    end
+
+    before { put "/api/v1/productions/#{id}", params: params, as: :json, headers: authenticated_header(user) }
+
+    it 'persists both defaults' do
+      production = Production.find(id)
+      expect(production.default_rehearsal_block_length).to eq(90)
+      expect(production.default_rehearsal_break_length).to eq(15)
+    end
+
+    it 'round-trips through the skeleton endpoint' do
+      get "/api/v1/productions/#{id}/skeleton", as: :json, headers: authenticated_header(user)
+      expect(json['default_rehearsal_block_length']).to eq(90)
+      expect(json['default_rehearsal_break_length']).to eq(15)
+    end
+  end
+
   # Test suite for DELETE /productions/:id
   describe 'DELETE /productions/:id' do
     before { delete "/api/v1/productions/#{id}", as: :json, headers: authenticated_header(user) }
@@ -142,6 +162,19 @@ RSpec.describe 'Productions API' do
       expect(BuildRehearsalScheduleWorker.jobs.size).to eql(0)
       expect(Rehearsal.all.size).to eq(40)
       expect(Rehearsal.all.first.production.id).to eq(id)
+    end
+  end
+
+  describe 'post /api/productions/:production_id/publish_rehearsal_calendar' do
+    before { post "/api/v1/productions/#{id}/publish_rehearsal_calendar", headers: authenticated_header(user) }
+
+    it 'returns 202' do
+      expect(response).to have_http_status(202)
+    end
+
+    it 'enqueues the publish worker for this production' do
+      expect(PublishRehearsalCalendarWorker.jobs.size).to eql(1)
+      expect(PublishRehearsalCalendarWorker.jobs.first['args']).to eq([id])
     end
   end
 

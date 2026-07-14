@@ -9,7 +9,8 @@ class ProductionsController < ApiController
     :full,
     :user_conflicts,
     :space_conflicts,
-    :build_rehearsal_schedule
+    :build_rehearsal_schedule,
+    :publish_rehearsal_calendar
   ]
 
   # GET /productions
@@ -248,6 +249,13 @@ class ProductionsController < ApiController
     )
     json_response(@production.as_json(include: [:theater]))
   end
+
+  def publish_rehearsal_calendar
+    authorize! :update, @production
+    PublishRehearsalCalendarWorker.perform_async(@production.id)
+    head :accepted
+  end
+
 def user_conflicts
     users = User.joins(:jobs).where(jobs: { production: @production }).includes(:conflicts).distinct
     render json: users.map { |user| { user: user, conflicts: user.conflicts } }
@@ -269,20 +277,13 @@ def user_conflicts
     def production_params
       params.require(:production).permit(
         :audition_information,
+        :default_rehearsal_block_length,
+        :default_rehearsal_break_length,
         :default_space_id,
         :end_date,
         :id,
         :lines_per_minute,
         :play_id,
-        :rehearsal_block_length,
-        :rehearsal_break_length,
-        :rehearsal_days_of_week,
-        :rehearsal_default_user_ids,
-        :rehearsal_end_date,
-        :rehearsal_end_time,
-        :rehearsal_start_date,
-        :rehearsal_end_time,
-        :rehearsal_time_between_breaks,
         :theater_id,
         :start_date,
         default_call_user_ids: [],

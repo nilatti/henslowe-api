@@ -267,4 +267,35 @@ RSpec.describe 'Rehearsals API' do
       end
     end
   end
+
+  describe 'DELETE /rehearsals/:id when the rehearsal was already published' do
+    let!(:rehearsal) do
+      r = create(:rehearsal, production: production, start_time: 1.day.from_now, end_time: 1.day.from_now + 2.hours)
+      r.user_ids = [user.id]
+      r
+    end
+
+    context 'with people already invited' do
+      before { PublishRehearsalCalendar.new(production).run }
+
+      it 'emails a cancellation to everyone who was invited' do
+        expect {
+          delete "/api/v1/rehearsals/#{rehearsal.id}", headers: authenticated_header(user)
+        }.to have_enqueued_mail(RehearsalCalendarMailer, :cancel_deleted).with(hash_including(uid: "rehearsal-#{rehearsal.id}@henslowescloud.com"), user.id)
+      end
+
+      it 'still destroys the rehearsal' do
+        delete "/api/v1/rehearsals/#{rehearsal.id}", headers: authenticated_header(user)
+        expect(Rehearsal.find_by(id: rehearsal.id)).to be_nil
+      end
+    end
+
+    context 'when the rehearsal was never published' do
+      it 'sends no cancellation email' do
+        expect {
+          delete "/api/v1/rehearsals/#{rehearsal.id}", headers: authenticated_header(user)
+        }.not_to have_enqueued_mail(RehearsalCalendarMailer)
+      end
+    end
+  end
 end
