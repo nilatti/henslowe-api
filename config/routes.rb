@@ -53,6 +53,7 @@ Rails.application.routes.draw do
         end
       end
       resources :specializations
+      resources :departments
       resources :phases
       resources :productions do
         resources :auditions, only: [:create]

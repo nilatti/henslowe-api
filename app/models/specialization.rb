@@ -5,6 +5,7 @@ class Specialization < ApplicationRecord
   has_many :jobs
   belongs_to :default_start_phase, class_name: 'Phase', optional: true
   belongs_to :default_end_phase, class_name: 'Phase', optional: true
+  belongs_to :department, optional: true
   default_scope { order('title ASC') }
   scope :actor, -> { where title: 'Actor' }
   scope :auditioner, -> { where title: 'Auditioner' }

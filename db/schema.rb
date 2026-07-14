@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_14_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -206,6 +206,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_120000) do
     t.index ["rehearsal_id"], name: "index_conflicts_on_rehearsal_id"
     t.index ["space_id"], name: "index_conflicts_on_space_id"
     t.index ["user_id"], name: "index_conflicts_on_user_id"
+  end
+
+  create_table "departments", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "entrance_exits", charset: "utf8mb3", force: :cascade do |t|
@@ -548,8 +555,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_120000) do
     t.bigint "default_start_phase_id"
     t.bigint "default_end_phase_id"
     t.integer "context", default: 2, null: false
+    t.bigint "department_id"
     t.index ["default_end_phase_id"], name: "index_specializations_on_default_end_phase_id"
     t.index ["default_start_phase_id"], name: "index_specializations_on_default_start_phase_id"
+    t.index ["department_id"], name: "index_specializations_on_department_id"
   end
 
   create_table "stage_directions", charset: "latin1", force: :cascade do |t|

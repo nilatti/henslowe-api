@@ -31,7 +31,7 @@ class JobsController < ApiController
     json_response(
       @jobs.as_json(
         include: [
-          :specialization,
+          { specialization: { include: :department } },
           :theater,
           :character,
           :character_group,
@@ -54,7 +54,7 @@ class JobsController < ApiController
       @job.as_json(
         include: [
           :character,
-          :specialization,
+          { specialization: { include: :department } },
           :theater,
           audition_submission: { only: [:id, :video_url, :notes] },
           user: { only: [:id, :email, :first_name, :middle_name, :last_name, :preferred_name, :phone_number, :timezone, :gender, :bio, :street_address, :city, :state, :zip, :website, :emergency_contact_name, :emergency_contact_number, :fake] },
@@ -77,7 +77,7 @@ class JobsController < ApiController
       render json:@job.as_json(
         include: [
           :character,
-          :specialization,
+          { specialization: { include: :department } },
           :theater,
           :user,
           production: {
@@ -101,7 +101,7 @@ class JobsController < ApiController
         @job.as_json(
           include: [
             :character,
-            :specialization,
+            { specialization: { include: :department } },
             :theater,
             user: {
               include: [:conflicts, :jobs]

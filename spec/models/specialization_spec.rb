@@ -21,6 +21,16 @@ RSpec.describe Specialization, type: :model do
     end
   end
 
+  describe 'department association' do
+    it { expect(build(:specialization)).to belong_to(:department).optional }
+
+    it 'accepts department assignment' do
+      department = create(:department)
+      spec = create(:specialization, department: department)
+      expect(spec.reload.department_id).to eq(department.id)
+    end
+  end
+
   it "scopes function" do
     actor_specialization = create(:specialization, title: 'Actor')
     auditioner_specialization = create(:specialization, title: 'Auditioner')

@@ -6,7 +6,7 @@ class SpecializationsController < ApiController
   # GET /specializations
   def index
     @specializations = Specialization.all
-    render json: @specializations.as_json(include: [:default_start_phase, :default_end_phase])
+    render json: @specializations.as_json(include: [:default_start_phase, :default_end_phase, :department])
   end
 
   # GET /specializations/1
@@ -15,6 +15,7 @@ class SpecializationsController < ApiController
       include: {
         default_start_phase: {},
         default_end_phase: {},
+        department: {},
         jobs: {
           include: [
             character: { only: [:name, :xml_id] },
@@ -33,7 +34,7 @@ class SpecializationsController < ApiController
     authorize! :create, @specialization
 
     if @specialization.save
-      render json: @specialization, status: :created
+      render json: @specialization.as_json(include: [:default_start_phase, :default_end_phase, :department]), status: :created
     else
       render json: @specialization.errors, status: :unprocessable_entity
     end
@@ -42,7 +43,7 @@ class SpecializationsController < ApiController
   # PATCH/PUT /specializations/1
   def update
     if @specialization.update(specialization_params)
-      json_response(@specialization.as_json(include: [:default_start_phase, :default_end_phase]))
+      json_response(@specialization.as_json(include: [:default_start_phase, :default_end_phase, :department]))
     else
       render json: @specialization.errors, status: :unprocessable_entity
     end
@@ -66,7 +67,7 @@ class SpecializationsController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def specialization_params
-      params.require(:specialization).permit(:context, :default_end_phase_id, :default_start_phase_id, :description, :production_admin, :theater_admin, :title)
+      params.require(:specialization).permit(:context, :default_end_phase_id, :default_start_phase_id, :department_id, :description, :production_admin, :theater_admin, :title)
     end
 end
   end
