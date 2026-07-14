@@ -12,7 +12,7 @@ class PublishRehearsalCalendar
   private
 
   def publish_rehearsal(rehearsal)
-    current_ids = rehearsal.user_ids.to_set
+    current_ids = rehearsal.users.where(receive_rehearsal_calendar_invites: true).pluck(:id).to_set
     invited_ids = rehearsal.rehearsal_invites.pluck(:user_id).to_set
     # published_at tracks the exact `updated_at` value last published, not a wall-clock
     # timestamp — this is what makes "has this rehearsal changed since publish" a plain

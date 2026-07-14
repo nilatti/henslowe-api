@@ -131,6 +131,21 @@ RSpec.describe 'Users API' do
     end
   end
 
+  describe 'PUT /api/v1/users/:id with receive_rehearsal_calendar_invites' do
+    before do
+      put "/api/v1/users/#{id}", params: { user: { receive_rehearsal_calendar_invites: false } }, as: :json, headers: authenticated_header(user)
+    end
+
+    it 'persists the preference' do
+      expect(user.reload.receive_rehearsal_calendar_invites).to eq(false)
+    end
+
+    it 'round-trips through the show endpoint' do
+      get "/api/v1/users/#{id}/", headers: authenticated_header(user)
+      expect(json['receive_rehearsal_calendar_invites']).to eq(false)
+    end
+  end
+
   describe 'access user data' do
     context 'when user is self' do
       before {
