@@ -23,8 +23,10 @@ class ConflictPatternsController < ApiController
   # POST /conflicts
   # POST /conflicts.json
   def create
-    user_id = (conflict_pattern_params[:user_id] || params[:user_id])&.to_i
-    raise CanCan::AccessDenied unless user_id == current_user.id || current_user.superadmin?
+    target_user_id = (conflict_pattern_params[:user_id] || params[:user_id])&.to_i
+    target_user = target_user_id && User.find_by(id: target_user_id)
+    raise CanCan::AccessDenied unless current_user.can_manage_conflicts_for?(target_user)
+
     @conflict_pattern = ConflictPattern.new(conflict_pattern_params)
 
     if @conflict_pattern.save

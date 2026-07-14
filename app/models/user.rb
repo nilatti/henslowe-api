@@ -207,6 +207,18 @@ class User < ApplicationRecord
     self.jobs.select { |job| job.theater_id == theater.id }
   end
 
+  # Allow the user themselves, superadmins, and any production/theater admin
+  # who shares a production with the target user to manage that user's conflicts.
+  def can_manage_conflicts_for?(other_user)
+    return false if other_user.nil?
+    return true if id == other_user.id
+    return true if superadmin?
+
+    Production.joins(:jobs).where(jobs: { user_id: other_user.id }).distinct.any? do |production|
+      production_admin?(production) || theater_admin?(production.theater)
+    end
+  end
+
   def has_active_subscription?
     paid_override? || subscription_status == 'active'
   end

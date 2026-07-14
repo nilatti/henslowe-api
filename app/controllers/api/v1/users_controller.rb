@@ -205,7 +205,7 @@ class UsersController < ApiController
   def build_conflict_schedule
     puts "build conflict schedule called"
     set_user
-    authorize! :update, @user
+    raise CanCan::AccessDenied unless current_user.can_manage_conflicts_for?(@user)
     conflict_schedule_pattern = params[:conflict_schedule_pattern]
     end_date = conflict_schedule_pattern[:end_date] || Date.today + 1.year
     start_date = conflict_schedule_pattern[:start_date] || Date.today

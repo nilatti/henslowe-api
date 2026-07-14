@@ -133,4 +133,43 @@ RSpec.describe 'Conflicts API' do
       expect(response).to have_http_status(204)
     end
   end
+
+  describe 'POST /conflicts as a production admin acting on behalf of an actor' do
+    let!(:production) { create(:production) }
+    let!(:admin_user) { create(:user, :paid) }
+    let!(:actor) { create(:user) }
+
+    before do
+      create(:job, production: production, theater: production.theater, user: admin_user, specialization: create(:specialization, :director))
+      create(:job, production: production, theater: production.theater, user: actor, specialization: create(:specialization, :actor))
+    end
+
+    it 'allows creating a one-time conflict for the actor' do
+      post "/api/v1/users/#{actor.id}/conflicts",
+        params: { conflict: { user_id: actor.id, start_time: Time.now, end_time: Time.now + 1.hour } },
+        as: :json, headers: authenticated_header(admin_user)
+
+      expect(response).to have_http_status(201)
+      expect(Conflict.where(user_id: actor.id).count).to eq(1)
+    end
+
+    it 'allows creating a recurring conflict pattern for the actor' do
+      post "/api/v1/users/#{actor.id}/conflict_patterns",
+        params: { conflict_pattern: { user_id: actor.id, start_date: Date.today, end_date: Date.today + 30, start_time: "05:00", end_time: "09:00", category: "rehearsal" } },
+        as: :json, headers: authenticated_header(admin_user)
+
+      expect(response).to have_http_status(201)
+      expect(ConflictPattern.where(user_id: actor.id).count).to eq(1)
+    end
+
+    it 'denies creating a conflict for a user outside the admin\'s productions' do
+      outsider = create(:user)
+
+      post "/api/v1/users/#{outsider.id}/conflicts",
+        params: { conflict: { user_id: outsider.id, start_time: Time.now, end_time: Time.now + 1.hour } },
+        as: :json, headers: authenticated_header(admin_user)
+
+      expect(response).to have_http_status(403)
+    end
+  end
 end
