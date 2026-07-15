@@ -9,6 +9,35 @@ class Rehearsal < ApplicationRecord
   has_many :rehearsal_invites, dependent: :destroy
   # add check on time start before end
 
+  def calendar_summary
+    play_title = production.play&.title
+    play_title.present? ? "#{play_title}: #{title.presence || 'Rehearsal'}" : (title.presence || 'Rehearsal')
+  end
+
+  def calendar_description
+    [text_unit_content, notes].reject(&:blank?).join("\n")
+  end
+
+  def calendar_location
+    return nil unless space
+
+    [space.name, space.full_address].reject(&:blank?).join(', ')
+  end
+
+  def text_unit_content
+    [
+      acts.map { |a| self.class.with_page_range(a.heading, a) },
+      scenes.map { |s| self.class.with_page_range(s.pretty_name, s) },
+      french_scenes.map { |fs| self.class.with_page_range(fs.pretty_name, fs) },
+    ].flatten.reject(&:blank?).join(", ")
+  end
+
+  def self.with_page_range(name, item)
+    return name if name.blank? || item.start_page.nil? || item.end_page.nil?
+
+    item.start_page == item.end_page ? "#{name} (p. #{item.start_page})" : "#{name} (pp. #{item.start_page}–#{item.end_page})"
+  end
+
   def sync_conflicts
     return unless start_time && end_time
 

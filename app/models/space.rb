@@ -6,4 +6,8 @@ class Space < ApplicationRecord
   has_many :theaters, through: :space_agreements
 
   validates :name, presence: true
+
+  def full_address
+    [street_address, city, state, zip].reject(&:blank?).join(', ')
+  end
 end

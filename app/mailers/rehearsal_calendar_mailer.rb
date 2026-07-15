@@ -1,39 +1,39 @@
 class RehearsalCalendarMailer < ApplicationMailer
   def invite(rehearsal_id, user_id, sequence)
-    @rehearsal = Rehearsal.includes(:space, production: :theater).find(rehearsal_id)
+    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, production: :play).find(rehearsal_id)
     @user = User.find(user_id)
 
     attach_ics(
       method: 'REQUEST',
       uid: ics_uid(@rehearsal.id),
       sequence: sequence,
-      summary: rehearsal_summary(@rehearsal),
-      description: @rehearsal.notes,
-      location: @rehearsal.space&.name,
+      summary: @rehearsal.calendar_summary,
+      description: @rehearsal.calendar_description,
+      location: @rehearsal.calendar_location,
       start_time: @rehearsal.start_time,
       end_time: @rehearsal.end_time,
     )
 
-    mail(to: @user.email, subject: "Rehearsal: #{rehearsal_summary(@rehearsal)}")
+    mail(to: @user.email, subject: "Rehearsal: #{@rehearsal.calendar_summary}")
   end
 
   def cancel(rehearsal_id, user_id, sequence)
-    @rehearsal = Rehearsal.includes(:space, production: :theater).find(rehearsal_id)
+    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, production: :play).find(rehearsal_id)
     @user = User.find(user_id)
 
     attach_ics(
       method: 'CANCEL',
       uid: ics_uid(@rehearsal.id),
       sequence: sequence,
-      summary: rehearsal_summary(@rehearsal),
-      description: @rehearsal.notes,
-      location: @rehearsal.space&.name,
+      summary: @rehearsal.calendar_summary,
+      description: @rehearsal.calendar_description,
+      location: @rehearsal.calendar_location,
       start_time: @rehearsal.start_time,
       end_time: @rehearsal.end_time,
       cancelled: true,
     )
 
-    mail(to: @user.email, subject: "Cancelled: #{rehearsal_summary(@rehearsal)}")
+    mail(to: @user.email, subject: "Cancelled: #{@rehearsal.calendar_summary}")
   end
 
   # Used when the underlying Rehearsal record has already been destroyed, so the ICS
@@ -63,10 +63,6 @@ class RehearsalCalendarMailer < ApplicationMailer
     "rehearsal-#{rehearsal_id}@henslowescloud.com"
   end
 
-  def rehearsal_summary(rehearsal)
-    rehearsal.title.presence || "Rehearsal"
-  end
-
   def attach_ics(method:, uid:, sequence:, summary:, description:, location:, start_time:, end_time:, cancelled: false)
     # Expose the fields views need, since `invite`/`cancel` source them from @rehearsal
     # while `cancel_deleted` sources them from a plain snapshot hash.
@@ -88,7 +84,10 @@ class RehearsalCalendarMailer < ApplicationMailer
       e.uid = uid
       e.sequence = sequence
       e.organizer = "mailto:#{ENV.fetch('MAILER_FROM', 'noreply@henslowescloud.com')}"
-      e.attendee = "mailto:#{@user.email}"
+      e.attendee = Icalendar::Values::CalAddress.new(
+        "mailto:#{@user.email}",
+        { 'RSVP' => 'FALSE' },
+      )
       e.status = cancelled ? 'CANCELLED' : 'CONFIRMED'
       e.ip_class = 'PRIVATE'
     end

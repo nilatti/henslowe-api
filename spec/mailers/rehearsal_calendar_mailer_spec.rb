@@ -2,10 +2,14 @@ require 'rails_helper'
 require 'icalendar'
 
 RSpec.describe RehearsalCalendarMailer, type: :mailer do
-  let(:space) { create(:space, name: 'Studio B') }
+  let(:space) do
+    create(:space, name: 'Studio B', street_address: nil, city: nil, state: nil, zip: nil)
+  end
   let(:user) { create(:user, email: 'actor@example.com') }
+  let(:play) { create(:play, title: 'Hamlet') }
+  let(:production) { create(:production, play: play) }
   let(:rehearsal) do
-    create(:rehearsal, title: 'Act 1 run', notes: 'Bring scripts', space: space,
+    create(:rehearsal, title: 'Act 1 run', notes: 'Bring scripts', space: space, production: production,
       start_time: Time.zone.parse('2026-08-01 18:00:00 UTC'), end_time: Time.zone.parse('2026-08-01 20:00:00 UTC'))
   end
 
@@ -26,7 +30,7 @@ RSpec.describe RehearsalCalendarMailer, type: :mailer do
 
     it 'builds a VEVENT with the rehearsal details' do
       event = ics_for(mail).events.first
-      expect(event.summary.to_s).to eq('Act 1 run')
+      expect(event.summary.to_s).to eq('Hamlet: Act 1 run')
       expect(event.location.to_s).to eq('Studio B')
       expect(event.uid.to_s).to eq("rehearsal-#{rehearsal.id}@henslowescloud.com")
       expect(event.sequence.to_i).to eq(2)
@@ -37,6 +41,37 @@ RSpec.describe RehearsalCalendarMailer, type: :mailer do
       event = ics_for(mail).events.first
       expect(event.dtstart.utc?).to be true
       expect(event.dtend.utc?).to be true
+    end
+
+    it 'does not request an RSVP reply from the attendee' do
+      event = ics_for(mail).events.first
+      expect(event.attendee.first.ical_params['rsvp']).to eq(['FALSE'])
+    end
+
+    context 'with scheduled acts/scenes' do
+      let(:act) { create(:act, play: play, number: 1, heading: 'The Beginning', start_page: 5, end_page: 12) }
+      let(:rehearsal) do
+        r = create(:rehearsal, title: 'Act 1 run', notes: 'Bring scripts', space: space, production: production,
+          start_time: Time.zone.parse('2026-08-01 18:00:00 UTC'), end_time: Time.zone.parse('2026-08-01 20:00:00 UTC'))
+        r.acts << act
+        r
+      end
+
+      it 'includes the pretty-printed content and page range in the description' do
+        event = ics_for(mail).events.first
+        expect(event.description.to_s).to eq("The Beginning (pp. 5–12)\nBring scripts")
+      end
+    end
+
+    context 'when the space has an address' do
+      let(:space) do
+        create(:space, name: 'Studio B', street_address: '123 Main St', city: 'Springfield', state: 'IL', zip: '62704')
+      end
+
+      it 'includes the address in the location' do
+        event = ics_for(mail).events.first
+        expect(event.location.to_s).to eq('Studio B, 123 Main St, Springfield, IL, 62704')
+      end
     end
   end
 

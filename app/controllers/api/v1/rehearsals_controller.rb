@@ -71,9 +71,9 @@ class RehearsalsController < ApiController
       snapshot = {
         uid: "rehearsal-#{rehearsal.id}@henslowescloud.com",
         sequence: rehearsal.ics_sequence + 1,
-        summary: rehearsal.title.presence || "Rehearsal",
-        description: rehearsal.notes,
-        location: rehearsal.space&.name,
+        summary: rehearsal.calendar_summary,
+        description: rehearsal.calendar_description,
+        location: rehearsal.calendar_location,
         start_time: rehearsal.start_time,
         end_time: rehearsal.end_time,
       }
