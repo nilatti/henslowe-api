@@ -1,4 +1,5 @@
 class CharacterGroup < ApplicationRecord
+  include LineCountable
   belongs_to :play
   has_many :characters, dependent: :destroy
   has_many :on_stages, dependent: :destroy

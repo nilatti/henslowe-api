@@ -6,8 +6,6 @@ class Line < ApplicationRecord
   has_many :words, dependent: :destroy
   accepts_nested_attributes_for :words
 
-  # after_save :update_line_counts
-
   def act
     self.scene.act
   end
@@ -17,9 +15,5 @@ class Line < ApplicationRecord
   end
   def scene
     self.french_scene.scene
-  end
-
-  def update_line_counts
-    UpdateLineCountWorker.perform_async(self.id)
   end
 end

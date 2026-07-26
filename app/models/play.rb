@@ -1,5 +1,6 @@
 class Play < ApplicationRecord
   include OnStageable
+  include LineCountable
   belongs_to :author
   belongs_to :production, optional: true
 

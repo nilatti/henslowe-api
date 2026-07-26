@@ -1,5 +1,6 @@
 class Act < ApplicationRecord
   include OnStageable
+  include LineCountable
   belongs_to :play
   has_many :scenes, dependent: :destroy
   has_many :french_scenes, through: :scenes

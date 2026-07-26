@@ -29,23 +29,17 @@ RSpec.describe Line, type: :model do
     it { expect(line.play).to eq(play)}
   end
 
-  it 'updates own line count, character line count, and play line count on save' do
-    # not sure why this works, as Sidekiq theoretically doesn't call in test...
-    line.new_content = 'If music be the banquet of love, perform it continually.'
-    line.save
-    expect { UpdateLineCountWorker.perform_async(line.id) }.to change { UpdateLineCountWorker.jobs.size }.by(1)
-    expect(line.new_content).to eq('If music be the banquet of love, perform it continually.')
-    expect(line.original_line_count == 1.0)
-    expect(line.new_line_count == 1.8)
-    expect(character.original_line_count == 1.0)
-    expect(character.new_line_count == 1.8)
-    expect(play.original_line_count == 1.0)
-    expect(play.new_line_count == 1.8)
-    expect(act.original_line_count == 1.0)
-    expect(act.new_line_count == 1.8)
-    expect(scene.original_line_count == 1.0)
-    expect(scene.new_line_count == 1.8)
-    expect(french_scene.original_line_count == 1.0)
-    expect(french_scene.new_line_count == 1.8)
+  it 'computes original_line_count and new_line_count live from line content, cascading through character/play/act/scene/french_scene' do
+    line # create the line, with original_content: 'If music be the food of love, play on!' (10 syllables = 1.0) and new_content: '' (cut, 0.0)
+
+    [character, play, act, scene, french_scene].each do |countable|
+      expect(countable.original_line_count).to eq(1.0)
+      expect(countable.new_line_count).to eq(0.0)
+    end
+  end
+
+  it 'falls back to original_content when new_content is nil (unedited)' do
+    unedited_line = create(:line, french_scene: french_scene, character: character, original_content: 'If music be the food of love, play on!', new_content: nil)
+    expect(unedited_line.play.new_line_count).to eq(unedited_line.play.original_line_count)
   end
 end

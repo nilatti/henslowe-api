@@ -161,7 +161,7 @@ class PlaysController < ApiController
   def play_skeleton
     render json: @play.as_json(include: {
       production: {only: [:lines_per_minute]},
-      characters: {only: [:id, :name, :age, :gender, :description, :original_line_count, :new_line_count, :character_group_id, :play_id]},
+      characters: {only: [:id, :name, :age, :gender, :description, :character_group_id, :play_id]},
       character_groups: {only: [:name, :id]},
       acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number], include: {songs: {only: [:id, :title], include: {characters: {only: [:id]}, character_groups: {only: [:id]}}}}}}, only: [:id, :number, :heading, :summary, :start_page, :end_page]}}, only: [:id, :number, :summary]},
       author: {only: [:first_name, :id, :last_name]}

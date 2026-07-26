@@ -1,5 +1,6 @@
 class FrenchScene < ApplicationRecord
   include OnStageable
+  include LineCountable
   belongs_to :scene
   has_many :entrance_exits, dependent: :destroy
   has_many :lines, dependent: :delete_all
