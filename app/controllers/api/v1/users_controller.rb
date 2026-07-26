@@ -209,7 +209,7 @@ class UsersController < ApiController
     conflict_schedule_pattern = params[:conflict_schedule_pattern]
     end_date = conflict_schedule_pattern[:end_date] || Date.today + 1.year
     start_date = conflict_schedule_pattern[:start_date] || Date.today
-    utc_offset = conflict_schedule_pattern[:utc_offset]
+    time_zone = conflict_schedule_pattern[:time_zone]
     # Strip any embedded offset from display strings before storing in the pattern record
     display_start = conflict_schedule_pattern[:start_time].to_s.sub(/[+-]\d{2}:\d{2}$/, '')
     display_end   = conflict_schedule_pattern[:end_time].to_s.sub(/[+-]\d{2}:\d{2}$/, '')
@@ -222,6 +222,7 @@ class UsersController < ApiController
       space_id: conflict_schedule_pattern[:space_id],
       start_date: start_date,
       start_time: display_start,
+      time_zone: time_zone,
       user: @user
     )
 
@@ -236,7 +237,7 @@ class UsersController < ApiController
       start_date,
       conflict_schedule_pattern[:start_time],
       @user.id,
-      utc_offset
+      time_zone
     )
       json_response(@user.as_json(include: [:conflicts, :conflict_patterns, :jobs]))
   end

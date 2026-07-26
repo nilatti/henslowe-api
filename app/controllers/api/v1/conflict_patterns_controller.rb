@@ -70,6 +70,7 @@ class ConflictPatternsController < ApiController
         :start_date,
         :start_time,
         :space_id,
+        :time_zone,
         :user_id
       )
     end

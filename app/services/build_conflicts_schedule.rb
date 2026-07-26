@@ -10,7 +10,7 @@ class BuildConflictsSchedule
     start_date: Date.today,
     start_time:,
     user_id:,
-    utc_offset: nil
+    time_zone: nil
     )
     @category = category
     @conflicts = []
@@ -22,7 +22,7 @@ class BuildConflictsSchedule
     @start_date = start_date
     @start_time = start_time
     @user_id = user_id
-    @utc_offset = utc_offset
+    @time_zone = ActiveSupport::TimeZone.new(time_zone.to_s) || ActiveSupport::TimeZone['UTC']
     end
 
   def run(
@@ -61,14 +61,17 @@ class BuildConflictsSchedule
         if conflict_pattern_id
           c.conflict_pattern = ConflictPattern.find(conflict_pattern_id)
         end
-        c.end_time = Time.parse("#{day.strftime('%F')} #{end_time}#{@utc_offset}").utc
+        # Resolve per-day so patterns spanning a DST transition get the correct
+        # standard/daylight offset for each individual occurrence, not one offset
+        # fixed at creation time and reused for the whole date range.
+        c.end_time = @time_zone.parse("#{day.strftime('%F')} #{end_time}").utc
         if user_id
           c.user = User.find(user_id)
         elsif space_id
           c.space = Space.find(space_id)
         end
         c.regular = true
-        c.start_time = Time.parse("#{day.strftime('%F')} #{start_time}#{@utc_offset}").utc
+        c.start_time = @time_zone.parse("#{day.strftime('%F')} #{start_time}").utc
         conflicts_array << c
     end
     return conflicts_array

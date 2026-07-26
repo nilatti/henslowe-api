@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_26_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -62,8 +62,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "heading"
-    t.float "original_line_count"
-    t.float "new_line_count"
     t.index ["play_id"], name: "index_acts_on_play_id"
   end
 
@@ -151,8 +149,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.string "xml_id"
     t.string "corresp"
     t.bigint "character_group_id"
-    t.integer "original_line_count"
-    t.integer "new_line_count"
     t.index ["character_group_id"], name: "index_characters_on_character_group_id"
     t.index ["play_id"], name: "index_characters_on_play_id"
   end
@@ -187,6 +183,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "days_of_week"
+    t.string "time_zone"
     t.index ["space_id"], name: "index_conflict_patterns_on_space_id"
     t.index ["user_id"], name: "index_conflict_patterns_on_user_id"
   end
@@ -239,8 +236,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.datetime "updated_at", null: false
     t.integer "end_page"
     t.integer "start_page"
-    t.float "original_line_count"
-    t.float "new_line_count"
     t.index ["scene_id"], name: "index_french_scenes_on_scene_id"
   end
 
@@ -323,8 +318,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.bigint "character_group_id"
     t.text "original_content", size: :medium
     t.text "new_content", size: :medium
-    t.float "original_line_count"
-    t.float "new_line_count"
     t.index ["character_group_id"], name: "index_lines_on_character_group_id"
     t.index ["character_id"], name: "index_lines_on_character_id"
     t.index ["french_scene_id"], name: "index_lines_on_french_scene_id"
@@ -407,8 +400,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.bigint "production_id"
     t.integer "original_play_id"
     t.text "synopsis"
-    t.float "original_line_count"
-    t.float "new_line_count"
     t.boolean "production_copy_complete", default: false
     t.string "copy_status"
     t.index ["author_id"], name: "index_plays_on_author_id"
@@ -494,8 +485,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_14_130001) do
     t.integer "end_page"
     t.integer "start_page"
     t.string "heading"
-    t.float "original_line_count"
-    t.float "new_line_count"
     t.index ["act_id"], name: "index_scenes_on_act_id"
   end
 

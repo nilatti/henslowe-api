@@ -1,14 +1,14 @@
 class BuildConflictsScheduleWorker
   include Sidekiq::Worker
 
-  def perform(category, conflict_pattern_id, days_of_week, end_date, end_time, space_id, start_date, start_time, user_id, utc_offset = nil)
+  def perform(category, conflict_pattern_id, days_of_week, end_date, end_time, space_id, start_date, start_time, user_id, time_zone = nil)
     days_of_week = days_of_week.is_a?(Array) ? days_of_week : days_of_week.split(',')
     if space_id
       space_id = space_id.to_i
     else
       space_id = nil
     end
-    user_id = user_id.to_i
+    user_id = user_id.present? ? user_id.to_i : nil
     logger.info "starting build conflicts schedule."
     logger.info(start_date)
     logger.info(end_date)
@@ -29,7 +29,7 @@ class BuildConflictsScheduleWorker
       start_date: start_date,
       start_time: start_time,
       user_id: user_id,
-      utc_offset: utc_offset
+      time_zone: time_zone
     ).run
   end
 end

@@ -68,6 +68,7 @@ class SpacesController < ApiController
     conflict_schedule_pattern = params[:conflict_schedule_pattern]
     end_date = conflict_schedule_pattern[:end_date] || Date.today + 1.year
     start_date = conflict_schedule_pattern[:start_date] || Date.today
+    time_zone = conflict_schedule_pattern[:time_zone]
     conflict_pattern = ConflictPattern.create(
       category: conflict_schedule_pattern[:category],
       days_of_week: conflict_schedule_pattern[:days_of_week],
@@ -75,6 +76,7 @@ class SpacesController < ApiController
       end_time: conflict_schedule_pattern[:end_time],
       start_date: start_date,
       start_time: conflict_schedule_pattern[:start_time],
+      time_zone: time_zone,
       space: @space
     )
 
@@ -87,7 +89,9 @@ class SpacesController < ApiController
       conflict_schedule_pattern[:end_time],
       @space.id,
       start_date,
-      conflict_schedule_pattern[:start_time]
+      conflict_schedule_pattern[:start_time],
+      nil,
+      time_zone
     )
       json_response(@space.as_json(include: [:conflicts, :conflict_patterns, :theaters]))
   end
