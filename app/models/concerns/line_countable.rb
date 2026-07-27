@@ -19,7 +19,10 @@ module LineCountable
 
   # Ensures these always appear in this model's JSON regardless of the
   # caller's as_json options, so every consumer sees the same live numbers.
+  # Pass skip_line_counts: true when the caller doesn't need them (e.g. a
+  # minimal-payload list endpoint) to avoid walking every line's text.
   def as_json(options = {})
+    return super(options) if options[:skip_line_counts]
     super(options.merge(
       methods: (Array(options[:methods]) + [:original_line_count, :new_line_count]).uniq
     ))

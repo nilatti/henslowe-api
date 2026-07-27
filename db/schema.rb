@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_26_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -403,6 +403,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_26_120000) do
     t.boolean "production_copy_complete", default: false
     t.string "copy_status"
     t.index ["author_id"], name: "index_plays_on_author_id"
+    t.index ["canonical"], name: "index_plays_on_canonical"
     t.index ["production_id"], name: "index_plays_on_production_id"
   end
 
