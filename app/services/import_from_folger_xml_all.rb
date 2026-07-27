@@ -283,7 +283,7 @@ class ImportFromFolgerXmlAll
     global_tracking_of_play_characters: nil,
     global_tracking_of_play_character_groups: nil
     )
-    @current_characters_on_stage = []
+    @current_characters_onstage = []
     scene_number = scene.attr('n') || 0
     heading = build_header(item: scene.at_xpath('head'))
     puts "header is #{heading}"
@@ -314,7 +314,11 @@ class ImportFromFolgerXmlAll
           )
         end
       end
-      process_item(item)
+      process_item(
+        item,
+        global_tracking_of_play_characters: global_tracking_of_play_characters,
+        global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+      )
     end
     return @current_scene
   end
@@ -334,10 +338,14 @@ class ImportFromFolgerXmlAll
     end
   end
 
-  def build_speech(french_scene:, item:)
+  def build_speech(french_scene:, item:, global_tracking_of_play_characters: nil, global_tracking_of_play_character_groups: nil)
     puts "building speech"
     @current_character = []
-    character_parser = extract_characters_from_xml_id_string(xml_ids: item.attr('who'))
+    character_parser = extract_characters_from_xml_id_string(
+      xml_ids: item.attr('who'),
+      global_tracking_of_play_characters: global_tracking_of_play_characters,
+      global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+    )
     @current_character = character_parser.flatten!(3)
     puts "at global: #{@current_character}"
   end
@@ -451,12 +459,23 @@ class ImportFromFolgerXmlAll
   end
 
   def determine_type_of_item(
-      item:
+      item:,
+      global_tracking_of_play_characters: nil,
+      global_tracking_of_play_character_groups: nil
     )
     if item.matches?('sp')
-      build_speech(french_scene: @current_french_scene, item: item)
+      build_speech(
+        french_scene: @current_french_scene,
+        item: item,
+        global_tracking_of_play_characters: global_tracking_of_play_characters,
+        global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+      )
     elsif item.matches?('stage')
-      build_stage_direction(item: item)
+      build_stage_direction(
+        item: item,
+        global_tracking_of_play_characters: global_tracking_of_play_characters,
+        global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+      )
     elsif item.matches?('sound')
       build_sound_cue(french_scene: @current_french_scene, item: item)
     elsif item.matches?('head')
@@ -513,15 +532,25 @@ class ImportFromFolgerXmlAll
     end
   end
   def process_item(
-    item
+    item,
+    global_tracking_of_play_characters: nil,
+    global_tracking_of_play_character_groups: nil
   )
     determine_type_of_item(
       item: item,
+      global_tracking_of_play_characters: global_tracking_of_play_characters,
+      global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
     )
     if verify_no_more_children(item)
       return
     else
-      item.children.select(&:element?).each {|child| process_item(child)}
+      item.children.select(&:element?).each do |child|
+        process_item(
+          child,
+          global_tracking_of_play_characters: global_tracking_of_play_characters,
+          global_tracking_of_play_character_groups: global_tracking_of_play_character_groups
+        )
+      end
     end
   end
 
@@ -531,7 +560,7 @@ class ImportFromFolgerXmlAll
     characters:,
     global_tracking_of_current_characters_on_stage: nil
   )
-    tracking = global_tracking_of_current_characters_on_stage || @current_characters_on_stage
+    tracking = global_tracking_of_current_characters_on_stage || @current_characters_onstage
   puts "503 #{characters.size}"
     if stage_direction.attr('type') == 'entrance'
       tracking << characters

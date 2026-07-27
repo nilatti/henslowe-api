@@ -1,10 +1,16 @@
 require 'rails_helper'
 RSpec.describe ImportFromFolgerXmlAll, type: :service do
-  before(:all) do
+  before(:each) do
     @import = ImportFromFolgerXmlAll.new('spec/data/folger_test.xml')
     create(:author, last_name: 'Shakespeare')
     @xml = @import.parsed_xml
     @play = @import.build_play(global_parsed_xml: @xml)
+    # build_word (reached indirectly via build_scene/process_item/determine_type_of_item)
+    # falls back to this instance's own `play` accessor when it isn't passed one
+    # explicitly, so every example needs it set the same way 'builds acts' used to
+    # set it as a side effect — that only worked before because before(:all) shared
+    # one @import instance and relied on example run order.
+    @import.play = @play
     create(:character_group, xml_id: "LORDS_AYL", play: @play)
     create(:character_group, xml_id: "ATTENDANTS_AYL", play: @play)
     lords_senior = create(:character_group, xml_id: "LORDS.SENIOR_AYL", play: @play)
@@ -181,7 +187,6 @@ RSpec.describe ImportFromFolgerXmlAll, type: :service do
   end
 
   it 'builds acts' do
-    @import.play = @play
     act = @import.build_acts(
       play: @play,
       parsed_xml: @xml,

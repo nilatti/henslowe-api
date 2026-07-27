@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe BuildRehearsalScheduleBlocks do
-  before(:all) do
+  before(:each) do
     @production = create(:production)
     @users = create_list(:user, 3)
     @break_length = 5
