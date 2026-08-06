@@ -48,6 +48,14 @@ RSpec.describe RehearsalCalendarMailer, type: :mailer do
       expect(event.attendee.first.ical_params['rsvp']).to eq(['FALSE'])
     end
 
+    it 'renders the human-readable time in Eastern, not the raw UTC stamp' do
+      # start_time/end_time above are 18:00/20:00 UTC == 2:00 PM/4:00 PM EDT.
+      # A regression here means the email body shows the bare UTC clock time
+      # (e.g. "6:00 PM") while the attached ICS is correctly in UTC.
+      expect(mail.text_part.body.to_s).to include('2:00 PM – 4:00 PM EDT')
+      expect(mail.html_part.body.to_s).to include('2:00 PM – 4:00 PM EDT')
+    end
+
     context 'with scheduled acts/scenes' do
       let(:act) { create(:act, play: play, number: 1, heading: 'The Beginning', start_page: 5, end_page: 12) }
       let(:rehearsal) do

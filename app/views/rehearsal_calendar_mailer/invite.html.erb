@@ -4,7 +4,7 @@
 
 <p style="margin-top: 16px;">
   <strong><%= @start_time.strftime('%A, %B %-d, %Y') %></strong><br>
-  <%= @start_time.strftime('%-I:%M %p') %> – <%= @end_time.strftime('%-I:%M %p') %>
+  <%= @start_time.strftime('%-I:%M %p') %> – <%= @end_time.strftime('%-I:%M %p %Z') %>
   <% if @location.present? %>
     · <%= @location %>
   <% end %>
