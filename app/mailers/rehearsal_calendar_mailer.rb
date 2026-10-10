@@ -59,6 +59,10 @@ class RehearsalCalendarMailer < ApplicationMailer
 
   private
 
+  # Mirrors the frontend's DEFAULT_TIMEZONE (dateTimeUtils.ts) — the app has no
+  # per-theater/space timezone concept yet, so every display string assumes Eastern.
+  DISPLAY_TIME_ZONE = 'America/New_York'
+
   def ics_uid(rehearsal_id)
     "rehearsal-#{rehearsal_id}@henslowescloud.com"
   end
@@ -69,15 +73,20 @@ class RehearsalCalendarMailer < ApplicationMailer
     @summary = summary
     @description = description
     @location = location
-    @start_time = start_time.to_time
-    @end_time = end_time.to_time
+    start_time = start_time.to_time
+    end_time = end_time.to_time
+    # @start_time/@end_time are for the human-readable email copy only — localize them
+    # for display. The ICS DTSTART/DTEND below are built from the un-localized values
+    # and pinned to UTC explicitly, which is what calendar clients should key off of.
+    @start_time = start_time.in_time_zone(DISPLAY_TIME_ZONE)
+    @end_time = end_time.in_time_zone(DISPLAY_TIME_ZONE)
 
     calendar = Icalendar::Calendar.new
     calendar.ip_method = method
 
     calendar.event do |e|
-      e.dtstart = Icalendar::Values::DateTime.new(@start_time.utc, 'tzid' => 'UTC')
-      e.dtend = Icalendar::Values::DateTime.new(@end_time.utc, 'tzid' => 'UTC')
+      e.dtstart = Icalendar::Values::DateTime.new(start_time.utc, 'tzid' => 'UTC')
+      e.dtend = Icalendar::Values::DateTime.new(end_time.utc, 'tzid' => 'UTC')
       e.summary = summary
       e.description = description if description.present?
       e.location = location if location.present?

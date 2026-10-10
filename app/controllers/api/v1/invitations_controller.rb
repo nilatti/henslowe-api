@@ -65,9 +65,15 @@ class InvitationsController < ApiController
     end
     return render json: { base: ["invitation_no_longer_available"] }, status: :unprocessable_entity unless @invitation.pending?
 
+    # theater_pays only ever means "the theater CAN cover this" — it's not the sole path
+    # to acceptance. If the invitee already qualifies on their own (paid_override or an
+    # active personal subscription), that takes precedence and the job isn't marked
+    # theater_sponsored, since the theater isn't actually the one paying for it.
+    theater_covers_it = false
     if @invitation.theater_pays?
       sponsoring_theater = @invitation.theater || @invitation.production&.theater
-      unless sponsoring_theater&.has_active_subscription?
+      theater_covers_it = sponsoring_theater&.has_active_subscription? || false
+      if !theater_covers_it && !current_user.has_active_subscription?
         return render json: { base: ["theater_billing_not_configured"] }, status: :unprocessable_entity
       end
     end
@@ -77,7 +83,7 @@ class InvitationsController < ApiController
       specialization_id: @invitation.specialization_id,
       theater_id: @invitation.theater_id,
       production_id: @invitation.production_id,
-      theater_sponsored: @invitation.theater_pays?
+      theater_sponsored: theater_covers_it
     )
 
     if @job.save

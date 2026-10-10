@@ -223,6 +223,34 @@ RSpec.describe 'invitations API', type: :request do
           expect(invitation.reload.status).to eq('accepted')
         end
       end
+
+      context 'and the theater has no active subscription but the user has paid_override' do
+        let(:matching_user) { create(:user, :paid_override) }
+
+        before { post "/api/v1/invitations/#{invitation.token}/accept", as: :json, headers: authenticated_header(matching_user) }
+
+        it 'still succeeds via the user\'s own override, not the theater' do
+          expect(response).to have_http_status(:created)
+          job = Job.find_by(user: matching_user, theater: theater, specialization: director_spec)
+          expect(job).to be_present
+          expect(job.theater_sponsored).to be false
+        end
+
+        it 'marks the invitation accepted' do
+          expect(invitation.reload.status).to eq('accepted')
+        end
+      end
+
+      context 'and the theater has no active subscription but the user already has their own subscription' do
+        let(:matching_user) { create(:user, :paid) }
+
+        it 'still succeeds via the user\'s own subscription, not the theater' do
+          post "/api/v1/invitations/#{invitation.token}/accept", as: :json, headers: authenticated_header(matching_user)
+          expect(response).to have_http_status(:created)
+          job = Job.find_by(user: matching_user, theater: theater, specialization: director_spec)
+          expect(job.theater_sponsored).to be false
+        end
+      end
     end
   end
 

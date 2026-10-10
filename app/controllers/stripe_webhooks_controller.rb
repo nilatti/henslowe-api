@@ -9,7 +9,7 @@ class StripeWebhooksController < ActionController::API
     )
 
     case event.type
-    when 'customer.subscription.updated', 'customer.subscription.deleted'
+    when 'customer.subscription.created', 'customer.subscription.updated', 'customer.subscription.deleted'
       sync_subscription(event.data.object)
     end
 
