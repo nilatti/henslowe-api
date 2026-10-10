@@ -178,6 +178,62 @@ RSpec.describe 'Productions API' do
     end
   end
 
+  describe 'put /api/productions/:production_id/reschedule_rehearsals' do
+    let!(:production) { productions.first }
+    let!(:actor) { create(:user) }
+    let!(:first) { create(:rehearsal, production: production, users: [actor], start_time: Time.zone.parse('2026-03-02 18:00'), end_time: Time.zone.parse('2026-03-02 19:00')) }
+    let!(:second) { create(:rehearsal, production: production, start_time: Time.zone.parse('2026-03-02 19:10'), end_time: Time.zone.parse('2026-03-02 20:00')) }
+    let(:new_times) {
+      [
+        { id: second.id, start_time: '2026-03-02T18:00:00Z', end_time: '2026-03-02T18:50:00Z' },
+        { id: first.id, start_time: '2026-03-02T19:00:00Z', end_time: '2026-03-02T20:00:00Z' },
+      ]
+    }
+
+    context 'as a production admin' do
+      before { put "/api/v1/productions/#{id}/reschedule_rehearsals", as: :json, params: { rehearsals: new_times }, headers: authenticated_header(user) }
+
+      it 'returns 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'saves every new time' do
+        expect(second.reload.start_time).to eq(Time.zone.parse('2026-03-02 18:00'))
+        expect(second.reload.end_time).to eq(Time.zone.parse('2026-03-02 18:50'))
+        expect(first.reload.start_time).to eq(Time.zone.parse('2026-03-02 19:00'))
+        expect(first.reload.end_time).to eq(Time.zone.parse('2026-03-02 20:00'))
+      end
+
+      it "moves the called users' conflicts with the rehearsal" do
+        conflict = first.conflicts.find_by(user_id: actor.id)
+        expect(conflict.start_time).to eq(Time.zone.parse('2026-03-02 19:00'))
+        expect(conflict.end_time).to eq(Time.zone.parse('2026-03-02 20:00'))
+      end
+    end
+
+    context 'when a rehearsal belongs to another production' do
+      let!(:foreign) { create(:rehearsal, production: productions.last) }
+
+      it 'returns 404 and changes nothing' do
+        original_start = first.start_time
+        put "/api/v1/productions/#{id}/reschedule_rehearsals", as: :json,
+            params: { rehearsals: new_times + [{ id: foreign.id, start_time: '2026-03-02T21:00:00Z', end_time: '2026-03-02T22:00:00Z' }] },
+            headers: authenticated_header(user)
+        expect(response).to have_http_status(404)
+        expect(first.reload.start_time).to eq(original_start)
+      end
+    end
+
+    context 'as a user who cannot manage the production' do
+      it 'returns 403 and changes nothing' do
+        original_start = first.start_time
+        put "/api/v1/productions/#{id}/reschedule_rehearsals", as: :json, params: { rehearsals: new_times }, headers: authenticated_header(create(:user))
+        expect(response).to have_http_status(403)
+        expect(first.reload.start_time).to eq(original_start)
+      end
+    end
+  end
+
   describe 'get /api/productions/production_names' do
     before { get "/api/v1/productions/production_names", headers: authenticated_header(user)}
     it "returns 200" do

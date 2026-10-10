@@ -10,7 +10,8 @@ class ProductionsController < ApiController
     :user_conflicts,
     :space_conflicts,
     :build_rehearsal_schedule,
-    :publish_rehearsal_calendar
+    :publish_rehearsal_calendar,
+    :reschedule_rehearsals
   ]
 
   # GET /productions
@@ -254,6 +255,27 @@ class ProductionsController < ApiController
     authorize! :update, @production
     PublishRehearsalCalendarWorker.perform_async(@production.id)
     head :accepted
+  end
+
+  # Saves new times for several rehearsals at once (drag-to-reorder re-packs a
+  # whole day). All-or-nothing, so a failed save can't leave the day with
+  # overlapping blocks.
+  def reschedule_rehearsals
+    authorize! :update, @production
+    times = params.require(:rehearsals).map { |r| r.permit(:id, :start_time, :end_time) }
+    rehearsals = @production.rehearsals.where(id: times.map { |t| t[:id] }).index_by(&:id)
+    unless rehearsals.size == times.size
+      return render json: { message: 'Rehearsal not found in this production' }, status: :not_found
+    end
+
+    Rehearsal.transaction do
+      times.each do |t|
+        rehearsal = rehearsals[t[:id].to_i]
+        rehearsal.update!(start_time: t[:start_time], end_time: t[:end_time])
+        rehearsal.sync_conflicts
+      end
+    end
+    json_response(rehearsals.values.as_json(only: [:id, :start_time, :end_time]))
   end
 
 def user_conflicts
