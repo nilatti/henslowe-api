@@ -111,6 +111,23 @@ RSpec.describe 'Rehearsals API' do
       end
     end
 
+    context 'with content from several acts' do
+      let(:rehearsal) { create(:rehearsal, production: production) }
+      let(:id) { rehearsal.id }
+      # Scene 1 of the last act sorts before scene 2 of the first act by number alone
+      let(:first_act_scene) { play.acts.first.scenes.second }
+      let(:last_act_scene) { play.acts.last.scenes.first }
+
+      before do
+        rehearsal.update!(scene_ids: [last_act_scene.id, first_act_scene.id])
+        get "/api/v1/rehearsals/#{id}", headers: authenticated_header(user)
+      end
+
+      it 'returns scenes in play order' do
+        expect(json['scenes'].map { |s| s['id'] }).to eq([first_act_scene.id, last_act_scene.id])
+      end
+    end
+
     context 'when rehearsal does not exist' do
       let(:id) { 0 }
 

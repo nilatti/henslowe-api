@@ -1,6 +1,6 @@
 class RehearsalCalendarMailer < ApplicationMailer
   def invite(rehearsal_id, user_id, sequence)
-    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, production: :play).find(rehearsal_id)
+    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, :users, production: :play).find(rehearsal_id)
     @user = User.find(user_id)
 
     attach_ics(
@@ -18,7 +18,7 @@ class RehearsalCalendarMailer < ApplicationMailer
   end
 
   def cancel(rehearsal_id, user_id, sequence)
-    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, production: :play).find(rehearsal_id)
+    @rehearsal = Rehearsal.includes(:space, :acts, :scenes, :french_scenes, :users, production: :play).find(rehearsal_id)
     @user = User.find(user_id)
 
     attach_ics(

@@ -71,6 +71,18 @@ RSpec.describe RehearsalCalendarMailer, type: :mailer do
       end
     end
 
+    context 'with a call list' do
+      before do
+        rehearsal.users << create(:user, first_name: 'Zoe', preferred_name: nil, last_name: 'Young')
+        rehearsal.users << create(:user, first_name: 'Robert', preferred_name: 'Bob', last_name: 'Adams')
+      end
+
+      it 'includes everyone called, alphabetized by last name, in the description' do
+        event = ics_for(mail).events.first
+        expect(event.description.to_s).to eq("Called: Bob Adams, Zoe Young\nBring scripts")
+      end
+    end
+
     context 'when the space has an address' do
       let(:space) do
         create(:space, name: 'Studio B', street_address: '123 Main St', city: 'Springfield', state: 'IL', zip: '62704')

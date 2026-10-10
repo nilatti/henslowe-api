@@ -66,16 +66,16 @@ RSpec.describe PublishRehearsalCalendar do
       rehearsal.user_ids = [user1.id, user2.id]
     end
 
-    it 'emails only the newly added person' do
-      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).with(rehearsal.id, user2.id, 0)
+    it 'invites the newly added person' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).with(rehearsal.id, user2.id, 1)
     end
 
-    it 'does not re-email the person who was already invited' do
-      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).exactly(1).times
+    it 'resends to the person already invited, so their call list is current' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).with(rehearsal.id, user1.id, 1)
     end
 
-    it 'does not bump the ics_sequence' do
-      expect { run }.not_to change { rehearsal.reload.ics_sequence }
+    it 'bumps the ics_sequence exactly once' do
+      expect { run }.to change { rehearsal.reload.ics_sequence }.from(0).to(1)
     end
   end
 
@@ -117,7 +117,11 @@ RSpec.describe PublishRehearsalCalendar do
     end
 
     it 'sends a cancellation to the removed person' do
-      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :cancel).with(rehearsal.id, user2.id, 0)
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :cancel).with(rehearsal.id, user2.id, 1)
+    end
+
+    it 'resends to the person still called, so their call list is current' do
+      expect { run }.to have_enqueued_mail(RehearsalCalendarMailer, :invite).with(rehearsal.id, user1.id, 1)
     end
 
     it 'destroys their rehearsal_invite row so a future re-add sends a fresh invite' do
