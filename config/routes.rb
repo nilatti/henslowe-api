@@ -68,6 +68,7 @@ Rails.application.routes.draw do
         member do
           put :build_rehearsal_schedule
           post :publish_rehearsal_calendar
+          put :reschedule_rehearsals
           get :skeleton
           get :full
           get :user_conflicts
