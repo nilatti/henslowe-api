@@ -1,12 +1,13 @@
 module Api
   module V1
 class ActsController < ApiController
-  before_action :set_act, only: [:show, :update, :destroy, :act_script, :render_cut_script, :render_cuts_marked_script]
+  include PlayReordering
+  before_action :set_act, only: [:show, :update, :destroy, :act_script, :reorder_scenes, :render_cut_script, :render_cuts_marked_script]
   before_action :set_play
   # GET /acts
   def index
     if @play
-      @acts = Act.where(play_id: @play.id).order('number')
+      @acts = Act.where(play_id: @play.id).order(:position)
     else
       @acts = Act.all
     end
@@ -42,6 +43,13 @@ class ActsController < ApiController
   # DELETE /acts/1
   def destroy
     @act.destroy
+  end
+
+  # PUT /acts/:id/reorder_scenes  { ids: [scene ids in their new order] }
+  def reorder_scenes
+    authorize_reorder!(@act.play)
+    apply_order!(@act.scenes, params.require(:ids))
+    head :no_content
   end
 
   def act_script

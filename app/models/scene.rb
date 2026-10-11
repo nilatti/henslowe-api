@@ -9,14 +9,17 @@ class Scene < ApplicationRecord
 
   validates :number, presence: true
 
-  default_scope {order(:number)}
+  acts_as_list scope: :act
+  # Order within the act is position; number is only the label.
+  default_scope {order(:position)}
 
   def pretty_name
     "%02d.%02d" % [self.act.number, self.number]
   end
 
   def self.play_order(scenes)
-    scenes.sort_by(&:pretty_name)
+    scenes = scenes.includes(:act) if scenes.respond_to?(:includes)
+    scenes.sort_by { |s| [s.act.position.to_i, s.position.to_i] }
   end
 
 end

@@ -1,6 +1,7 @@
 module Api
   module V1
 class PlaysController < ApiController
+  include PlayReordering
   skip_before_action :authenticate_request, only: %i[play_titles play_script play_skeleton]
   before_action :set_author, only: %i[index create]
   before_action :set_play, except: %i[index play_titles create]
@@ -163,7 +164,7 @@ class PlaysController < ApiController
       production: {only: [:lines_per_minute]},
       characters: {only: [:id, :name, :age, :gender, :description, :character_group_id, :play_id]},
       character_groups: {only: [:name, :id]},
-      acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number], include: {songs: {only: [:id, :title], include: {characters: {only: [:id]}, character_groups: {only: [:id]}}}}}}, only: [:id, :number, :heading, :summary, :start_page, :end_page]}}, only: [:id, :number, :summary]},
+      acts: {include: {scenes: {methods: :pretty_name, include: {french_scenes: {only: [:id, :number, :position], include: {songs: {only: [:id, :title], include: {characters: {only: [:id]}, character_groups: {only: [:id]}}}}}}, only: [:id, :number, :position, :heading, :summary, :start_page, :end_page]}}, only: [:id, :number, :position, :summary]},
       author: {only: [:first_name, :id, :last_name]}
       },
       only: [:canonical, :id, :production_id, :synopsis, :text_notes, :title]
@@ -173,6 +174,26 @@ class PlaysController < ApiController
   def play_titles
     @plays = Play.includes(:author).where(canonical: true)
     render json: @plays.as_json(only: %i[author_id id title], include: { author: { only: [:last_name] } }, skip_line_counts: true)
+  end
+
+  # PUT /plays/:id/reorder_acts  { ids: [act ids in their new order] }
+  def reorder_acts
+    authorize_reorder!(@play)
+    apply_order!(@play.acts, params.require(:ids))
+    head :no_content
+  end
+
+  # PUT /plays/:id/reorder_script_items
+  #   { french_scenes: [{ id:, items: [{ type: 'line'|'stage_direction'|'sound_cue', id: }] }] }
+  # Each listed French scene gets exactly the listed items, in that order. A
+  # moved line's speaker is added to the on-stage list of the French scene it
+  # lands in.
+  def reorder_script_items
+    authorize_reorder!(@play)
+    ReorderScriptItems.new(play: @play, french_scenes: script_items_params).run
+    head :no_content
+  rescue ReorderScriptItems::InvalidOrder => e
+    raise PlayReordering::InvalidOrder, e.message
   end
 
   def production_copy_complete
@@ -233,6 +254,12 @@ class PlaysController < ApiController
       @play = Play.find(params[:id])
     end
 
+  end
+
+  def script_items_params
+    params.require(:french_scenes).map do |fs|
+      fs.permit(:id, items: [:type, :id]).to_h.deep_symbolize_keys
+    end
   end
 
   # Only allow a trusted parameter "white list" through.

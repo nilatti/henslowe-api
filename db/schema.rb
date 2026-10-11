@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_10_10_120000) do
   create_table "active_admin_comments", charset: "utf8mb3", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -62,6 +62,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "heading"
+    t.integer "position"
     t.index ["play_id"], name: "index_acts_on_play_id"
   end
 
@@ -236,6 +237,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.datetime "updated_at", null: false
     t.integer "end_page"
     t.integer "start_page"
+    t.integer "position"
     t.index ["scene_id"], name: "index_french_scenes_on_scene_id"
   end
 
@@ -318,6 +320,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.bigint "character_group_id"
     t.text "original_content", size: :medium
     t.text "new_content", size: :medium
+    t.integer "position"
     t.index ["character_group_id"], name: "index_lines_on_character_group_id"
     t.index ["character_id"], name: "index_lines_on_character_id"
     t.index ["french_scene_id"], name: "index_lines_on_french_scene_id"
@@ -486,6 +489,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.integer "end_page"
     t.integer "start_page"
     t.string "heading"
+    t.integer "position"
     t.index ["act_id"], name: "index_scenes_on_act_id"
   end
 
@@ -508,6 +512,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.datetime "updated_at", null: false
     t.string "original_content"
     t.text "new_content"
+    t.integer "position"
     t.index ["french_scene_id"], name: "index_sound_cues_on_french_scene_id"
   end
 
@@ -560,6 +565,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_27_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "new_content", size: :medium
+    t.integer "position"
     t.index ["french_scene_id"], name: "index_stage_directions_on_french_scene_id"
   end
 

@@ -19,10 +19,11 @@ RSpec.describe Scene, type: :model do
     it { expect(scene).to validate_presence_of(:number)}
   end
 
-  it "it default scope orders by number" do
-    scene1 = create(:scene, number: 2)
-    scene2 = create(:scene, number: 1)
-    expect(Scene.all.first.number).to eq(1)
+  it "default scope orders by position, not number" do
+    act = create(:act)
+    first = create(:scene, act: act, number: 2)
+    create(:scene, act: act, number: 1)
+    expect(act.scenes.first).to eq(first)
   end
 
    it "has a pretty name" do
@@ -30,23 +31,22 @@ RSpec.describe Scene, type: :model do
      scene = build(:scene, act: act)
      expect(scene.pretty_name).to eq("%02d.%02d" % [act.number, scene.number])
    end
-   it "sorts in play order" do
+   it "sorts in play order by act position then scene position, ignoring numbers" do
      play = build(:play)
-     act1 = build(:act, number: 1, play: play)
-     act2 = build(:act, number: 2, play: play)
-     scene3 = build(:scene, number: 1, act: act2)
-     scene2 = build(:scene, number: 2, act: act1)
-     scene1 = build(:scene, number: 1, act: act1)
-     scenes = [scene1, scene2, scene3]
-     expect(Scene.play_order(scenes).first).to be(scene1)
-     expect(Scene.play_order(scenes).last).to be(scene3)
+     act1 = build(:act, number: 2, position: 1, play: play)
+     act2 = build(:act, number: 1, position: 2, play: play)
+     scene3 = build(:scene, number: 1, position: 1, act: act2)
+     scene2 = build(:scene, number: 1, position: 2, act: act1)
+     scene1 = build(:scene, number: 2, position: 1, act: act1)
+     scenes = [scene3, scene2, scene1]
+     expect(Scene.play_order(scenes)).to eq([scene1, scene2, scene3])
    end
 
-   it "sorts numerically past 9 scenes, not alphabetically" do
+   it "sorts numerically past 9 positions, not alphabetically" do
      act = build(:act, number: 1)
-     scenes = (1..11).to_a.shuffle.map { |n| build(:scene, number: n, act: act) }
+     scenes = (1..11).to_a.shuffle.map { |n| build(:scene, number: n, position: n, act: act) }
      ordered = Scene.play_order(scenes)
-     expect(ordered.map(&:number)).to eq((1..11).to_a)
+     expect(ordered.map(&:position)).to eq((1..11).to_a)
    end
 
    it "finds onstages for play (but only one per character or group)" do

@@ -2,12 +2,12 @@ class Rehearsal < ApplicationRecord
   belongs_to :space, optional: true
   belongs_to :production
   # Play order everywhere a rehearsal's content is read (API, schedules,
-  # calendar invites). Each model's own default scope sorts by its number alone,
-  # which interleaves units from different acts/scenes — e.g. 2.1 before 1.2.
-  has_and_belongs_to_many :acts, -> { reorder(:number) }
-  has_and_belongs_to_many :scenes, -> { joins(:act).reorder('acts.number', 'scenes.number') }
+  # calendar invites). Each model's own default scope sorts by its position
+  # within its parent alone, which would interleave units from different acts/scenes.
+  has_and_belongs_to_many :acts, -> { reorder(:position) }
+  has_and_belongs_to_many :scenes, -> { joins(:act).reorder('acts.position', 'scenes.position') }
   has_and_belongs_to_many :french_scenes,
-    -> { joins(scene: :act).reorder('acts.number', 'scenes.number', 'french_scenes.number') }
+    -> { joins(scene: :act).reorder('acts.position', 'scenes.position', 'french_scenes.position') }
   # The calendar description lists everyone called, so changing the call list
   # counts as changing the rehearsal: the next publish resends to everyone
   # already invited, not just the people added or removed.

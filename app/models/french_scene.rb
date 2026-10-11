@@ -18,10 +18,13 @@ class FrenchScene < ApplicationRecord
 
   validates :number, presence: true
 
-  default_scope {order(:number)}
+  acts_as_list scope: :scene
+  # Order within the scene is position; number is only the label.
+  default_scope {order(:position)}
 
   def self.play_order(french_scenes)
-    french_scenes.sort_by(&:pretty_name)
+    french_scenes = french_scenes.includes(scene: :act) if french_scenes.respond_to?(:includes)
+    french_scenes.sort_by { |fs| [fs.scene.act.position.to_i, fs.scene.position.to_i, fs.position.to_i] }
   end
 
   def pretty_name

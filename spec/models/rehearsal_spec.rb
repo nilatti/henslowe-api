@@ -58,14 +58,15 @@ RSpec.describe Rehearsal, type: :model do
   end
 
   describe 'text unit order' do
-    let(:play) { create(:play) }
-    let(:act1) { create(:act, play: play, number: 1, heading: 'Act One') }
-    let(:act2) { create(:act, play: play, number: 2, heading: 'Act Two') }
-    let(:scene_1_2) { create(:scene, act: act1, number: 2) }
-    let(:scene_2_1) { create(:scene, act: act2, number: 1) }
-    let(:fs_1_2_b) { create(:french_scene, scene: scene_1_2, number: 'b') }
-    let(:fs_2_1_a) { create(:french_scene, scene: scene_2_1, number: 'a') }
-    let(:fs_1_2_a) { create(:french_scene, scene: scene_1_2, number: 'a') }
+    # Created in play order, so positions follow it.
+    let!(:play) { create(:play) }
+    let!(:act1) { create(:act, play: play, number: 1, heading: 'Act One') }
+    let!(:act2) { create(:act, play: play, number: 2, heading: 'Act Two') }
+    let!(:scene_1_2) { create(:scene, act: act1, number: 2) }
+    let!(:scene_2_1) { create(:scene, act: act2, number: 1) }
+    let!(:fs_1_2_a) { create(:french_scene, scene: scene_1_2, number: 'a') }
+    let!(:fs_1_2_b) { create(:french_scene, scene: scene_1_2, number: 'b') }
+    let!(:fs_2_1_a) { create(:french_scene, scene: scene_2_1, number: 'a') }
     let(:rehearsal) { create(:rehearsal) }
 
     it 'returns acts in play order' do
@@ -95,6 +96,15 @@ RSpec.describe Rehearsal, type: :model do
       rehearsal.update!(scene_ids: [scene_2_1.id, scene_1_2.id], french_scene_ids: [fs_2_1_a.id, fs_1_2_a.id])
       expect(rehearsal.reload.scene_ids).to eq([scene_1_2.id, scene_2_1.id])
       expect(rehearsal.french_scene_ids).to eq([fs_1_2_a.id, fs_2_1_a.id])
+    end
+
+    it 'follows reordered positions rather than numbers' do
+      act2.update_columns(position: 1)
+      act1.update_columns(position: 2)
+      rehearsal.acts << act1 << act2
+      rehearsal.scenes << scene_1_2 << scene_2_1
+      expect(rehearsal.reload.acts).to eq([act2, act1])
+      expect(rehearsal.scenes).to eq([scene_2_1, scene_1_2])
     end
 
     it 'lists content in play order in the calendar description' do
