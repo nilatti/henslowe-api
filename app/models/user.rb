@@ -152,18 +152,7 @@ class User < ApplicationRecord
     admin_jobs.size > 0 #return true if there are an admin jobs assigned to this user for this production.
   end
   def production_admin_for_play?(play)
-    productions = play.productions
-    admin = []
-    productions.each do |production|
-      if production_admin?(production)
-        admin << true
-      end
-    end
-    if admin.include?(true)
-      return true
-    else
-      return false
-    end
+    play.production.present? && production_admin?(play.production)
   end
   def production_jobs(production)
     production_jobs = self.jobs.select { |job| job.production_id == production.id }
@@ -190,18 +179,7 @@ class User < ApplicationRecord
     admin_jobs.size > 0 #return true if there are admin jobs for this user for this theater.
   end
   def theater_admin_for_play?(play)
-    productions = play.productions
-    admin = []
-    productions.each do |production|
-      if theater_admin?(production.theater)
-        admin << true
-      end
-    end
-    if admin.include?(true)
-      return true
-    else
-      return false
-    end
+    play.production.present? && theater_admin?(play.production.theater)
   end
   def theater_jobs(theater)
     self.jobs.select { |job| job.theater_id == theater.id }

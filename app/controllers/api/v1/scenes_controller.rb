@@ -1,7 +1,8 @@
 module Api
   module V1
 class ScenesController < ApiController
-  before_action :set_scene, only: [:show, :update, :destroy, :scene_script]
+  include PlayReordering
+  before_action :set_scene, only: [:show, :update, :destroy, :scene_script, :reorder_french_scenes]
   before_action :set_act
 
   # GET /scenes
@@ -56,6 +57,13 @@ class ScenesController < ApiController
         ],
         methods: :pretty_name
       )
+  end
+
+  # PUT /scenes/:id/reorder_french_scenes  { ids: [French scene ids in their new order] }
+  def reorder_french_scenes
+    authorize_reorder!(@scene.act.play)
+    apply_order!(@scene.french_scenes, params.require(:ids))
+    head :no_content
   end
 
   private

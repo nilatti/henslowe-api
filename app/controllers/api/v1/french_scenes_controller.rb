@@ -106,7 +106,7 @@ class FrenchScenesController < ApiController
   private
 
     def copy_prior_on_stages
-      prior = @scene.french_scenes.where.not(id: @french_scene.id).order(:number).last
+      prior = @scene.french_scenes.where.not(id: @french_scene.id).reorder(:position).last
       return unless prior
       prior.on_stages.each do |os|
         @french_scene.on_stages.create!(

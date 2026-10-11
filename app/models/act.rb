@@ -7,7 +7,9 @@ class Act < ApplicationRecord
   has_many :lines, through: :french_scenes
   has_many :on_stages, through: :french_scenes
   has_and_belongs_to_many :rehearsals
-  default_scope {order(:number)}
+  acts_as_list scope: :play
+  # Play order is position; number is only the label ("Act 3").
+  default_scope {order(:position)}
 
   validates :number, presence: true
 
@@ -16,7 +18,7 @@ class Act < ApplicationRecord
   end
 
   def self.play_order(acts)
-    acts.sort_by(&:pretty_name)
+    acts.sort_by { |a| a.position.to_i }
   end
 
 end

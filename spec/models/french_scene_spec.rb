@@ -24,10 +24,11 @@ RSpec.describe FrenchScene, type: :model do
     it { expect(french_scene).to have_and_belong_to_many(:rehearsals) }
   end
 
- it "it default scope orders by number" do
-    french_scene1 = create(:french_scene, number: "c")
-    french_scene2 = create(:french_scene, number: "a")
-    expect(FrenchScene.all.first.number).to eq("a")
+ it "default scope orders by position, not number" do
+    scene = create(:scene)
+    first = create(:french_scene, scene: scene, number: "c")
+    create(:french_scene, scene: scene, number: "a")
+    expect(scene.french_scenes.first).to eq(first)
   end
 
   it "has a pretty name" do
@@ -38,17 +39,18 @@ RSpec.describe FrenchScene, type: :model do
   end
   it "sorts in play order" do
     play = build(:play)
-    act1 = build(:act, number: 1, play: play)
-    act2 = build(:act, number: 2, play: play)
-    scene3 = build(:scene, number: 1, act: act2)
-    scene2 = build(:scene, number: 2, act: act1)
-    scene1 = build(:scene, number: 1, act: act1)
+    act1 = build(:act, number: 1, position: 1, play: play)
+    act2 = build(:act, number: 2, position: 2, play: play)
+    scene3 = build(:scene, number: 1, position: 1, act: act2)
+    scene2 = build(:scene, number: 2, position: 2, act: act1)
+    scene1 = build(:scene, number: 1, position: 1, act: act1)
 
-    french_scene1 = build(:french_scene, number: "a", scene: scene1)
-    french_scene5 = build(:french_scene, number: "b", scene: scene3)
-    french_scene3 = build(:french_scene, number: "c", scene: scene2)
-    french_scene2 = build(:french_scene, number: "b", scene: scene1)
-    french_scene4 = build(:french_scene, number: "a", scene: scene2)
+    # Positions deliberately disagree with the letters.
+    french_scene1 = build(:french_scene, number: "b", position: 1, scene: scene1)
+    french_scene5 = build(:french_scene, number: "a", position: 2, scene: scene3)
+    french_scene3 = build(:french_scene, number: "a", position: 2, scene: scene2)
+    french_scene2 = build(:french_scene, number: "a", position: 2, scene: scene1)
+    french_scene4 = build(:french_scene, number: "c", position: 1, scene: scene2)
     french_scenes = [french_scene1, french_scene2, french_scene3, french_scene4, french_scene5]
     expect(FrenchScene.play_order(french_scenes).first).to be(french_scene1)
     expect(FrenchScene.play_order(french_scenes).last).to be(french_scene5)

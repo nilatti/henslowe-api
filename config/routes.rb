@@ -120,11 +120,14 @@ Rails.application.routes.draw do
           get :play_scene_on_stages
           get :play_script
           get :play_skeleton
+          put :reorder_acts
+          put :reorder_script_items
           get :render_cut_part_script, format: 'docx'
         end
         resources :acts, shallow: true do
           member do
             get :act_script
+            put :reorder_scenes
             get :render_cut_script, format: 'docx'
             get :render_cuts_marked_part_script, format: 'docx'
             get :render_cuts_marked_script, format: 'docx'
@@ -132,6 +135,7 @@ Rails.application.routes.draw do
           resources :scenes, shallow: true do
             member do
               get :scene_script
+              put :reorder_french_scenes
             end
             resources :french_scenes, shallow: true do
               member do

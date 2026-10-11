@@ -8,7 +8,7 @@ class Play < ApplicationRecord
 
   serialize :genre, type: Array
   has_many :words, dependent: :delete_all
-  has_many :acts, -> { order(:number) }, dependent: :destroy
+  has_many :acts, -> { order(:position) }, dependent: :destroy
   has_many :characters, -> { order(:name) }, dependent: :destroy
   has_many :character_groups, dependent: :destroy
   has_many :scenes, through: :acts
